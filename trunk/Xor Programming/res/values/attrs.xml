@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="widthRatio" format="float" />
+    <attr name="heightRatio" format="float" />
+
+    <declare-styleable name="AspectFrame">
+        <attr name="widthRatio" />
+        <attr name="heightRatio" />
+    </declare-styleable>
+    <declare-styleable name="GameView">
+        <attr name="transparentBackground" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="CheckableImageButton">
+        <attr name="checked" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="AutoSizeTextView">
+        <attr name="widthRatio" />
+        <attr name="heightRatio" />
+        <attr name="android:text" />
+        <attr name="android:textColor" />
+        <attr name="justification">
+            <enum name="left" value="0" />
+            <enum name="center" value="1" />
+            <enum name="right" value="2" />
+        </attr>
+    </declare-styleable>
+
+</resources>
