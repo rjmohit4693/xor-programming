@@ -1,5 +1,7 @@
 package com.xorprogramming.sound;
 
+import com.xorprogramming.logging.LoggingType;
+import com.xorprogramming.logging.Logger;
 import android.content.Context;
 import android.media.MediaPlayer;
 
@@ -29,6 +31,7 @@ public class MusicManager
         }
         else
         {
+            Logger.log(LoggingType.WARNING, "Music manager cannot play audio while another is already playing");
             return false;
         }
     }
@@ -38,6 +41,7 @@ public class MusicManager
     {
         if (player == null)
         {
+            Logger.log(LoggingType.WARNING, "Music manager cannot pause when no audio is playing");
             return false;
         }
         else
@@ -52,7 +56,7 @@ public class MusicManager
     {
         if (player == null)
         {
-            
+            Logger.log(LoggingType.WARNING, "Music manager cannot resume when no audio is paused");
             return false;
         }
         else

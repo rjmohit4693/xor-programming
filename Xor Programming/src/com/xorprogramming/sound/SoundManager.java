@@ -1,5 +1,7 @@
 package com.xorprogramming.sound;
 
+import com.xorprogramming.logging.Logger;
+import com.xorprogramming.logging.LoggingType;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -10,21 +12,21 @@ public class SoundManager
 {
     private static final int     MAX_SIMULTANEOUS_STREAMS = 5;
     private static final int     STREAM_TYPE              = AudioManager.STREAM_MUSIC;
-
+    
     private final SparseIntArray soundPoolIDs;
     private final SparseIntArray loadingSoundPoolIDs;
-
+    
     private SoundPool            soundPool;
     private AudioManager         manager;
-
-
+    
+    
     public SoundManager()
     {
         soundPoolIDs = new SparseIntArray();
         loadingSoundPoolIDs = new SparseIntArray();
     }
-
-
+    
+    
     public void loadSound(Context context, int resourceID)
     {
         if (soundPool == null)
@@ -49,18 +51,19 @@ public class SoundManager
         }
         loadingSoundPoolIDs.put(soundPool.load(context, resourceID, 1), resourceID);
     }
-
-
+    
+    
     public boolean playSound(int resourceID)
     {
         return playSound(resourceID, 0);
     }
-
-
+    
+    
     public boolean playSound(int resourceID, int loop)
     {
         if (soundPool == null)
         {
+            Logger.log(LoggingType.WARNING, "Sound manager cannot play audio when it has not been loaded");
             return false;
         }
         int index = soundPoolIDs.indexOfKey(resourceID);
@@ -71,41 +74,55 @@ public class SoundManager
         }
         else
         {
+            Logger.log(LoggingType.WARNING, "Sound manager cannot play audio when it has not been loaded");
             return false;
         }
     }
-
-
+    
+    
     private float getVolume()
     {
         float streamVolumeCurrent = manager.getStreamVolume(AudioManager.STREAM_MUSIC);
         float streamVolumeMax = manager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         return streamVolumeCurrent / streamVolumeMax;
     }
-
-
-    public void pauseAll()
+    
+    
+    public boolean pauseAll()
     {
         if (soundPool != null)
         {
             soundPool.autoPause();
+            return true;
+        }
+        else
+        {
+            Logger.log(LoggingType.WARNING, "Sound manager cannot pause audio when it has not been loaded");
+            return false;
         }
     }
-
-
-    public void resumeAll()
+    
+    
+    public boolean resumeAll()
     {
         if (soundPool != null)
         {
             soundPool.autoResume();
+            return true;
+        }
+        else
+        {
+            Logger.log(LoggingType.WARNING, "Sound manager cannot resume audio when it has not been loaded");
+            return false;
         }
     }
-
-
+    
+    
     public boolean unloadSound(int resourceID)
     {
         if (soundPool == null)
         {
+            Logger.log(LoggingType.WARNING, "Sound manager cannot unload audio when it has not been loaded");
             return false;
         }
         int index = soundPoolIDs.indexOfKey(resourceID);
@@ -117,11 +134,12 @@ public class SoundManager
         }
         else
         {
+            Logger.log(LoggingType.WARNING, "Sound manager cannot unload audio " + resourceID);
             return false;
         }
     }
-
-
+    
+    
     public void dispose()
     {
         if (soundPool != null)

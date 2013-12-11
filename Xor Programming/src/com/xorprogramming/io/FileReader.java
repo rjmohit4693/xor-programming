@@ -1,6 +1,8 @@
 package com.xorprogramming.io;
 
 import android.content.res.AssetManager;
+import com.xorprogramming.logging.Logger;
+import com.xorprogramming.logging.LoggingType;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -30,11 +32,11 @@ public class FileReader
     {
         if (assets == null)
         {
-            throw new NullPointerException("The assets must be non-null");
+            throw new NullPointerException(Logger.log(LoggingType.ERROR, "The assets must be non-null"));
         }
         else if (path == null)
         {
-            throw new NullPointerException("The path must be non-null");
+            throw new NullPointerException(Logger.log(LoggingType.ERROR, "The path must be non-null"));
         }
         this.assets = assets;
         this.path = path;
@@ -62,6 +64,11 @@ public class FileReader
                 sb.append("\n");
             }
             return sb.toString();
+        }
+        catch (IOException ex)
+        {
+            Logger.log(LoggingType.ERROR, ex.getMessage());
+            throw ex;
         }
         finally
         {

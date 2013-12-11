@@ -11,8 +11,8 @@ public class AchievementManager<E extends Enum<E>, T>
     private final Map<E, List<Achievement<E, T>>> achievementActionMap;
     private final List<Achievement<E, T>>         achievementList;
     private final List<AchievementListener>       listeners;
-
-
+    
+    
     public AchievementManager()
     {
         achievementActionMap = new TreeMap<E, List<Achievement<E, T>>>(new Comparator<E>()
@@ -25,14 +25,14 @@ public class AchievementManager<E extends Enum<E>, T>
         achievementList = new ArrayList<Achievement<E, T>>();
         listeners = new ArrayList<AchievementListener>();
     }
-
-
+    
+    
     public void addAchievementListener(AchievementListener listener)
     {
         listeners.add(listener);
     }
-
-
+    
+    
     public void addAchievement(Achievement<E, T> achievement)
     {
         achievementList.add(achievement);
@@ -51,8 +51,8 @@ public class AchievementManager<E extends Enum<E>, T>
             }
         }
     }
-
-
+    
+    
     public void checkAchievements(E action, T t)
     {
         List<Achievement<E, T>> value = achievementActionMap.get(action);
@@ -65,8 +65,8 @@ public class AchievementManager<E extends Enum<E>, T>
             }
         }
     }
-
-
+    
+    
     private void updateListeners(Achievement<?, ?> achievement)
     {
         for (int i = 0; i < listeners.size(); i++)
@@ -74,14 +74,14 @@ public class AchievementManager<E extends Enum<E>, T>
             listeners.get(i).onAchievementGet(achievement);
         }
     }
-
-
+    
+    
     public int getAchievementCount()
     {
         return achievementList.size();
     }
-
-
+    
+    
     public int getAchievementsGetsCount()
     {
         int achievementGets = 0;
