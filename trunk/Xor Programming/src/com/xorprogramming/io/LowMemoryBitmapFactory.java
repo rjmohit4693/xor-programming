@@ -1,10 +1,10 @@
 package com.xorprogramming.io;
 
+import com.xorprogramming.logging.LoggingType;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
-import com.xorprogramming.Constants;
+import com.xorprogramming.logging.Logger;
 
 // -------------------------------------------------------------------------
 /**
@@ -15,7 +15,7 @@ import com.xorprogramming.Constants;
  */
 public class LowMemoryBitmapFactory
 {
-    private static final int TEMP_STORAGE_SIZE = 16 * 1024;
+    private static final int TEMP_STORAGE_SIZE = 16384;
     
     
     // ----------------------------------------------------------
@@ -71,7 +71,7 @@ public class LowMemoryBitmapFactory
         }
         catch (Exception ex)
         {
-            Log.e(Constants.LOG_TAG, "Error loading bitmap", ex);
+            Logger.log(LoggingType.ERROR, ex.getMessage());
             return null;
         }
     }
@@ -125,7 +125,7 @@ public class LowMemoryBitmapFactory
         }
         catch (Exception ex)
         {
-            Log.e(Constants.LOG_TAG, "Error loading bitmap", ex);
+            Logger.log(LoggingType.ERROR, ex.getMessage());
             return null;
         }
     }
@@ -162,7 +162,7 @@ public class LowMemoryBitmapFactory
         }
         catch (Exception ex)
         {
-            Log.e(Constants.LOG_TAG, "Error loading bitmap", ex);
+            Logger.log(LoggingType.ERROR, ex.getMessage());
             return null;
         }
     }

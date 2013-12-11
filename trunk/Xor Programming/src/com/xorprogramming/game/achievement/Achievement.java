@@ -9,14 +9,14 @@ public abstract class Achievement<E extends Enum<E>, T>
     private final String name;
     private final String description;
     private boolean      hasAchievement;
-
-
+    
+    
     public Achievement(String name, String description, E firstCheckAction, E... otherCheckActions)
     {
         this(name, description, false, firstCheckAction, otherCheckActions);
     }
-
-
+    
+    
     public Achievement(
         String name,
         String description,
@@ -29,14 +29,14 @@ public abstract class Achievement<E extends Enum<E>, T>
         this.hasAchievement = hasAchievement;
         this.checkActions = EnumSet.of(firstCheckAction, otherCheckActions);
     }
-
-
+    
+    
     final Set<E> getCheckActions()
     {
         return checkActions;
     }
-
-
+    
+    
     final boolean checkAchievement(E action, T t)
     {
         if (!hasAchievement)
@@ -48,23 +48,23 @@ public abstract class Achievement<E extends Enum<E>, T>
             return false;
         }
     }
-
-
+    
+    
     protected abstract boolean abstractCheckAchievement(E action, T t);
-
-
+    
+    
     public final boolean hasAchievement()
     {
         return hasAchievement;
     }
-
-
+    
+    
     public String getDescription()
     {
         return description;
     }
-
-
+    
+    
     @Override
     public String toString()
     {

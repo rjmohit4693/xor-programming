@@ -2,6 +2,8 @@ package com.xorprogramming.anim;
 
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+import com.xorprogramming.logging.Logger;
+import com.xorprogramming.logging.LoggingType;
 
 // -------------------------------------------------------------------------
 /**
@@ -47,7 +49,9 @@ public class FlashAnimation
     {
         if (Float.isInfinite(percentGrowth) || Float.isNaN(percentGrowth))
         {
-            throw new IllegalArgumentException("The percent growth cannot be infinite or NAN");
+            throw new IllegalArgumentException(Logger.log(
+                LoggingType.ERROR,
+                "Invalid percent growth for flash animation: " + percentGrowth));
         }
         else if (percentRestTime >= 0 && percentRestTime <= 1)
         {
@@ -56,7 +60,9 @@ public class FlashAnimation
         }
         else
         {
-            throw new IllegalArgumentException("The percent rest time must be between 0 and 1 inclusive");
+            throw new IllegalArgumentException(Logger.log(
+                LoggingType.ERROR,
+                "Invalid percent growth for flash animation: " + percentGrowth));
         }
     }
     

@@ -1,17 +1,20 @@
 package com.xorprogramming.game;
 
-public class SimpleRenderingActivity<T extends GameView<?, ?>> extends GameActivity<T>
+public class SimpleRenderingActivity<T extends GameView<?, ?>>
+    extends GameActivity<T>
 {
     private boolean toBeResumed;
     private boolean lostFocus;
-
+    
+    
     @Override
     protected void onStart()
     {
         super.onStart();
         getGameView().initializeRenderer();
     }
-
+    
+    
     @Override
     protected void onResume()
     {
@@ -22,8 +25,8 @@ public class SimpleRenderingActivity<T extends GameView<?, ?>> extends GameActiv
             onActualResume();
         }
     }
-
-
+    
+    
     @Override
     protected void onPause()
     {
@@ -31,14 +34,16 @@ public class SimpleRenderingActivity<T extends GameView<?, ?>> extends GameActiv
         lostFocus = true;
         getGameView().stopRendering();
     }
-
+    
+    
     @Override
     protected void onStop()
     {
         super.onStop();
         getGameView().disposeRenderer();
     }
-
+    
+    
     @Override
     public void onWindowFocusChanged(boolean hasFocus)
     {
@@ -50,7 +55,8 @@ public class SimpleRenderingActivity<T extends GameView<?, ?>> extends GameActiv
             onActualResume();
         }
     }
-
+    
+    
     public void onActualResume()
     {
         getGameView().startRendering();
