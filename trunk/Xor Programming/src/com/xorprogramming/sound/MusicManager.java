@@ -1,9 +1,9 @@
 package com.xorprogramming.sound;
 
-import com.xorprogramming.logging.LoggingType;
-import com.xorprogramming.logging.Logger;
 import android.content.Context;
 import android.media.MediaPlayer;
+import com.xorprogramming.logging.Logger;
+import com.xorprogramming.logging.LoggingType;
 
 public class MusicManager
 {
