@@ -1,4 +1,4 @@
-package com.xorprogramming.ui;
+package com.xorprogramming.ui.splash;
 
 import android.app.Dialog;
 import android.content.Context;
