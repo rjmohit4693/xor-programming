@@ -8,8 +8,8 @@ public interface Savable
 {
     void save(ObjectOutputStream out)
         throws IOException;
-
-
+    
+    
     void restore(ObjectInputStream in)
         throws IOException;
 }

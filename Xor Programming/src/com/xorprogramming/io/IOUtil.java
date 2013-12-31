@@ -18,8 +18,8 @@ public class IOUtil
     {
         // No constructor needed for utility class
     }
-
-
+    
+    
     public static void save(Context c, Savable s, String file, int mode)
         throws IOException
     {
@@ -62,8 +62,8 @@ public class IOUtil
             }
         }
     }
-
-
+    
+    
     public static void restore(Context c, Savable s, String file)
         throws IOException
     {
@@ -106,8 +106,8 @@ public class IOUtil
             }
         }
     }
-
-
+    
+    
     public static String readFromAssets(AssetManager assets, String file)
         throws IOException
     {

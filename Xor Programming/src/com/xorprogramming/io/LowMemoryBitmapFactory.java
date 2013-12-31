@@ -1,10 +1,10 @@
 package com.xorprogramming.io;
 
-import com.xorprogramming.logging.LoggingType;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import com.xorprogramming.logging.Logger;
+import com.xorprogramming.logging.LoggingType;
 
 // -------------------------------------------------------------------------
 /**

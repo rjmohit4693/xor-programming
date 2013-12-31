@@ -12,9 +12,9 @@ public final class Logger
     /**
      * Tag for all logging within the API
      */
-    private static final String  LOG_TAG = "XOR";
+    private static final String           LOG_TAG = "XOR";
     
-    private static LoggingPolicy policy;
+    private static volatile LoggingPolicy policy;
     
     static
     {
