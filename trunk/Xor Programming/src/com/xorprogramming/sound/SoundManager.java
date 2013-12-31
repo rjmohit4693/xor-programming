@@ -1,12 +1,12 @@
 package com.xorprogramming.sound;
 
-import com.xorprogramming.logging.Logger;
-import com.xorprogramming.logging.LoggingType;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
 import android.util.SparseIntArray;
+import com.xorprogramming.logging.Logger;
+import com.xorprogramming.logging.LoggingType;
 
 public class SoundManager
 {
