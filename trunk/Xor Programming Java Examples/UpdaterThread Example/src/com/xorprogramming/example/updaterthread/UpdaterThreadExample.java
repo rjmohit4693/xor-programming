@@ -1,6 +1,7 @@
 package com.xorprogramming.example.updaterthread;
 
-import java.util.Random;
+import java.util.List;
+
 
 // -------------------------------------------------------------------------
 /**
@@ -10,11 +11,7 @@ import java.util.Random;
  * @version 1.0.0
  */
 public class UpdaterThreadExample
-    implements Updatable
 {
-    private final Random rand = new Random();
-    private int                 counter;
-
 
     // ----------------------------------------------------------
     /**
@@ -26,41 +23,33 @@ public class UpdaterThreadExample
     public static void main(String[] args)
         throws InterruptedException
     {
-        new UpdaterThreadExample();
-    }
-
-
-    private UpdaterThreadExample()
-        throws InterruptedException
-    {
-        UpdaterThread updaterThread = new UpdaterThread(this, 5);
-
-        System.out.println("Starting...");
-        updaterThread.start();
-        System.out.println("Started\n");
-
-        Thread.sleep(2000); // Sleep for 2 seconds
-
-        System.out.println("Terminating...");
-        updaterThread.terminate(true);
-        System.out.println("Terminated");
-    }
-
-
-    @Override
-    public void update(float deltaT)
-    {
-        counter++;
-        System.out.printf("Update #%d\nTime since last update: %f\n\n", counter, deltaT);
-
-        try
+        Updatable u = new Updatable()
         {
-            Thread.sleep(rand.nextInt(100)); // Sleep between 0-99 ms to simulate a variable update period
-        }
-        catch (InterruptedException e)
+            @Override
+            public void update(float deltaT)
+            {
+                System.out.println(deltaT);
+            }
+        };
+        final UpdaterThread thread = new UpdaterThread(u, 30);
+        new Thread()
         {
-            e.printStackTrace();
-        }
+            public void run()
+            {
+                thread.start();
+                try
+                {
+                    Thread.sleep(1000);
+                }
+                catch (InterruptedException e)
+                {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                thread.stop(false);
+            }
+        }.start();
     }
+
 
 }

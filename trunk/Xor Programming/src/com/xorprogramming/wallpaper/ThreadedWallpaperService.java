@@ -1,10 +1,10 @@
 package com.xorprogramming.wallpaper;
 
+import com.xorprogramming.example.updaterthread.Updatable;
+import com.xorprogramming.example.updaterthread.UpdaterThread;
 import android.graphics.Canvas;
 import android.service.wallpaper.WallpaperService;
 import android.view.SurfaceHolder;
-import com.xorprogramming.thread.Updatable;
-import com.xorprogramming.thread.UpdaterThread;
 
 public abstract class ThreadedWallpaperService
     extends WallpaperService
