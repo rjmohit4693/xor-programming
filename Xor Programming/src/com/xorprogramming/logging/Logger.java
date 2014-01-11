@@ -3,7 +3,7 @@ package com.xorprogramming.logging;
 // -------------------------------------------------------------------------
 /**
  * A class containing shared, static resources for the Xor Programming API
- * 
+ *
  * @author Steven Roberts
  * @version 1.0.0
  */
@@ -13,21 +13,21 @@ public final class Logger
      * Tag for all logging within the API
      */
     private static final String           LOG_TAG = "XOR";
-    
+
     private static volatile LoggingPolicy policy;
-    
+
     static
     {
         policy = LoggingPolicy.NO_LOGGING;
     }
-    
-    
+
+
     private Logger()
     {
         // No constructor needed
     }
-    
-    
+
+
     public static void setLoggingPolicy(LoggingPolicy newPolicy)
     {
         if (newPolicy == null)
@@ -39,14 +39,14 @@ public final class Logger
             policy = newPolicy;
         }
     }
-    
-    
+
+
     public static String log(LoggingType type, String message)
     {
         return log(type, LOG_TAG, message);
     }
-    
-    
+
+
     public static String log(LoggingType type, String tag, String message)
     {
         if (policy.isLogging(type))
@@ -54,5 +54,21 @@ public final class Logger
             type.log(tag, message);
         }
         return message;
+    }
+
+
+    public static Throwable log(LoggingType type, Throwable throwable)
+    {
+        return log(type, LOG_TAG, throwable);
+    }
+
+
+    public static Throwable log(LoggingType type, String tag, Throwable throwable)
+    {
+        if (policy.isLogging(type))
+        {
+            type.log(tag, throwable.getMessage());
+        }
+        return throwable;
     }
 }
