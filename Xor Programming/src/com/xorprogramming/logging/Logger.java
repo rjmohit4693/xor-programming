@@ -1,5 +1,8 @@
 package com.xorprogramming.logging;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 // -------------------------------------------------------------------------
 /**
  * A class containing shared, static resources for the Xor Programming API
@@ -12,13 +15,15 @@ public final class Logger
     /**
      * Tag for all logging within the API
      */
-    private static final String           LOG_TAG = "XOR";
+    private static final String               LOG_TAG      = "XOR";
 
-    private static volatile LoggingPolicy policy;
+    private static final List<LoggerListener> logListeners = new CopyOnWriteArrayList<LoggerListener>();
+
+    private static volatile LoggingPolicy     policy;
 
     static
     {
-        policy = LoggingPolicy.NO_LOGGING;
+        policy = LoggingPolicy.FULL_LOGGING;
     }
 
 
@@ -28,7 +33,7 @@ public final class Logger
     }
 
 
-    public static void setLoggingPolicy(LoggingPolicy newPolicy)
+    public synchronized static void setLoggingPolicy(LoggingPolicy newPolicy)
     {
         if (newPolicy == null)
         {
@@ -41,6 +46,18 @@ public final class Logger
     }
 
 
+    public void addLoggerListener(LoggerListener listener)
+    {
+        logListeners.add(listener);
+    }
+
+
+    public void removeLoggerListener(LoggerListener listener)
+    {
+        logListeners.remove(listener);
+    }
+
+
     public static String log(LoggingType type, String message)
     {
         return log(type, LOG_TAG, message);
@@ -49,26 +66,43 @@ public final class Logger
 
     public static String log(LoggingType type, String tag, String message)
     {
-        if (policy.isLogging(type))
+        synchronized (Logger.class)
         {
-            type.log(tag, message);
+            if (policy.isLogging(type))
+            {
+                type.log(tag, message);
+            }
         }
+        updateListeners(type, tag, message);
         return message;
     }
 
 
-    public static Throwable log(LoggingType type, Throwable throwable)
+    public static <T extends Throwable> T log(LoggingType type, T throwable)
     {
         return log(type, LOG_TAG, throwable);
     }
 
 
-    public static Throwable log(LoggingType type, String tag, Throwable throwable)
+    public static <T extends Throwable> T log(LoggingType type, String tag, T throwable)
     {
-        if (policy.isLogging(type))
+        synchronized (Logger.class)
         {
-            type.log(tag, throwable.getMessage());
+            if (policy.isLogging(type))
+            {
+                type.log(tag, throwable.getMessage());
+            }
         }
+        updateListeners(type, tag, throwable.getMessage());
         return throwable;
+    }
+
+
+    private static void updateListeners(LoggingType type, String tag, String message)
+    {
+        for (LoggerListener l : logListeners)
+        {
+            l.onLog(type, tag, message);
+        }
     }
 }

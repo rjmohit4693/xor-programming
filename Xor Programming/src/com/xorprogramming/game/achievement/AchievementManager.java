@@ -59,7 +59,7 @@ public final class AchievementManager<E extends Enum<E>, T>
         for (int i = 0; i < value.size(); i++)
         {
             Achievement<E, T> achievement = value.get(i);
-            if (!achievement.hasAchievement() && achievement.check(action, t))
+            if (achievement.check(action, t))
             {
                 updateListeners(achievement);
             }
@@ -73,6 +73,11 @@ public final class AchievementManager<E extends Enum<E>, T>
         {
             listeners.get(i).onAchievementGet(achievement);
         }
+    }
+
+    public Achievement<?, ?> getAchievement(int index)
+    {
+        return achievementList.get(index);
     }
 
 
@@ -128,7 +133,7 @@ public final class AchievementManager<E extends Enum<E>, T>
         }
         catch (IOException ex)
         {
-            Logger.log(LoggingType.WARNING, "Unable to read achievement: " + ex.getMessage());
+            Logger.log(LoggingType.WARNING, "Unable to resore achievements: " + ex.getMessage());
         }
     }
 }
