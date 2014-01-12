@@ -11,28 +11,28 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-public class AchievementManager<E extends Enum<E>, T>
+public final class AchievementManager<E extends Enum<E>, T>
     implements Savable
 {
     private final Map<E, List<Achievement<E, T>>> achievementActionMap;
     private final List<Achievement<E, T>>         achievementList;
     private final List<AchievementListener>       listeners;
-    
-    
+
+
     public AchievementManager(Class<E> enumClass)
     {
         achievementActionMap = new EnumMap<E, List<Achievement<E, T>>>(enumClass);
         achievementList = new ArrayList<Achievement<E, T>>();
         listeners = new ArrayList<AchievementListener>();
     }
-    
-    
+
+
     public void addAchievementListener(AchievementListener listener)
     {
         listeners.add(listener);
     }
-    
-    
+
+
     public void addAchievement(Achievement<E, T> achievement)
     {
         achievementList.add(achievement);
@@ -51,22 +51,22 @@ public class AchievementManager<E extends Enum<E>, T>
             }
         }
     }
-    
-    
+
+
     public void checkAchievements(E action, T t)
     {
         List<Achievement<E, T>> value = achievementActionMap.get(action);
         for (int i = 0; i < value.size(); i++)
         {
             Achievement<E, T> achievement = value.get(i);
-            if (!achievement.hasAchievement() && achievement.checkAchievement(action, t))
+            if (!achievement.hasAchievement() && achievement.check(action, t))
             {
                 updateListeners(achievement);
             }
         }
     }
-    
-    
+
+
     private void updateListeners(Achievement<?, ?> achievement)
     {
         for (int i = 0; i < listeners.size(); i++)
@@ -74,14 +74,14 @@ public class AchievementManager<E extends Enum<E>, T>
             listeners.get(i).onAchievementGet(achievement);
         }
     }
-    
-    
+
+
     public int getAchievementCount()
     {
         return achievementList.size();
     }
-    
-    
+
+
     public int getAchievementsGetsCount()
     {
         int achievementGets = 0;
@@ -94,8 +94,8 @@ public class AchievementManager<E extends Enum<E>, T>
         }
         return achievementGets;
     }
-    
-    
+
+
     public void save(ObjectOutputStream out)
         throws IOException
     {
@@ -106,8 +106,8 @@ public class AchievementManager<E extends Enum<E>, T>
             out.writeLong(a.getAcievementGetTime());
         }
     }
-    
-    
+
+
     public void restore(ObjectInputStream in)
     {
         try

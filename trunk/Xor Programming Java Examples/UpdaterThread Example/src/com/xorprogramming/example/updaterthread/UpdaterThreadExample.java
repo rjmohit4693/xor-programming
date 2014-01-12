@@ -1,7 +1,8 @@
 package com.xorprogramming.example.updaterthread;
 
+import com.xorprogramming.thread.Updatable;
+import com.xorprogramming.thread.UpdaterThread;
 import java.util.List;
-
 
 // -------------------------------------------------------------------------
 /**
@@ -12,6 +13,7 @@ import java.util.List;
  */
 public class UpdaterThreadExample
 {
+    private static UpdaterThread thread;
 
     // ----------------------------------------------------------
     /**
@@ -29,27 +31,39 @@ public class UpdaterThreadExample
             public void update(float deltaT)
             {
                 System.out.println(deltaT);
+                long start = System.currentTimeMillis();
+                while (System.currentTimeMillis() < start + 2500);
             }
         };
-        final UpdaterThread thread = new UpdaterThread(u, 30);
+        thread = new UpdaterThread(u);
         new Thread()
         {
             public void run()
             {
-                thread.start();
+                System.out.println(thread.start());
                 try
                 {
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                 }
                 catch (InterruptedException e)
                 {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                thread.stop(false);
+                System.out.println(thread.stop(false));
+                System.out.println(thread.start());
+                try
+                {
+                    Thread.sleep(4000);
+                }
+                catch (InterruptedException e)
+                {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                System.out.println(thread.stop(true));
             }
         }.start();
     }
-
 
 }

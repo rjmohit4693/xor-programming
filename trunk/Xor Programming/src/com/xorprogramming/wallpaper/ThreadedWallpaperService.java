@@ -1,15 +1,15 @@
 package com.xorprogramming.wallpaper;
 
-import com.xorprogramming.example.updaterthread.Updatable;
-import com.xorprogramming.example.updaterthread.UpdaterThread;
 import android.graphics.Canvas;
 import android.service.wallpaper.WallpaperService;
 import android.view.SurfaceHolder;
+import com.xorprogramming.thread.Updatable;
+import com.xorprogramming.thread.UpdaterThread;
 
 public abstract class ThreadedWallpaperService
     extends WallpaperService
 {
-    
+
     public abstract class ThreadedEngine
         extends Engine
     {
@@ -17,8 +17,8 @@ public abstract class ThreadedWallpaperService
         private final UpdaterThread thread;
         private int                 width;
         private int                 height;
-        
-        
+
+
         public ThreadedEngine(float targetFPS)
         {
             u = new Updatable()
@@ -50,16 +50,16 @@ public abstract class ThreadedWallpaperService
             };
             thread = new UpdaterThread(u, targetFPS);
         }
-        
-        
+
+
         @Override
         public void onDestroy()
         {
             super.onDestroy();
-            thread.terminate(true);
+            thread.stop(true);
         }
-        
-        
+
+
         @Override
         public void onVisibilityChanged(boolean visible)
         {
@@ -69,11 +69,11 @@ public abstract class ThreadedWallpaperService
             }
             else
             {
-                thread.terminate(true);
+                thread.stop(true);
             }
         }
-        
-        
+
+
         @Override
         public synchronized void onSurfaceChanged(SurfaceHolder holder, int format, int newWidth, int newHeight)
         {
@@ -82,31 +82,31 @@ public abstract class ThreadedWallpaperService
             height = newHeight;
             u.update(0);
         }
-        
-        
+
+
         @Override
         public void onSurfaceDestroyed(SurfaceHolder holder)
         {
             super.onSurfaceDestroyed(holder);
-            thread.terminate(true);
+            thread.stop(true);
         }
-        
-        
+
+
         public synchronized int getWidth()
         {
             return width;
         }
-        
-        
+
+
         public synchronized int getHeight()
         {
             return height;
         }
-        
-        
+
+
         public abstract void update(float deltaT);
-        
-        
+
+
         public abstract void render(Canvas c);
     }
 }
