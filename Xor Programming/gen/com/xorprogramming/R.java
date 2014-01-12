@@ -54,20 +54,14 @@ containing a value of this type.
          */
         public static int widthRatio=0x7f010000;
     }
-    public static final class drawable {
-        public static int icon=0x7f020000;
-    }
     public static final class id {
-        public static int center=0x7f030001;
-        public static int left=0x7f030000;
-        public static int right=0x7f030002;
-    }
-    public static final class string {
-        public static int company_name=0x7f040000;
+        public static int center=0x7f020001;
+        public static int left=0x7f020000;
+        public static int right=0x7f020002;
     }
     public static final class style {
-        public static int splash_animation=0x7f050001;
-        public static int splash_screen=0x7f050000;
+        public static int splash_animation=0x7f030001;
+        public static int splash_screen=0x7f030000;
     }
     public static final class styleable {
         /** Attributes that can be used with a AspectFrame.

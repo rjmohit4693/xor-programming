@@ -3,50 +3,73 @@ package com.xorprogramming.thread;
 // -------------------------------------------------------------------------
 /**
  * This class regularly updates a given {@code Updatable}. An {@code UpdaterThread} can be started and terminated
- * repeatedly, and all of its methods are thread-safe.
- * 
+ * repeatedly, and all of its methods are thread-safe. Note that unlike a {@code Thread}, {@code UpdaterThread} is not
+ * made for inheritance.
+ * <p>
+ * Memory consistency is guaranteed for data whose access is confined to an {@code UpdaterThread}'s {@code update}
+ * method. However, if data is not confined to the {@code update} method, addition synchronization measures must be
+ * taken.
+ * </p>
+ *
  * @author Steven Roberts
- * @version 3.0.1
+ * @version 3.1.1
  */
 public final class UpdaterThread
 {
     /**
      * Use this field when setting the UPS to prevent the {@code UpdaterThread} from sleeping or yielding, thus
-     * achieving maximum ups.
+     * achieving maximum UPS.
      */
-    public static final float MAX_UPS = Float.POSITIVE_INFINITY;
-    
-    private final Object      lock    = new Object();
-    
-    private final Updatable   u;
-    
-    private volatile boolean  done;
-    private volatile float    targetUPS;
-    private Thread            innerThread;
-    
-    
+    public static final float           MAX_UPS         = Float.POSITIVE_INFINITY;
+
+    /*
+     * Ensures starting and stopping are mutually exclusive
+     */
+    private final Object                startStopLock   = new Object();
+
+    /*
+     * Ensures the inner thread cannot start before the previous instance finished
+     */
+    private final Object                innerThreadLock = new Object();
+
+    private final Updatable             u;
+
+    private volatile UpdaterThreadState state;
+    private volatile float              targetUPS;
+    private Thread                      innerThread;
+
+
     // ----------------------------------------------------------
     /**
      * Create a new {@code UpdaterThread} object with max ups.
-     * 
+     *
      * @param u
      *            The object to update
+     * @throws NullPointerException
+     *             if the {@code Updatable} is null
+     * @see #MAX_UPS
      */
     public UpdaterThread(Updatable u)
     {
         this(u, MAX_UPS);
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Create a new {@code UpdaterThread} object.
-     * 
+     *
      * @param u
      *            The object to update
      * @param targetUPS
-     *            The number of thread updates every second. It must be a number greater than 0 or
+     *            The number of thread updates every second. It must be a positive number or
      *            {@code UpdaterThread.MAX_UPS}, which prevents the UpdaterThread from sleeping or yielding.
+     * @throws NullPointerException
+     *             if the {@code Updatable} is null
+     * @throws IllegalArgumentException
+     *             if {@code targetUPS} is not a positive number or {@code MAX_UPS}
+     * @see #MAX_UPS
+     * @see UpdaterThread#targetUPS
      */
     public UpdaterThread(Updatable u, float targetUPS)
     {
@@ -56,16 +79,18 @@ public final class UpdaterThread
         }
         setTargetUPS(targetUPS);
         this.u = u;
-        this.done = true;
+        state = UpdaterThreadState.NOT_YET_STARTED;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Sets the number of UPS that the thread will try to attain.
-     * 
+     *
      * @param targetUPS
-     *            The target ups or {@code UpdaterThread.MAX_UPS}
+     *            The target UPS or {@code UpdaterThread.MAX_UPS}
+     * @throws IllegalArgumentException
+     *             if {@code targetUPS} is not a positive number or {@code MAX_UPS}
      */
     public void setTargetUPS(float targetUPS)
     {
@@ -78,33 +103,34 @@ public final class UpdaterThread
             this.targetUPS = targetUPS;
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Gets the number of UPS that the thread will try to attain.
-     * 
+     *
      * @return the number of UPS that the thread will try to attain
      */
     public float getTargetUPS()
     {
         return targetUPS;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
-     * Starts the thread provided it is not running currently
-     * 
+     * Starts the thread provided it is not running. Note that if the {@code UpdaterThread} is stopping when
+     * {@code start} is called, the thread starts, but will not run until the thread finishes stopping. This method does
+     * not block.
+     *
      * @return true if started successfully, false otherwise
      */
     public boolean start()
     {
-        synchronized (lock)
+        synchronized (startStopLock)
         {
-            if (done)
+            if (innerThread == null)
             {
-                done = false;
                 innerThread = new InnerThread();
                 innerThread.start();
                 return true;
@@ -115,120 +141,133 @@ public final class UpdaterThread
             }
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
-     * Checks if thread has terminated
-     * 
-     * @return true if the thread has terminated, false otherwise
+     * Gets the current state of the {@code UpdaterThread}
+     *
+     * @return the current state of the {@code UpdaterThread}
+     * @see UpdaterThreadState
      */
-    public boolean isDone()
+    public UpdaterThreadState getState()
     {
-        synchronized (lock)
+        synchronized (startStopLock)
         {
-            return done;
+            return state;
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
-     * Requests the thread to stop.
-     * 
-     * @param waitForTermination
-     *            If true, the method will block until the thread has finished, otherwise the method will request
+     * Requests the thread to stop and changes the state to stopping.
+     *
+     * @param join
+     *            If true, the method will block until the thread is stopped. Otherwise, the method will request
      *            termination and immediately return
-     * @return true if terminated successfully, false otherwise
+     * @return true if the request to stop the thread was successful, false otherwise. The request is successful iff the
+     *         thread is running.
+     * @throws IllegalStateException
+     *             if {@code stop(true)} is called within an {@code Updatable}'s {@code update} method becase the thread
+     *             cannot wait for itself to finish.
      */
-    public boolean terminate(boolean waitForTermination)
+    public boolean stop(boolean join)
     {
-        synchronized (lock)
+        synchronized (startStopLock)
         {
-            if (done)
+            if (innerThread == null)
             {
                 return false;
             }
-            else
+
+            state = UpdaterThreadState.STOPPING;
+            innerThread.interrupt();
+            if (join)
             {
-                done = true;
-                innerThread.interrupt();
-                if (waitForTermination)
+                if (Thread.currentThread() == innerThread)
                 {
-                    boolean retry = true;
-                    while (retry)
+                    throw new IllegalStateException("The Updatable cannot wait for itself to terminate");
+                }
+                boolean retry = true;
+                while (retry)
+                {
+                    try
                     {
-                        try
-                        {
-                            innerThread.join();
-                            retry = false;
-                        }
-                        catch (InterruptedException e)
-                        {
-                            // Try again
-                        }
+                        innerThread.join();
+                        retry = false;
+                    }
+                    catch (InterruptedException e)
+                    {
+                        // Try again
                     }
                 }
-                innerThread = null;
-                return true;
             }
+            innerThread = null;
+            return true;
         }
     }
-    
-    
+
+
+    // ----------------------------------------------------------
+    /**
+     * Handles the updating of the {@code Updatable}. While multiple instances of this class can exist within an
+     * {@code UpdaterThread}, only one can run at a time.
+     */
     private class InnerThread
         extends Thread
     {
         private static final float NANOS_PER_SEC  = 1e9f;
         private static final float MILLIS_PER_SEC = 1e3f;
-        
-        
+
+
         @Override
         public void run()
         {
-            long loopTime; // In nanoseconds
             long prevTime = -1; // In nanoseconds
-            
-            while (!done)
+            synchronized (innerThreadLock)
             {
-                float curTargetUPS = targetUPS;
-                
-                if (prevTime == -1)
+                state = UpdaterThreadState.RUNNING;
+                while (!isInterrupted())
                 {
-                    loopTime = curTargetUPS == MAX_UPS ? 0 : (long)(NANOS_PER_SEC / curTargetUPS);
-                    prevTime = System.nanoTime();
-                }
-                else
-                {
+                    float curTargetUPS = targetUPS; // Take a snapshot of the current targetUPS
+
                     long curTime = System.nanoTime();
-                    loopTime = curTime - prevTime;
+                    if (prevTime == -1)
+                    {
+                        u.update(1 / targetUPS);
+                    }
+                    else
+                    {
+                        u.update((curTime - prevTime) / NANOS_PER_SEC);
+                    }
                     prevTime = curTime;
-                }
-                
-                u.update(loopTime / NANOS_PER_SEC);
-                
-                if (curTargetUPS != MAX_UPS)
-                {
-                    long updateTime = System.nanoTime() - prevTime;
-                    
-                    // Sleep time in milliseconds
-                    long sleep = (long)(MILLIS_PER_SEC / curTargetUPS - MILLIS_PER_SEC * updateTime / NANOS_PER_SEC);
-                    try
+
+                    if (curTargetUPS != MAX_UPS)
                     {
-                        if (sleep < 0)
+                        long updateTime = System.nanoTime() - curTime; // In nanoseconds
+
+                        // Sleep time in milliseconds
+                        long sleep =
+                            (long)(MILLIS_PER_SEC / curTargetUPS - MILLIS_PER_SEC * updateTime / NANOS_PER_SEC);
+                        try
                         {
-                            Thread.yield();
+                            if (sleep < 0)
+                            {
+                                Thread.yield();
+                            }
+                            else
+                            {
+                                Thread.sleep(sleep);
+                            }
                         }
-                        else
+                        catch (InterruptedException e)
                         {
-                            Thread.sleep(sleep);
+                            return;
                         }
                     }
-                    catch (InterruptedException e)
-                    {
-                        // Nothing needed here. This can only happen if the terminate method is called.
-                    }
                 }
+                state = UpdaterThreadState.STOPPED;
             }
         }
     }
