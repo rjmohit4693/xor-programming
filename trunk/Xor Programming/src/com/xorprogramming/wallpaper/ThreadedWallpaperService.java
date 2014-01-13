@@ -13,41 +13,17 @@ public abstract class ThreadedWallpaperService
     public abstract class ThreadedEngine
         extends Engine
     {
-        private final Updatable     u;
-        private final UpdaterThread thread;
-        private int                 width;
-        private int                 height;
+        private final Updatable      u;
+        private final UpdaterThread  thread;
+        private final WallpaperScene scene;
+        private int                  width;
+        private int                  height;
 
 
-        public ThreadedEngine(float targetFPS)
+        public ThreadedEngine(float targetFPS, final WallpaperScene scene)
         {
-            u = new Updatable()
-            {
-                public void update(float deltaT)
-                {
-                    SurfaceHolder holder = getSurfaceHolder();
-                    Canvas c = null;
-                    try
-                    {
-                        c = holder.lockCanvas();
-                        if (c != null)
-                        {
-                            synchronized (ThreadedEngine.this)
-                            {
-                                ThreadedEngine.this.update(deltaT);
-                                ThreadedEngine.this.render(c);
-                            }
-                        }
-                    }
-                    finally
-                    {
-                        if (c != null)
-                        {
-                            holder.unlockCanvasAndPost(c);
-                        }
-                    }
-                }
-            };
+            this.scene = scene;
+            u = new WallpaperUpdatable();
             thread = new UpdaterThread(u, targetFPS);
         }
 
@@ -78,8 +54,11 @@ public abstract class ThreadedWallpaperService
         public synchronized void onSurfaceChanged(SurfaceHolder holder, int format, int newWidth, int newHeight)
         {
             super.onSurfaceChanged(holder, format, width, height);
-            width = newWidth;
-            height = newHeight;
+            synchronized (scene)
+            {
+                width = newWidth;
+                height = newHeight;
+            }
             u.update(0);
         }
 
@@ -92,21 +71,35 @@ public abstract class ThreadedWallpaperService
         }
 
 
-        public synchronized int getWidth()
+        private class WallpaperUpdatable
+            implements Updatable
         {
-            return width;
+
+            public void update(float deltaT)
+            {
+                SurfaceHolder holder = getSurfaceHolder();
+                Canvas c = null;
+                try
+                {
+                    c = holder.lockCanvas();
+                    if (c != null)
+                    {
+                        synchronized (scene)
+                        {
+                            scene.update(deltaT, width, height);
+                            scene.render(c, width, height);
+                        }
+                    }
+                }
+                finally
+                {
+                    if (c != null)
+                    {
+                        holder.unlockCanvasAndPost(c);
+                    }
+                }
+            }
+
         }
-
-
-        public synchronized int getHeight()
-        {
-            return height;
-        }
-
-
-        public abstract void update(float deltaT);
-
-
-        public abstract void render(Canvas c);
     }
 }
