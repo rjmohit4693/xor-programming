@@ -8,12 +8,13 @@ import android.view.SurfaceHolder;
 public abstract class SimpleWallpaperService
     extends WallpaperService
 {
-    
-    public abstract class SimpleEngine
+
+    public class SimpleEngine
         extends Engine
     {
         private static final float MILLIS_PER_SEC = 1e3f;
         private static final float NANOS_PER_SEC  = 1e9f;
+        private final WallpaperScene scene;
         private final Handler      handler        = new Handler();
         private final Runnable     updater        = new Runnable()
                                                   {
@@ -27,15 +28,16 @@ public abstract class SimpleWallpaperService
         private boolean            isVisible;
         private int                width;
         private int                height;
-        
-        
-        public SimpleEngine()
+
+
+        public SimpleEngine(WallpaperScene scene)
         {
+            this.scene = scene;
             targetFrameTime = -1;
         }
-        
-        
-        public SimpleEngine(float targetFPS)
+
+
+        public SimpleEngine(float targetFPS, WallpaperScene scene)
         {
             if (Float.isInfinite(targetFPS) || Float.isNaN(targetFPS) || targetFPS < 0)
             {
@@ -49,25 +51,26 @@ public abstract class SimpleWallpaperService
             {
                 targetFrameTime = 1 / targetFPS;
             }
+            this.scene = scene;
         }
-        
-        
+
+
         private void handleInvisibility()
         {
             isVisible = false;
             handler.removeCallbacks(updater);
             lastTime = 0;
         }
-        
-        
+
+
         @Override
         public void onDestroy()
         {
             super.onDestroy();
             handleInvisibility();
         }
-        
-        
+
+
         @Override
         public void onVisibilityChanged(boolean visible)
         {
@@ -81,8 +84,8 @@ public abstract class SimpleWallpaperService
                 handleInvisibility();
             }
         }
-        
-        
+
+
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int newWidth, int newHeight)
         {
@@ -91,28 +94,14 @@ public abstract class SimpleWallpaperService
             height = newHeight;
             update();
         }
-        
-        
+
+
         @Override
         public void onSurfaceDestroyed(SurfaceHolder holder)
         {
             super.onSurfaceDestroyed(holder);
             handleInvisibility();
         }
-        
-        
-        public int getWidth()
-        {
-            return width;
-        }
-        
-        
-        public int getHeight()
-        {
-            return height;
-        }
-        
-        
         public void update()
         {
             if (!isVisible)
@@ -120,7 +109,7 @@ public abstract class SimpleWallpaperService
                 return;
             }
             SurfaceHolder holder = getSurfaceHolder();
-            
+
             Canvas c = null;
             long start = System.nanoTime();
             try
@@ -130,14 +119,14 @@ public abstract class SimpleWallpaperService
                 {
                     if (lastTime == 0)
                     {
-                        update(targetFrameTime == -1 ? 0 : targetFrameTime);
+                        scene.update(targetFrameTime == -1 ? 0 : targetFrameTime, width, height);
                     }
                     else
                     {
-                        update((start - lastTime) / NANOS_PER_SEC);
+                        scene.update((start - lastTime) / NANOS_PER_SEC, width, height);
                     }
                     lastTime = start;
-                    render(c);
+                    scene.render(c, width, height);
                 }
             }
             finally
@@ -154,12 +143,6 @@ public abstract class SimpleWallpaperService
                     / NANOS_PER_SEC)));
             }
         }
-        
-        
-        public abstract void update(float deltaT);
-        
-        
-        public abstract void render(Canvas c);
-        
+
     }
 }
