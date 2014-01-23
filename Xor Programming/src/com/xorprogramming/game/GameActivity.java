@@ -2,8 +2,6 @@ package com.xorprogramming.game;
 
 import android.app.Activity;
 import android.view.View;
-import com.xorprogramming.logging.Logger;
-import com.xorprogramming.logging.LoggingType;
 
 public class GameActivity<T extends GameView<?, ?>>
     extends Activity
@@ -15,7 +13,7 @@ public class GameActivity<T extends GameView<?, ?>>
     {
         if (gameView == null)
         {
-            throw new NullPointerException(Logger.log(LoggingType.ERROR, "The game view must be non-null"));
+            throw new NullPointerException("The game view must be non-null");
         }
         this.gameView = gameView;
     }
@@ -27,7 +25,7 @@ public class GameActivity<T extends GameView<?, ?>>
         View v = findViewById(gameViewRes);
         if (v == null)
         {
-            throw new IllegalArgumentException(Logger.log(LoggingType.ERROR, "Invalid game view id: " + gameViewRes));
+            throw new IllegalArgumentException("Invalid game view id: " + gameViewRes);
         }
         try
         {
@@ -35,8 +33,7 @@ public class GameActivity<T extends GameView<?, ?>>
         }
         catch (ClassCastException ex)
         {
-            throw new IllegalArgumentException(Logger.log(LoggingType.ERROR, "Invalid gave view: cannot cast from"
-                + v.getClass().getSimpleName()));
+            throw new IllegalArgumentException("Invalid gave view: cannot cast from" + v.getClass().getSimpleName());
         }
     }
 
@@ -45,9 +42,8 @@ public class GameActivity<T extends GameView<?, ?>>
     {
         if (gameView == null)
         {
-            throw new IllegalStateException(Logger.log(
-                LoggingType.ERROR,
-                "The game view has not been set.  Ensure setGameView was called in onCreate"));
+            throw new IllegalStateException(
+                "The game view has not been set.  Ensure setGameView was called in onCreate");
         }
         return gameView;
     }
