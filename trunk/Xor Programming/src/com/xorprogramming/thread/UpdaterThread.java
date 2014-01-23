@@ -132,6 +132,7 @@ public final class UpdaterThread
             if (innerThread == null)
             {
                 innerThread = new InnerThread();
+                state = UpdaterThreadState.RUNNING;
                 innerThread.start();
                 return true;
             }
@@ -227,8 +228,7 @@ public final class UpdaterThread
             long prevTime = -1; // In nanoseconds
             synchronized (innerThreadLock)
             {
-                state = UpdaterThreadState.RUNNING;
-                while (!isInterrupted())
+                while (state == UpdaterThreadState.RUNNING)
                 {
                     float curTargetUPS = targetUPS; // Take a snapshot of the current targetUPS
 
@@ -263,7 +263,7 @@ public final class UpdaterThread
                         }
                         catch (InterruptedException e)
                         {
-                            return;
+                            // Continue
                         }
                     }
                 }

@@ -1,8 +1,7 @@
 package com.xorprogramming.game.achievement;
 
-import com.xorprogramming.io.Savable;
-import com.xorprogramming.logging.Logger;
-import com.xorprogramming.logging.LoggingType;
+import com.xorprogramming.io.savable.SaveException;
+import com.xorprogramming.io.savable.Savable;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -102,7 +101,7 @@ public final class AchievementManager<E extends Enum<E>, T>
 
 
     public void save(ObjectOutputStream out)
-        throws IOException
+        throws IOException, SaveException
     {
         for (Achievement<E, T> a : achievementList)
         {
@@ -114,10 +113,9 @@ public final class AchievementManager<E extends Enum<E>, T>
 
 
     public void restore(ObjectInputStream in)
+        throws IOException, SaveException
     {
-        try
-        {
-            while (in.available() > 0)
+        while (in.available() > 0)
             {
                 int id = in.readInt();
                 boolean hasAchievement = in.readBoolean();
@@ -130,10 +128,5 @@ public final class AchievementManager<E extends Enum<E>, T>
                     }
                 }
             }
-        }
-        catch (IOException ex)
-        {
-            Logger.log(LoggingType.WARNING, "Unable to resore achievements: " + ex.getMessage());
-        }
     }
 }

@@ -2,14 +2,12 @@ package com.xorprogramming.anim;
 
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
-import com.xorprogramming.logging.Logger;
-import com.xorprogramming.logging.LoggingType;
 
 // -------------------------------------------------------------------------
 /**
  * An animation that grows then shrinks. If a percent rest time is given, the animation will rest at the original size
  * until for that percent of the animation duration after the growing and shrinking has completed.
- * 
+ *
  * @author Steven Roberts
  * @version 1.0.0
  */
@@ -20,12 +18,12 @@ public class FlashAnimation
     private final float percentRestTime;
     private float       viewWidth;
     private float       viewHeight;
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Create a new FlashAnimation object no a 0 percent rest timer
-     * 
+     *
      * @param percentGrowth
      *            The percent growth of the animated object
      */
@@ -33,12 +31,12 @@ public class FlashAnimation
     {
         this(percentGrowth, 1);
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Create a new FlashAnimation object.
-     * 
+     *
      * @param percentGrowth
      *            The percent growth of the animated object
      * @param percentRestTime
@@ -49,9 +47,7 @@ public class FlashAnimation
     {
         if (Float.isInfinite(percentGrowth) || Float.isNaN(percentGrowth))
         {
-            throw new IllegalArgumentException(Logger.log(
-                LoggingType.ERROR,
-                "Invalid percent growth for flash animation: " + percentGrowth));
+            throw new IllegalArgumentException("Invalid percent growth for flash animation: " + percentGrowth);
         }
         else if (percentRestTime >= 0 && percentRestTime <= 1)
         {
@@ -60,13 +56,11 @@ public class FlashAnimation
         }
         else
         {
-            throw new IllegalArgumentException(Logger.log(
-                LoggingType.ERROR,
-                "Invalid percent growth for flash animation: " + percentGrowth));
+            throw new IllegalArgumentException("Invalid percent growth for flash animation: " + percentGrowth);
         }
     }
-    
-    
+
+
     @Override
     public void initialize(int width, int height, int parentWidth, int parentHeight)
     {
@@ -74,8 +68,8 @@ public class FlashAnimation
         viewHeight = height;
         super.initialize(width, height, parentWidth, parentHeight);
     }
-    
-    
+
+
     @Override
     protected void applyTransformation(float interpolatedTime, Transformation t)
     {

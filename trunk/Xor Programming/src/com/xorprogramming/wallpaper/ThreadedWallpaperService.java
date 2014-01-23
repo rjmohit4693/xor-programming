@@ -13,6 +13,8 @@ public abstract class ThreadedWallpaperService
     public abstract class ThreadedEngine
         extends Engine
     {
+        private final Object         lock = new Object();
+
         private final Updatable      u;
         private final UpdaterThread  thread;
         private final WallpaperScene scene;
@@ -51,11 +53,11 @@ public abstract class ThreadedWallpaperService
 
 
         @Override
-        public synchronized void onSurfaceChanged(SurfaceHolder holder, int format, int newWidth, int newHeight)
+        public void onSurfaceChanged(SurfaceHolder holder, int format, int newWidth, int newHeight)
         {
-            super.onSurfaceChanged(holder, format, width, height);
-            synchronized (scene)
+            synchronized (lock)
             {
+                super.onSurfaceChanged(holder, format, width, height);
                 width = newWidth;
                 height = newHeight;
             }
@@ -84,7 +86,7 @@ public abstract class ThreadedWallpaperService
                     c = holder.lockCanvas();
                     if (c != null)
                     {
-                        synchronized (scene)
+                        synchronized (lock)
                         {
                             scene.update(deltaT, width, height);
                             scene.render(c, width, height);
