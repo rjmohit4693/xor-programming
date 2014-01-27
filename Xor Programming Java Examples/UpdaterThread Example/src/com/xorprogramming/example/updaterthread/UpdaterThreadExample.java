@@ -1,15 +1,25 @@
 package com.xorprogramming.example.updaterthread;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Random;
+import javax.swing.JFrame;
+
 // -------------------------------------------------------------------------
 /**
  * A very simple test of the UpdaterThread
  *
  * @author Steven Roberts
- * @version 1.0.0
+ * @version 2.0.0
  */
 public class UpdaterThreadExample
+    extends JFrame
+    implements Updatable
 {
-    private static UpdaterThread thread;
+    private final Random rand;
 
 
     // ----------------------------------------------------------
@@ -17,30 +27,68 @@ public class UpdaterThreadExample
      * Starts the execution of the code
      *
      * @param args
-     * @throws InterruptedException
      */
     public static void main(String[] args)
-        throws InterruptedException
     {
-        Updatable u = new Updatable()
+        new UpdaterThreadExample();
+    }
+
+
+    private UpdaterThreadExample()
+    {
+        super("Updater Thread Example");
+
+        rand = new Random();
+
+        setSize(800, 600);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        createBufferStrategy(1);
+        final UpdaterThread thread = new UpdaterThread(this, 4);
+        addWindowListener(new WindowAdapter()
         {
             @Override
-            public void update(float deltaT)
+            public void windowIconified(WindowEvent e)
             {
-                System.out.println(deltaT);
-                long start = System.currentTimeMillis();
-                while (System.currentTimeMillis() < start + 2500)
-                    ;
+                thread.stop(false);
             }
-        };
-        thread = new UpdaterThread(u, 2);
-        System.out.println(thread.start());
-        System.out.println(thread.stop(false));
-        System.out.println(thread.start());
-        System.out.println(thread.stop(false));
-        System.out.println(thread.start());
-        System.out.println(thread.stop(false));
-        System.out.println(thread.start());
+
+
+            @Override
+            public void windowDeiconified(WindowEvent e)
+            {
+                thread.start();
+            }
+
+
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                thread.stop(true);
+            }
+        });
+        setVisible(true);
+        thread.start();
+    }
+
+
+    @Override
+    public void update(float deltaT)
+    {
+        Graphics g = getBufferStrategy().getDrawGraphics();
+
+        g.setColor(randColor());
+        g.fillRect(0, 0, getWidth(), getHeight());
+
+        g.dispose();
+        getBufferStrategy().show();
+        Toolkit.getDefaultToolkit().sync();
+    }
+
+
+    private Color randColor()
+    {
+        return Color.getHSBColor(rand.nextFloat(), 1, 1);
     }
 
 }

@@ -54,34 +54,14 @@ containing a value of this type.
          */
         public static int widthRatio=0x7f010000;
     }
-    public static final class drawable {
-        public static int ic_checkerboard=0x7f020000;
-        public static int tiled_checkerboard=0x7f020001;
-    }
     public static final class id {
-        public static int alpha=0x7f040007;
-        public static int alpha_seek_bar=0x7f040008;
-        public static int blue_seek_bar=0x7f040006;
-        public static int center=0x7f040001;
-        public static int color_view=0x7f040003;
-        public static int green_seek_bar=0x7f040005;
-        public static int left=0x7f040000;
-        public static int red_seek_bar=0x7f040004;
-        public static int right=0x7f040002;
-    }
-    public static final class layout {
-        public static int dialog_color=0x7f030000;
-    }
-    public static final class string {
-        public static int alpha=0x7f050003;
-        public static int blue=0x7f050002;
-        public static int default_color_dialog_title=0x7f050004;
-        public static int green=0x7f050001;
-        public static int red=0x7f050000;
+        public static int center=0x7f020001;
+        public static int left=0x7f020000;
+        public static int right=0x7f020002;
     }
     public static final class style {
-        public static int splash_animation=0x7f060001;
-        public static int splash_screen=0x7f060000;
+        public static int splash_animation=0x7f030001;
+        public static int splash_screen=0x7f030000;
     }
     public static final class styleable {
         /** Attributes that can be used with a AspectFrame.
