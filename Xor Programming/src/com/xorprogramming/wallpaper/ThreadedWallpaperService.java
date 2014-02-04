@@ -10,19 +10,19 @@ public abstract class ThreadedWallpaperService
     extends WallpaperService
 {
 
-    public abstract class ThreadedEngine
+    public abstract class ThreadedEngine<T extends WallpaperScene>
         extends Engine
     {
         private final Object         lock = new Object();
 
         private final Updatable      u;
         private final UpdaterThread  thread;
-        private final WallpaperScene scene;
+        private final T scene;
         private int                  width;
         private int                  height;
 
 
-        public ThreadedEngine(float targetFPS, final WallpaperScene scene)
+        public ThreadedEngine(float targetFPS, T scene)
         {
             this.scene = scene;
             u = new WallpaperUpdatable();
@@ -70,6 +70,12 @@ public abstract class ThreadedWallpaperService
         {
             super.onSurfaceDestroyed(holder);
             thread.stop(true);
+        }
+
+
+        protected T getWallpaperScene()
+        {
+            return scene;
         }
 
 

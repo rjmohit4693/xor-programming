@@ -6,8 +6,6 @@ int attr widthRatio 0x7f010000
 int id center 0x7f020001
 int id left 0x7f020000
 int id right 0x7f020002
-int style splash_animation 0x7f030001
-int style splash_screen 0x7f030000
 int[] styleable AspectFrame { 0x7f010000, 0x7f010001 }
 int styleable AspectFrame_heightRatio 1
 int styleable AspectFrame_widthRatio 0
