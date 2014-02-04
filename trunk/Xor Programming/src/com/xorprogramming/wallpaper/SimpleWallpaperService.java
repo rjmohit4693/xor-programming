@@ -9,12 +9,12 @@ public abstract class SimpleWallpaperService
     extends WallpaperService
 {
 
-    public class SimpleEngine
+    public class SimpleEngine<T extends WallpaperScene>
         extends Engine
     {
         private static final float MILLIS_PER_SEC = 1e3f;
         private static final float NANOS_PER_SEC  = 1e9f;
-        private final WallpaperScene scene;
+        private final T            scene;
         private final Handler      handler        = new Handler();
         private final Runnable     updater        = new Runnable()
                                                   {
@@ -30,14 +30,14 @@ public abstract class SimpleWallpaperService
         private int                height;
 
 
-        public SimpleEngine(WallpaperScene scene)
+        public SimpleEngine(T scene)
         {
             this.scene = scene;
             targetFrameTime = -1;
         }
 
 
-        public SimpleEngine(float targetFPS, WallpaperScene scene)
+        public SimpleEngine(float targetFPS, T scene)
         {
             if (Float.isInfinite(targetFPS) || Float.isNaN(targetFPS) || targetFPS < 0)
             {
@@ -102,6 +102,8 @@ public abstract class SimpleWallpaperService
             super.onSurfaceDestroyed(holder);
             handleInvisibility();
         }
+
+
         public void update()
         {
             if (!isVisible)
@@ -142,6 +144,12 @@ public abstract class SimpleWallpaperService
                 handler.postDelayed(updater, (long)(MILLIS_PER_SEC * (targetFrameTime + (start - System.nanoTime())
                     / NANOS_PER_SEC)));
             }
+        }
+
+
+        protected T getWallpaperScene()
+        {
+            return scene;
         }
 
     }

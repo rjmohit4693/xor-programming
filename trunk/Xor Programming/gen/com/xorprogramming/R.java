@@ -59,10 +59,6 @@ containing a value of this type.
         public static int left=0x7f020000;
         public static int right=0x7f020002;
     }
-    public static final class style {
-        public static int splash_animation=0x7f030001;
-        public static int splash_screen=0x7f030000;
-    }
     public static final class styleable {
         /** Attributes that can be used with a AspectFrame.
            <p>Includes the following attributes:</p>
