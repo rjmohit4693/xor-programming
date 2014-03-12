@@ -6,23 +6,61 @@ import android.view.SurfaceHolder;
 import com.xorprogramming.thread.Updatable;
 import com.xorprogramming.thread.UpdaterThread;
 
+// -------------------------------------------------------------------------
+/**
+ * An abstraction of the {@code WallpaperService} that uses a {@code WallpaperScene} for updating and rendering. The
+ * {@code ThreadedWallpaperService} is intend to be extended and have an inner class that extends {@code ThreadedEngine}
+ * .
+ *
+ * @see ThreadedEngine
+ * @see WallpaperScene
+ * @author Steven Roberts
+ * @version 1.0.0
+ */
 public abstract class ThreadedWallpaperService
     extends WallpaperService
 {
-
+    // -------------------------------------------------------------------------
+    /**
+     * Handles the rendering of a {@code WallpaperScene} and threading required to update it. The scene is only updated
+     * when the live wallpaper can be seen by a user. Note that the {@code ThreadedEngine} runs on a non-UI thread.
+     * Thus, any interaction in a {@code WallpaperScene} by the UI thread with fields used in the {@code render} and
+     * {@code update} methods must be synchronized.
+     *
+     * @param <T>
+     *            The type of {@code WallpaperScene}
+     * @see WallpaperScene
+     * @see ThreadedWallpaperService
+     * @author Steven Roberts
+     * @version 1.0.1
+     */
     public abstract class ThreadedEngine<T extends WallpaperScene>
         extends Engine
     {
-        private final Object         lock = new Object();
+        private final Object        lock = new Object();
 
-        private final Updatable      u;
-        private final UpdaterThread  thread;
-        private final T scene;
-        private int                  width;
-        private int                  height;
+        private final Updatable     u;
+        private final UpdaterThread thread;
+        private final T             scene;
+        private int                 width;
+        private int                 height;
 
 
-        public ThreadedEngine(float targetFPS, T scene)
+        // ----------------------------------------------------------
+        /**
+         * Create a new ThreadedEngine object.
+         *
+         * @param scene
+         *            The {@code WallpaperScene} for the live wallpaper
+         * @param targetFPS
+         *            The number of thread updates every second. It must be a positive number or
+         *            {@code UpdaterThread.MAX_UPS}, which prevents the thread from sleeping or yielding.
+         * @throws NullPointerException
+         *             If the {@code WallpaperScene} is null
+         * @throws IllegalArgumentException
+         *             If {@code targetUPS} is not a positive number or {@code UpdaterThread.MAX_UPS}
+         */
+        public ThreadedEngine(T scene, float targetFPS)
         {
             this.scene = scene;
             u = new WallpaperUpdatable();
@@ -65,6 +103,30 @@ public abstract class ThreadedWallpaperService
         }
 
 
+        // ----------------------------------------------------------
+        /**
+         * Gets the width of the live wallpaper
+         *
+         * @return The width
+         */
+        protected int getWidth()
+        {
+            return width;
+        }
+
+
+        // ----------------------------------------------------------
+        /**
+         * Gets the height of the live wallpaper
+         *
+         * @return The height
+         */
+        protected int getHeight()
+        {
+            return height;
+        }
+
+
         @Override
         public void onSurfaceDestroyed(SurfaceHolder holder)
         {
@@ -73,6 +135,12 @@ public abstract class ThreadedWallpaperService
         }
 
 
+        // ----------------------------------------------------------
+        /**
+         * Get the {@code WallpaperScene} for the live wallpaper
+         *
+         * @return The scene
+         */
         protected T getWallpaperScene()
         {
             return scene;

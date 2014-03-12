@@ -5,16 +5,38 @@ import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
 import android.view.SurfaceHolder;
 
+// -------------------------------------------------------------------------
+/**
+ * An abstraction of the {@code WallpaperService} that uses a {@code WallpaperScene} for updating and rendering. The
+ * {@code SimpleWallpaperService} is intend to be extended and have an inner class that extends {@code SimpleEngine}.
+ *
+ * @see SimpleEngine
+ * @see WallpaperScene
+ * @author Steven Roberts
+ * @version 1.0.0
+ */
 public abstract class SimpleWallpaperService
     extends WallpaperService
 {
 
+    // -------------------------------------------------------------------------
+    /**
+     * Handles the rendering of a {@code WallpaperScene} and threading required to update it. The scene is only updated
+     * when the live wallpaper can be seen by a user. Note that the {@code SimpleEngine} runs entirely on the UI thread
+     * and may not be suitable for a {@code WallpaperScene} that require intensive updating or rendering.
+     *
+     * @param <T>
+     *            The type of {@code WallpaperScene}
+     * @see WallpaperScene
+     * @see SimpleWallpaperService
+     * @author Steven Roberts
+     * @version 1.2.1
+     */
     public class SimpleEngine<T extends WallpaperScene>
         extends Engine
     {
         private static final float MILLIS_PER_SEC = 1e3f;
         private static final float NANOS_PER_SEC  = 1e9f;
-        private final T            scene;
         private final Handler      handler        = new Handler();
         private final Runnable     updater        = new Runnable()
                                                   {
@@ -23,6 +45,7 @@ public abstract class SimpleWallpaperService
                                                           update();
                                                       }
                                                   };
+        private final T            scene;
         private final float        targetFrameTime;
         private long               lastTime;
         private boolean            isVisible;
@@ -30,16 +53,46 @@ public abstract class SimpleWallpaperService
         private int                height;
 
 
+        // ----------------------------------------------------------
+        /**
+         * Create a new SimpleEngine object.
+         *
+         * @param scene
+         *            The {@code WallpaperScene} for the live wallpaper
+         * @throws NullPointerException
+         *             If the {@code WallpaperScene} is null
+         */
         public SimpleEngine(T scene)
         {
+            if (scene == null)
+            {
+                throw new NullPointerException("The scene must be non-null");
+            }
             this.scene = scene;
             targetFrameTime = -1;
         }
 
 
-        public SimpleEngine(float targetFPS, T scene)
+        // ----------------------------------------------------------
+        /**
+         * Create a new SimpleEngine object.
+         *
+         * @param scene
+         *            The {@code WallpaperScene} for the live wallpaper
+         * @param targetFPS
+         *            The frames per second at which the {@code WallpaperScene} will update and render
+         * @throws NullPointerException
+         *             If the {@code WallpaperScene} is null
+         * @throws IllegalArgumentException
+         *             If {@code targetUPS} is not a positive number
+         */
+        public SimpleEngine(T scene, float targetFPS)
         {
-            if (Float.isInfinite(targetFPS) || Float.isNaN(targetFPS) || targetFPS < 0)
+            if (scene == null)
+            {
+                throw new NullPointerException("The scene must be non-null");
+            }
+            else if (Float.isInfinite(targetFPS) || Float.isNaN(targetFPS) || targetFPS < 0)
             {
                 throw new IllegalArgumentException("Invalid FPS: " + targetFPS);
             }
@@ -52,6 +105,30 @@ public abstract class SimpleWallpaperService
                 targetFrameTime = 1 / targetFPS;
             }
             this.scene = scene;
+        }
+
+
+        // ----------------------------------------------------------
+        /**
+         * Gets the width of the live wallpaper
+         *
+         * @return The width
+         */
+        protected int getWidth()
+        {
+            return width;
+        }
+
+
+        // ----------------------------------------------------------
+        /**
+         * Gets the height of the live wallpaper
+         *
+         * @return The height
+         */
+        protected int getHeight()
+        {
+            return height;
         }
 
 
@@ -87,9 +164,18 @@ public abstract class SimpleWallpaperService
 
 
         @Override
+        public void onSurfaceCreated(SurfaceHolder holder)
+        {
+            super.onSurfaceCreated(holder);
+            scene.initialize(getApplicationContext());
+        }
+
+
+        @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int newWidth, int newHeight)
         {
             super.onSurfaceChanged(holder, format, width, height);
+            scene.onSizeChange(newWidth, newHeight);
             width = newWidth;
             height = newHeight;
             update();
@@ -101,9 +187,26 @@ public abstract class SimpleWallpaperService
         {
             super.onSurfaceDestroyed(holder);
             handleInvisibility();
+            scene.dispose();
         }
 
 
+        // ----------------------------------------------------------
+        /**
+         * Get the {@code WallpaperScene} for the live wallpaper
+         *
+         * @return The scene
+         */
+        protected T getWallpaperScene()
+        {
+            return scene;
+        }
+
+
+        // ----------------------------------------------------------
+        /**
+         * Forces the {@code WallpaperScene} to update and render itself
+         */
         public void update()
         {
             if (!isVisible)
@@ -144,12 +247,6 @@ public abstract class SimpleWallpaperService
                 handler.postDelayed(updater, (long)(MILLIS_PER_SEC * (targetFrameTime + (start - System.nanoTime())
                     / NANOS_PER_SEC)));
             }
-        }
-
-
-        protected T getWallpaperScene()
-        {
-            return scene;
         }
 
     }
