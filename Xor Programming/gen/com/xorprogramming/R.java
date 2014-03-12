@@ -86,7 +86,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:heightRatio
+          @attr name com.xorprogramming:heightRatio
         */
         public static final int AspectFrame_heightRatio = 1;
         /**
@@ -100,7 +100,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:widthRatio
+          @attr name com.xorprogramming:widthRatio
         */
         public static final int AspectFrame_widthRatio = 0;
         /** Attributes that can be used with a AutoSizeTextView.
@@ -109,8 +109,8 @@ containing a value of this type.
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #AutoSizeTextView_android_text com.xorprogramming:android_text}</code></td><td></td></tr>
-           <tr><td><code>{@link #AutoSizeTextView_android_textColor com.xorprogramming:android_textColor}</code></td><td></td></tr>
+           <tr><td><code>{@link #AutoSizeTextView_android_text android:text}</code></td><td></td></tr>
+           <tr><td><code>{@link #AutoSizeTextView_android_textColor android:textColor}</code></td><td></td></tr>
            <tr><td><code>{@link #AutoSizeTextView_heightRatio com.xorprogramming:heightRatio}</code></td><td></td></tr>
            <tr><td><code>{@link #AutoSizeTextView_justification com.xorprogramming:justification}</code></td><td></td></tr>
            <tr><td><code>{@link #AutoSizeTextView_widthRatio com.xorprogramming:widthRatio}</code></td><td></td></tr>
@@ -126,15 +126,15 @@ containing a value of this type.
             0x7f010004
         };
         /**
-          <p>This symbol is the offset where the {@link com.xorprogramming.R.attr#android_text}
+          <p>This symbol is the offset where the {@link android.R.attr#text}
           attribute's value can be found in the {@link #AutoSizeTextView} array.
-          @attr name android:android_text
+          @attr name android:text
         */
         public static final int AutoSizeTextView_android_text = 1;
         /**
-          <p>This symbol is the offset where the {@link com.xorprogramming.R.attr#android_textColor}
+          <p>This symbol is the offset where the {@link android.R.attr#textColor}
           attribute's value can be found in the {@link #AutoSizeTextView} array.
-          @attr name android:android_textColor
+          @attr name android:textColor
         */
         public static final int AutoSizeTextView_android_textColor = 0;
         /**
@@ -148,7 +148,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:heightRatio
+          @attr name com.xorprogramming:heightRatio
         */
         public static final int AutoSizeTextView_heightRatio = 3;
         /**
@@ -166,7 +166,7 @@ containing a value of this type.
 <tr><td><code>center</code></td><td>1</td><td></td></tr>
 <tr><td><code>right</code></td><td>2</td><td></td></tr>
 </table>
-          @attr name android:justification
+          @attr name com.xorprogramming:justification
         */
         public static final int AutoSizeTextView_justification = 4;
         /**
@@ -180,7 +180,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:widthRatio
+          @attr name com.xorprogramming:widthRatio
         */
         public static final int AutoSizeTextView_widthRatio = 2;
         /** Attributes that can be used with a CheckableImageButton.
@@ -207,7 +207,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:checked
+          @attr name com.xorprogramming:checked
         */
         public static final int CheckableImageButton_checked = 0;
         /** Attributes that can be used with a GameView.
@@ -234,7 +234,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:transparentBackground
+          @attr name com.xorprogramming:transparentBackground
         */
         public static final int GameView_transparentBackground = 0;
     };

@@ -74,6 +74,7 @@ public final class AchievementManager<E extends Enum<E>, T>
         }
     }
 
+
     public Achievement<?, ?> getAchievement(int index)
     {
         return achievementList.get(index);
@@ -101,7 +102,8 @@ public final class AchievementManager<E extends Enum<E>, T>
 
 
     public void save(ObjectOutputStream out)
-        throws IOException, SaveException
+        throws IOException,
+        SaveException
     {
         for (Achievement<E, T> a : achievementList)
         {
@@ -113,20 +115,21 @@ public final class AchievementManager<E extends Enum<E>, T>
 
 
     public void restore(ObjectInputStream in)
-        throws IOException, SaveException
+        throws IOException,
+        SaveException
     {
         while (in.available() > 0)
+        {
+            int id = in.readInt();
+            boolean hasAchievement = in.readBoolean();
+            long achievementGetTime = in.readLong();
+            for (Achievement<E, T> a : achievementList)
             {
-                int id = in.readInt();
-                boolean hasAchievement = in.readBoolean();
-                long achievementGetTime = in.readLong();
-                for (Achievement<E, T> a : achievementList)
+                if (a.getID() == id)
                 {
-                    if (a.getID() == id)
-                    {
-                        a.restore(hasAchievement, achievementGetTime);
-                    }
+                    a.restore(hasAchievement, achievementGetTime);
                 }
             }
+        }
     }
 }
