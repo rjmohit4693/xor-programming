@@ -157,14 +157,6 @@ public abstract class SimpleWallpaperService
 
 
         @Override
-        public void onDestroy()
-        {
-            super.onDestroy();
-            handleInvisibility();
-        }
-
-
-        @Override
         public void onVisibilityChanged(boolean visible)
         {
             if (visible)
@@ -191,7 +183,7 @@ public abstract class SimpleWallpaperService
         public void onSurfaceChanged(SurfaceHolder holder, int format, int newWidth, int newHeight)
         {
             super.onSurfaceChanged(holder, format, width, height);
-            scene.onSizeChange(newWidth, newHeight);
+            scene.onSizeChange(getApplicationContext(), newWidth, newHeight);
             width = newWidth;
             height = newHeight;
             update();

@@ -1,0 +1,24 @@
+int attr checked 0x7f010003
+int attr heightRatio 0x7f010001
+int attr justification 0x7f010004
+int attr transparentBackground 0x7f010002
+int attr widthRatio 0x7f010000
+int drawable ic_launcher 0x7f020000
+int id center 0x7f040001
+int id left 0x7f040000
+int id right 0x7f040002
+int string app_name 0x7f050000
+int[] styleable AspectFrame { 0x7f010000, 0x7f010001 }
+int styleable AspectFrame_heightRatio 1
+int styleable AspectFrame_widthRatio 0
+int[] styleable AutoSizeTextView { 0x01010098, 0x0101014f, 0x7f010000, 0x7f010001, 0x7f010004 }
+int styleable AutoSizeTextView_android_text 1
+int styleable AutoSizeTextView_android_textColor 0
+int styleable AutoSizeTextView_heightRatio 3
+int styleable AutoSizeTextView_justification 4
+int styleable AutoSizeTextView_widthRatio 2
+int[] styleable CheckableImageButton { 0x7f010003 }
+int styleable CheckableImageButton_checked 0
+int[] styleable GameView { 0x7f010002 }
+int styleable GameView_transparentBackground 0
+int xml wallpaper 0x7f030000

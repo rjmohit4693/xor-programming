@@ -85,14 +85,6 @@ public abstract class ThreadedWallpaperService
 
 
         @Override
-        public void onDestroy()
-        {
-            super.onDestroy();
-            thread.stop(true);
-        }
-
-
-        @Override
         public void onVisibilityChanged(boolean visible)
         {
             if (visible)
