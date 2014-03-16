@@ -15,7 +15,7 @@ import com.xorprogramming.wallpaper.WallpaperScene;
  * the screen.
  *
  * @author Steven Roberts
- * @version Mar 13, 2014
+ * @version 1.0.0
  */
 public class Scene
     implements WallpaperScene
