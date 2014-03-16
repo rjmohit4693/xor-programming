@@ -38,6 +38,7 @@ public class SimpleLiveWallpaper
          */
         public SimpleLiveWallpaperEngine()
         {
+            // Set the scene and run at 16 fps
             super(new Scene(), 16);
         }
 
