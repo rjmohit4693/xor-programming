@@ -21,7 +21,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 // -------------------------------------------------------------------------
 /**
- * A class containing shared, static resources for the Xor Programming API
+ * A utility
  *
  * @author Steven Roberts
  * @version 1.0.0
