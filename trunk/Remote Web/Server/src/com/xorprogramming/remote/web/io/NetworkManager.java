@@ -13,6 +13,15 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import javax.swing.SwingUtilities;
 
+// -------------------------------------------------------------------------
+/**
+ * Manages a network connection with multiple clients on two separate threads. Users of the {@code NetworkManager} class
+ * can be notified of errors, client connections, and client disconnections on the AWT event dispatching thread with a
+ * {@code NetworkListener}.
+ *
+ * @author Steven Roberts
+ * @version 1.0.0
+ */
 public class NetworkManager
     implements Closeable
 {
@@ -26,6 +35,13 @@ public class NetworkManager
     private final SocketWriter          writer;
 
 
+    // ----------------------------------------------------------
+    /**
+     * Create a new NetworkManager object.
+     * @param port The port on which the server will run
+     * @param listener The event listener
+     * @throws IOException If unable to create server socket
+     */
     public NetworkManager(int port, NetworkListener listener)
         throws IOException
     {
@@ -43,6 +59,10 @@ public class NetworkManager
     }
 
 
+    // ----------------------------------------------------------
+    /**
+     * Starts the threads that run the server
+     */
     public void start()
     {
         accepter.start();
@@ -50,6 +70,11 @@ public class NetworkManager
     }
 
 
+    // ----------------------------------------------------------
+    /**
+     * Sends a message to all the clients
+     * @param message The message
+     */
     public void sendMessage(String message)
     {
         messages.add(message);
@@ -77,6 +102,13 @@ public class NetworkManager
     }
 
 
+    // -------------------------------------------------------------------------
+    /**
+     *  This thread accepts clients and sends the newly created sockets to the writer thread
+     *
+     *  @author Steven Roberts
+     *  @version 1.0.0
+     */
     private class SocketAccepter
         extends Thread
     {
@@ -102,6 +134,7 @@ public class NetworkManager
                 }
                 catch (SocketException se)
                 {
+                    // the socket was close from the terminate method so break the loop
                     break;
                 }
                 catch (Exception e)
@@ -127,9 +160,19 @@ public class NetworkManager
     }
 
 
+    // -------------------------------------------------------------------------
+    /**
+     *  This thread writes messages to the clients and manages the connections.
+     *
+     *  @author Steven Roberts
+     *  @version 1.0.0
+     */
     private class SocketWriter
         extends Thread
     {
+        /**
+         * This variable must be used in a synchronized block with itself as the lock
+         */
         private final List<Connection> connections;
 
 
@@ -203,6 +246,7 @@ public class NetworkManager
                     }
                     catch (Exception e)
                     {
+                        // An error occurred in the connection so remove the client
                         closeConnection(c);
                         itr.remove();
                     }

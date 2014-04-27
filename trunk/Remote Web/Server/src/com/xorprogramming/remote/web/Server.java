@@ -14,6 +14,14 @@ import java.io.IOException;
 import java.net.InetAddress;
 import javax.swing.*;
 
+// -------------------------------------------------------------------------
+/**
+ * The GUI for the server. It displays the currently connected clients and allows users to send requests to open
+ * webpages on the clients. The server can also tells client programs to close themselves with the "exit" command.
+ *
+ * @author Steven Roberts
+ * @version 2.0.0
+ */
 public class Server
     implements NetworkListener, ActionListener
 {
@@ -27,6 +35,13 @@ public class Server
     private final DefaultListModel<Connection> listModel;
 
 
+    // ----------------------------------------------------------
+    /**
+     * Starts the server and calls constructor
+     *
+     * @param args
+     *            The command line arguments
+     */
     public static void main(String[] args)
     {
         try
