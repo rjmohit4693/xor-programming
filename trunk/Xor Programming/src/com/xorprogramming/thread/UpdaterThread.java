@@ -28,7 +28,7 @@ package com.xorprogramming.thread;
  * </p>
  *
  * @author Steven Roberts
- * @version 3.1.1
+ * @version 3.1.2
  */
 public final class UpdaterThread
 {
@@ -79,7 +79,7 @@ public final class UpdaterThread
      *            The object to update
      * @param targetUPS
      *            The number of thread updates every second. It must be a positive number or
-     *            {@code UpdaterThread.MAX_UPS}, which prevents the UpdaterThread from sleeping or yielding.
+     *            {@link UpdaterThread#MAX_UPS}, which prevents the UpdaterThread from sleeping or yielding.
      * @throws NullPointerException
      *             If the {@code Updatable} is null
      * @throws IllegalArgumentException
@@ -103,7 +103,7 @@ public final class UpdaterThread
      * Sets the number of UPS that the thread will try to attain.
      *
      * @param targetUPS
-     *            The target UPS or {@code UpdaterThread.MAX_UPS}
+     *            The target UPS or {@link UpdaterThread#MAX_UPS}
      * @throws IllegalArgumentException
      *             If {@code targetUPS} is not a positive number or {@code MAX_UPS}
      */
