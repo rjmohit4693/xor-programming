@@ -1,17 +1,10 @@
 /*
- * Copyright (C) 2014 Xor Programming
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright (C) 2014 Xor Programming Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions and limitations under the
+ * License.
  */
 
 package com.xorprogramming.logging;
@@ -21,8 +14,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 // -------------------------------------------------------------------------
 /**
- * A utility
+ * A utility class that manages logging to output. It uses a {@code LoggingPolicy} to determine which logging types
+ * actually get logged. It also notifies {@code LoggerListener}s when anything is logged regardless of the policy. This
+ * can be used for a central error handling, for example.
+ * <p/>
+ * Note that this class can be accessed concurrently. Also, when a thread logs a message, the
+ * {@code LoggerListener.onLog} method is called by that thread. Thus, in a multithreaded environment utilizing the
+ * {@code Logger}, a {@code LoggerListener.onLog} may require synchronization.
  *
+ * @see LoggingPolicy
+ * @see LoggerListener
  * @author Steven Roberts
  * @version 1.0.0
  */
@@ -49,6 +50,13 @@ public final class Logger
     }
 
 
+    // ----------------------------------------------------------
+    /**
+     * Sets a new logging policy.
+     *
+     * @param newPolicy
+     *            The new policy
+     */
     public synchronized static void setLoggingPolicy(LoggingPolicy newPolicy)
     {
         if (newPolicy == null)
@@ -62,24 +70,62 @@ public final class Logger
     }
 
 
+    // ----------------------------------------------------------
+    /**
+     * Adds a {@code LoggerListener} to be notified of logging events.
+     *
+     * @param listener
+     *            The {@code LoggerListener} to add
+     */
     public void addLoggerListener(LoggerListener listener)
     {
         logListeners.add(listener);
     }
 
 
+    // ----------------------------------------------------------
+    /**
+     * Removes the {@code LoggerListener} from the list of listeners. The listener will no longer be notified of logging
+     * events
+     *
+     * @param listener
+     *            The {@code LoggerListener} to remove
+     */
     public void removeLoggerListener(LoggerListener listener)
     {
         logListeners.remove(listener);
     }
 
 
+    // ----------------------------------------------------------
+    /**
+     * Logs a message to output with {@link Logger#LOG_TAG} as the tag.
+     *
+     * @param type
+     *            The type of message being logged
+     * @param message
+     *            The message to log
+     * @return The message
+     */
     public static String log(LoggingType type, String message)
     {
         return log(type, LOG_TAG, message);
     }
 
 
+    // ----------------------------------------------------------
+    /**
+     * Logs a message to output with the given tag.
+     *
+     * @param type
+     *            The type of message being logged
+     * @param tag
+     *            Used to identify the source of a log message. It usually identifies the class or activity where the
+     *            log call occurs.
+     * @param message
+     *            The message to log
+     * @return The message
+     */
     public static String log(LoggingType type, String tag, String message)
     {
         synchronized (Logger.class)
@@ -94,12 +140,35 @@ public final class Logger
     }
 
 
+    // ----------------------------------------------------------
+    /**
+     * Logs a {@code Throwable} to output with {@link Logger#LOG_TAG} as the tag.
+     *
+     * @param type
+     *            The type of message being logged
+     * @param throwable
+     *            The exception or error being logged
+     * @return The throwable
+     */
     public static <T extends Throwable> T log(LoggingType type, T throwable)
     {
         return log(type, LOG_TAG, throwable);
     }
 
 
+    // ----------------------------------------------------------
+    /**
+     * Logs a {@code Throwable} to output with {@link Logger#LOG_TAG} as the tag.
+     *
+     * @param type
+     *            The type of message being logged
+     * @param tag
+     *            Used to identify the source of a log message. It usually identifies the class or activity where the
+     *            log call occurs.
+     * @param throwable
+     *            The exception or error being logged
+     * @return The throwable
+     */
     public static <T extends Throwable> T log(LoggingType type, String tag, T throwable)
     {
         synchronized (Logger.class)

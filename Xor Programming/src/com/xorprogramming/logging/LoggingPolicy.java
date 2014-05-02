@@ -14,7 +14,7 @@ import java.util.EnumSet;
 // -------------------------------------------------------------------------
 /**
  * This class stores which {@code LoggingType}s are actually sent to output by the {@code Logger}. Note that this class
- * is immutable and therefore, is thread-safe. Some of the most commonly used logging policies are defined as
+ * is immutable, and therefore, is thread-safe.
  *
  * @see LoggingType
  * @see Logger
@@ -23,11 +23,20 @@ import java.util.EnumSet;
  */
 public final class LoggingPolicy
 {
+    /**
+     * A policy which contains all logging types
+     */
     public static final LoggingPolicy  FULL_LOGGING       = new LoggingPolicy(EnumSet.allOf(LoggingType.class));
+    /**
+     * A policy which contains the error, warning, and wtf logging types
+     */
     public static final LoggingPolicy  PRODUCTION_LOGGING = instanceOf(
                                                               LoggingType.ERROR,
                                                               LoggingType.WARNING,
                                                               LoggingType.WTF);
+    /**
+     * A policy which contains no logging types
+     */
     public static final LoggingPolicy  NO_LOGGING         = new LoggingPolicy(EnumSet.noneOf(LoggingType.class));
 
     private final EnumSet<LoggingType> loggingTypes;
@@ -39,12 +48,25 @@ public final class LoggingPolicy
     }
 
 
+    // ----------------------------------------------------------
+    /**
+     * Creates a {@code LoggingPolicy} with at least one arbitrary element.
+     * @param firstType The first logging type
+     * @param otherLoggingTypes The other logging types
+     * @return The new {@code LoggingPolicy}
+     */
     public static LoggingPolicy instanceOf(LoggingType firstType, LoggingType... otherLoggingTypes)
     {
         return new LoggingPolicy(EnumSet.of(firstType, otherLoggingTypes));
     }
 
 
+    // ----------------------------------------------------------
+    /**
+     * Checks if the give {@code LoggingType} is in the policy
+     * @param type The logging type
+     * @return true if it is part of the policy, false otherwise
+     */
     public boolean isLogging(LoggingType type)
     {
         return loggingTypes.contains(type);
