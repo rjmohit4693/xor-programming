@@ -16,7 +16,21 @@
 
 package com.xorprogramming.logging;
 
+// -------------------------------------------------------------------------
+/**
+ *  A listener interface for responding to logging event from the {@code Logger}
+ *
+ *  @author Steven Roberts
+ *  @version 1.0.0
+ */
 public interface LoggerListener
 {
+    // ----------------------------------------------------------
+    /**
+     * Called when a message is logged to output
+     * @param type The logging type
+     * @param tag The logging tag
+     * @param message The message that was logged
+     */
     void onLog(LoggingType type, String tag, String message);
 }
