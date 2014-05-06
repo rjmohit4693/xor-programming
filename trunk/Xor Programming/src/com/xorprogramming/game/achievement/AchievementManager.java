@@ -1,23 +1,16 @@
 /*
- * Copyright (C) 2014 Xor Programming
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright (C) 2014 Xor Programming Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions and limitations under the
+ * License.
  */
 
 package com.xorprogramming.game.achievement;
 
-import com.xorprogramming.io.savable.SaveException;
 import com.xorprogramming.io.savable.Savable;
+import com.xorprogramming.io.savable.SaveException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -32,22 +25,22 @@ public final class AchievementManager<E extends Enum<E>, T>
     private final Map<E, List<Achievement<E, T>>> achievementActionMap;
     private final List<Achievement<E, T>>         achievementList;
     private final List<AchievementListener>       listeners;
-
-
+    
+    
     public AchievementManager(Class<E> enumClass)
     {
         achievementActionMap = new EnumMap<E, List<Achievement<E, T>>>(enumClass);
         achievementList = new ArrayList<Achievement<E, T>>();
         listeners = new ArrayList<AchievementListener>();
     }
-
-
+    
+    
     public void addAchievementListener(AchievementListener listener)
     {
         listeners.add(listener);
     }
-
-
+    
+    
     public void addAchievement(Achievement<E, T> achievement)
     {
         achievementList.add(achievement);
@@ -66,8 +59,8 @@ public final class AchievementManager<E extends Enum<E>, T>
             }
         }
     }
-
-
+    
+    
     public void checkAchievements(E action, T t)
     {
         List<Achievement<E, T>> value = achievementActionMap.get(action);
@@ -80,8 +73,8 @@ public final class AchievementManager<E extends Enum<E>, T>
             }
         }
     }
-
-
+    
+    
     private void updateListeners(Achievement<?, ?> achievement)
     {
         for (int i = 0; i < listeners.size(); i++)
@@ -89,20 +82,20 @@ public final class AchievementManager<E extends Enum<E>, T>
             listeners.get(i).onAchievementGet(achievement);
         }
     }
-
-
+    
+    
     public Achievement<?, ?> getAchievement(int index)
     {
         return achievementList.get(index);
     }
-
-
+    
+    
     public int getAchievementCount()
     {
         return achievementList.size();
     }
-
-
+    
+    
     public int getAchievementsGetsCount()
     {
         int achievementGets = 0;
@@ -115,8 +108,8 @@ public final class AchievementManager<E extends Enum<E>, T>
         }
         return achievementGets;
     }
-
-
+    
+    
     public void save(ObjectOutputStream out)
         throws IOException,
         SaveException
@@ -128,8 +121,8 @@ public final class AchievementManager<E extends Enum<E>, T>
             out.writeLong(a.getAcievementGetTime());
         }
     }
-
-
+    
+    
     public void restore(ObjectInputStream in)
         throws IOException,
         SaveException

@@ -1,17 +1,10 @@
 /*
- * Copyright (C) 2014 Xor Programming
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright (C) 2014 Xor Programming Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions and limitations under the
+ * License.
  */
 
 package com.xorprogramming.io;
@@ -25,19 +18,19 @@ import com.xorprogramming.logging.LoggingType;
 // -------------------------------------------------------------------------
 /**
  * A factory used to efficiently load bitmaps.
- *
+ * 
  * @author Steven Roberts
  * @version 1.0.0
  */
 public class LowMemoryBitmapFactory
 {
     private static final int TEMP_STORAGE_SIZE = 16384;
-
-
+    
+    
     // ----------------------------------------------------------
     /**
      * Create a scaled bitmap of the given resource
-     *
+     * 
      * @param res
      *            Resource used for retrieving the resource
      * @param id
@@ -70,7 +63,7 @@ public class LowMemoryBitmapFactory
             BitmapFactory.Options bitmapSizeOptions = new BitmapFactory.Options();
             bitmapSizeOptions.inJustDecodeBounds = true;
             BitmapFactory.decodeResource(res, id, bitmapSizeOptions);
-
+            
             // load image using inSampleSize adapted to required image size
             BitmapFactory.Options bitmapDecodeOptions = new BitmapFactory.Options();
             bitmapDecodeOptions.inTempStorage = new byte[TEMP_STORAGE_SIZE];
@@ -78,7 +71,7 @@ public class LowMemoryBitmapFactory
             bitmapDecodeOptions.inPurgeable = true;
             bitmapDecodeOptions.inDither = higherQuality;
             bitmapDecodeOptions.inPreferredConfig = higherQuality ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
-
+            
             Bitmap decodedBitmap = BitmapFactory.decodeResource(res, id, bitmapDecodeOptions);
             Bitmap scaledBitmap = Bitmap.createScaledBitmap(decodedBitmap, width, height, higherQuality);
             decodedBitmap.recycle();
@@ -91,12 +84,12 @@ public class LowMemoryBitmapFactory
             return null;
         }
     }
-
-
+    
+    
     // ----------------------------------------------------------
     /**
      * Create a bitmap of the given resource. The bitmap will be the same size as the image.
-     *
+     * 
      * @param res
      *            Resource used for retrieving the resource
      * @param id
@@ -129,7 +122,7 @@ public class LowMemoryBitmapFactory
             BitmapFactory.Options bitmapSizeOptions = new BitmapFactory.Options();
             bitmapSizeOptions.inJustDecodeBounds = true;
             BitmapFactory.decodeResource(res, id, bitmapSizeOptions);
-
+            
             // load image using inSampleSize adapted to required image size
             BitmapFactory.Options bitmapDecodeOptions = new BitmapFactory.Options();
             bitmapDecodeOptions.inTempStorage = new byte[TEMP_STORAGE_SIZE];
@@ -145,12 +138,12 @@ public class LowMemoryBitmapFactory
             return null;
         }
     }
-
-
+    
+    
     // ----------------------------------------------------------
     /**
      * Create a bitmap of the given resource. The bitmap will be the same size as the image.
-     *
+     * 
      * @param res
      *            Resource used for retrieving the resource
      * @param id
@@ -173,7 +166,7 @@ public class LowMemoryBitmapFactory
             bitmapDecodeOptions.inPurgeable = true;
             bitmapDecodeOptions.inDither = higherQuality;
             bitmapDecodeOptions.inPreferredConfig = higherQuality ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
-
+            
             return BitmapFactory.decodeResource(res, id, bitmapDecodeOptions);
         }
         catch (Exception ex)
@@ -182,16 +175,16 @@ public class LowMemoryBitmapFactory
             return null;
         }
     }
-
-
+    
+    
     private static int computeInSampleSize(BitmapFactory.Options options, int dstWidth, int dstHeight)
     {
         final int srcHeight = options.outHeight;
         final int srcWidth = options.outWidth;
-
+        
         final int heightRatio = Math.round((float)srcHeight / dstHeight);
         final int widthRatio = Math.round((float)srcWidth / dstWidth);
         return Math.min(heightRatio, widthRatio);
     }
-
+    
 }

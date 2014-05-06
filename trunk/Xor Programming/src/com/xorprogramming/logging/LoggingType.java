@@ -14,7 +14,7 @@ import android.util.Log;
 // -------------------------------------------------------------------------
 /**
  * Defines the various type and levels of logging as found in {@code android.util.Log}
- *
+ * 
  * @see Log
  * @author Steven Roberts
  * @version 1.0.0
@@ -87,11 +87,11 @@ public enum LoggingType
             Log.wtf(tag, message);
         }
     };
-
+    
     // ----------------------------------------------------------
     /**
      * Logs the given message with the given tag
-     *
+     * 
      * @param tag
      *            Used to identify the source of a log message. It usually identifies the class or activity where the
      *            log call occurs
