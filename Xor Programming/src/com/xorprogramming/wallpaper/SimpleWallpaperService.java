@@ -1,17 +1,10 @@
 /*
- * Copyright (C) 2014 Xor Programming
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright (C) 2014 Xor Programming Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions and limitations under the
+ * License.
  */
 
 package com.xorprogramming.wallpaper;
@@ -25,7 +18,7 @@ import android.view.SurfaceHolder;
 /**
  * An abstraction of the {@code WallpaperService} that uses a {@code WallpaperScene} for updating and rendering. The
  * {@code SimpleWallpaperService} is intend to be extended and have an inner class that extends {@code SimpleEngine}.
- *
+ * 
  * @see SimpleEngine
  * @see WallpaperScene
  * @author Steven Roberts
@@ -34,13 +27,13 @@ import android.view.SurfaceHolder;
 public abstract class SimpleWallpaperService
     extends WallpaperService
 {
-
+    
     // -------------------------------------------------------------------------
     /**
      * Handles the rendering of a {@code WallpaperScene} and threading required to update it. The scene is only updated
      * when the live wallpaper can be seen by a user. Note that the {@code SimpleEngine} runs entirely on the UI thread
      * and may not be suitable for a {@code WallpaperScene} that require intensive updating or rendering.
-     *
+     * 
      * @param <T>
      *            The type of {@code WallpaperScene}
      * @see WallpaperScene
@@ -67,12 +60,12 @@ public abstract class SimpleWallpaperService
         private boolean            isVisible;
         private int                width;
         private int                height;
-
-
+        
+        
         // ----------------------------------------------------------
         /**
          * Create a new SimpleEngine object.
-         *
+         * 
          * @param scene
          *            The {@code WallpaperScene} for the live wallpaper
          * @throws NullPointerException
@@ -87,12 +80,12 @@ public abstract class SimpleWallpaperService
             this.scene = scene;
             targetFrameTime = -1;
         }
-
-
+        
+        
         // ----------------------------------------------------------
         /**
          * Create a new SimpleEngine object.
-         *
+         * 
          * @param scene
          *            The {@code WallpaperScene} for the live wallpaper
          * @param targetFPS
@@ -122,40 +115,40 @@ public abstract class SimpleWallpaperService
             }
             this.scene = scene;
         }
-
-
+        
+        
         // ----------------------------------------------------------
         /**
          * Gets the width of the live wallpaper
-         *
+         * 
          * @return The width
          */
         protected int getWidth()
         {
             return width;
         }
-
-
+        
+        
         // ----------------------------------------------------------
         /**
          * Gets the height of the live wallpaper
-         *
+         * 
          * @return The height
          */
         protected int getHeight()
         {
             return height;
         }
-
-
+        
+        
         private void handleInvisibility()
         {
             isVisible = false;
             handler.removeCallbacks(updater);
             lastTime = 0;
         }
-
-
+        
+        
         @Override
         public void onVisibilityChanged(boolean visible)
         {
@@ -169,16 +162,16 @@ public abstract class SimpleWallpaperService
                 handleInvisibility();
             }
         }
-
-
+        
+        
         @Override
         public void onSurfaceCreated(SurfaceHolder holder)
         {
             super.onSurfaceCreated(holder);
             scene.initialize(getApplicationContext());
         }
-
-
+        
+        
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int newWidth, int newHeight)
         {
@@ -188,8 +181,8 @@ public abstract class SimpleWallpaperService
             height = newHeight;
             update();
         }
-
-
+        
+        
         @Override
         public void onSurfaceDestroyed(SurfaceHolder holder)
         {
@@ -197,20 +190,20 @@ public abstract class SimpleWallpaperService
             handleInvisibility();
             scene.dispose();
         }
-
-
+        
+        
         // ----------------------------------------------------------
         /**
          * Get the {@code WallpaperScene} for the live wallpaper
-         *
+         * 
          * @return The scene
          */
         protected T getWallpaperScene()
         {
             return scene;
         }
-
-
+        
+        
         // ----------------------------------------------------------
         /**
          * Forces the {@code WallpaperScene} to update and render itself
@@ -222,7 +215,7 @@ public abstract class SimpleWallpaperService
                 return;
             }
             SurfaceHolder holder = getSurfaceHolder();
-
+            
             Canvas c = null;
             long start = System.nanoTime();
             try
@@ -256,6 +249,6 @@ public abstract class SimpleWallpaperService
                     / NANOS_PER_SEC)));
             }
         }
-
+        
     }
 }

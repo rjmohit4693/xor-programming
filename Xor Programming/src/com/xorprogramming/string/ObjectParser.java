@@ -1,17 +1,10 @@
 /*
- * Copyright (C) 2014 Xor Programming
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright (C) 2014 Xor Programming Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions and limitations under the
+ * License.
  */
 
 package com.xorprogramming.string;
@@ -33,19 +26,19 @@ import java.util.ArrayList;
  * </ol>
  * Notice that the new keyword is not used and arrays do not require square brackets. Also, comments can be appended to
  * the end of the String with a double slash and will be ignored by the parser.
- *
+ * 
  * @author Steven Roberts
  * @version 1.2.0
  */
 public class ObjectParser
 {
     private final String text;
-
-
+    
+    
     // ----------------------------------------------------------
     /**
      * Create a new ObjectParser object.
-     *
+     * 
      * @param text
      */
     public ObjectParser(String text)
@@ -56,12 +49,12 @@ public class ObjectParser
         }
         this.text = text;
     }
-
-
+    
+    
     // ----------------------------------------------------------
     /**
      * Parses the given text into the corresponding object
-     *
+     * 
      * @return The object parsed from the text
      * @throws ParseException
      */
@@ -70,8 +63,8 @@ public class ObjectParser
     {
         return parseObject(new StringChopper(text, "{}(),\n"));
     }
-
-
+    
+    
     private Object parseObject(StringChopper sc)
         throws ParseException
     {
@@ -79,7 +72,7 @@ public class ObjectParser
         {
             throw new ParseException("No object to parse");
         }
-
+        
         String initial = sc.next().trim();
         if (initial.length() == 0) // Skip a newline or any other empty token
         {
@@ -109,7 +102,7 @@ public class ObjectParser
         {
             return false;
         }
-
+        
         try
         {
             return Integer.parseInt(initial);
@@ -133,16 +126,16 @@ public class ObjectParser
         {
             // Ignore and continue
         }
-
+        
         if (!sc.hasNext())
         {
             throw new ParseException("No object to parse");
         }
-
+        
         ArrayList<Object> parameters = new ArrayList<Object>();
-
+        
         String next = sc.next().trim();
-
+        
         // If it is not an object, it is an array
         boolean isObject = true;
         if (next.equals("("))
@@ -157,9 +150,9 @@ public class ObjectParser
         {
             throw new ParseException("Invalid object: " + next);
         }
-
+        
         boolean done = false;
-
+        
         do
         {
             if (!sc.hasNext())
@@ -215,16 +208,16 @@ public class ObjectParser
             else
             {
                 // Parse an array
-
+                
                 Class<?> c = Class.forName(initial);
                 Object o = Array.newInstance(c, parameters.size());
                 for (int i = 0; i < parameters.size(); i++)
                 {
                     Array.set(o, i, parameters.get(i));
                 }
-
+                
                 return o;
-
+                
             }
         }
         catch (Exception e)
@@ -232,8 +225,8 @@ public class ObjectParser
             throw new ParseException(e.getMessage());
         }
     }
-
-
+    
+    
     private Object[] matchConstructor(Constructor<?> constructor, ArrayList<Object> actualParameters)
     {
         Class<?>[] formalParameters = constructor.getParameterTypes();
@@ -265,8 +258,8 @@ public class ObjectParser
         }
         return returnParameters;
     }
-
-
+    
+    
     private Class<?> convertToWrapper(Class<?> c)
     {
         if (c == Boolean.class)

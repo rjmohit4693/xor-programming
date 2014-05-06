@@ -21,15 +21,16 @@ public abstract class GLWallpaperService
     public abstract class ThreadedEngine<T extends Renderer>
         extends Engine
     {
-        private final T renderer;
+        private final T                renderer;
         private WallpaperGLSurfaceView surfaceView;
-
-
+        
+        
         public ThreadedEngine(T renderer, float targetFPS)
         {
             this.renderer = renderer;
         }
-
+        
+        
         @Override
         public void onCreate(SurfaceHolder surfaceHolder)
         {
@@ -37,8 +38,8 @@ public abstract class GLWallpaperService
             surfaceView = new WallpaperGLSurfaceView(getApplicationContext());
             surfaceView.setRenderer(renderer);
         }
-
-
+        
+        
         @Override
         public void onVisibilityChanged(boolean visible)
         {
@@ -51,28 +52,28 @@ public abstract class GLWallpaperService
                 surfaceView.onPause();
             }
         }
-
-
+        
+        
         @Override
         public void onDestroy()
         {
-        	super.onDestroy();
-        	surfaceView.onWallpaperDestroy();
+            super.onDestroy();
+            surfaceView.onWallpaperDestroy();
         }
-
-
+        
+        
         public void queueEvent(Runnable runnable)
         {
-        	surfaceView.queueEvent(runnable);
+            surfaceView.queueEvent(runnable);
         }
-
-
+        
+        
         protected T getWallpaperRenderer()
         {
             return renderer;
         }
-
-
+        
+        
         private class WallpaperGLSurfaceView
             extends GLSurfaceView
         {
@@ -80,15 +81,15 @@ public abstract class GLWallpaperService
             {
                 super(context);
             }
-
-
+            
+            
             @Override
             public SurfaceHolder getHolder()
             {
                 return getSurfaceHolder();
             }
-
-
+            
+            
             public void onWallpaperDestroy()
             {
                 super.onDetachedFromWindow();

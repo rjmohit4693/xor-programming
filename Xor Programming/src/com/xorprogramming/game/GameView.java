@@ -1,17 +1,10 @@
 /*
- * Copyright (C) 2014 Xor Programming
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright (C) 2014 Xor Programming Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions and limitations under the
+ * License.
  */
 
 package com.xorprogramming.game;
@@ -29,46 +22,46 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
     private static final float     DEFAULT_UPS    = 60;
     private static final float     NANOS_PER_SEC  = 1e9f;
     private static final float     MILLIS_PER_SEC = 1e3f;
-
+    
     private T1                     gameEngine;
     private GameRenderer<T1>       gameRenderer;
     private List<GameListener<T2>> listeners;
-
+    
     private Thread                 thread;
     private long                   prevTime;
     private volatile boolean       done;
     private volatile float         targetUPS;
-
-
+    
+    
     public GameView(Context context)
     {
         super(context);
         init();
     }
-
-
+    
+    
     public GameView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
         init();
     }
-
-
+    
+    
     public GameView(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
         init();
     }
-
-
+    
+    
     private void init()
     {
         listeners = new ArrayList<GameListener<T2>>();
         done = true;
         targetUPS = DEFAULT_UPS;
     }
-
-
+    
+    
     public void initializeComponents(T1 engine, GameRenderer<T1> renderer)
     {
         if (gameEngine == null)
@@ -82,14 +75,14 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
         this.gameEngine = engine;
         this.gameRenderer = renderer;
     }
-
-
+    
+    
     public final void setTargetUPS(float targetUPS)
     {
         this.targetUPS = targetUPS;
     }
-
-
+    
+    
     @Override
     protected final void onDraw(Canvas c)
     {
@@ -104,7 +97,7 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             {
                 gameEngine.update((now - prevTime) / NANOS_PER_SEC, this);
             }
-
+            
             if (!done)
             {
                 gameRenderer.render(gameEngine, c, getWidth(), getHeight());
@@ -112,8 +105,8 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             }
         }
     }
-
-
+    
+    
     public final boolean startRendering()
     {
         if (gameEngine == null || gameRenderer == null)
@@ -134,8 +127,8 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             return false;
         }
     }
-
-
+    
+    
     public final boolean stopRendering()
     {
         if (done)
@@ -150,14 +143,14 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             return true;
         }
     }
-
-
+    
+    
     public final void initializeRenderer()
     {
         gameRenderer.initialize(getResources());
     }
-
-
+    
+    
     public final void disposeRenderer()
     {
         if (done)
@@ -169,20 +162,20 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             throw new IllegalStateException("The controller cannot dispose the gameRenderer while running");
         }
     }
-
-
+    
+    
     public final void addListener(GameListener<T2> listener)
     {
         listeners.add(listener);
     }
-
-
+    
+    
     public final void removeListener(GameListener<T2> listener)
     {
         listeners.remove(listener);
     }
-
-
+    
+    
     public final void updateListeners(T2 t)
     {
         for (int i = 0; i < listeners.size(); i++)
@@ -190,8 +183,8 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             listeners.get(i).onGameEvent(t, gameEngine);
         }
     }
-
-
+    
+    
     private class InnerThread
         extends Thread
     {
