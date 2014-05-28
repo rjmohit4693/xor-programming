@@ -22,67 +22,64 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
     private static final float     DEFAULT_UPS    = 60;
     private static final float     NANOS_PER_SEC  = 1e9f;
     private static final float     MILLIS_PER_SEC = 1e3f;
-    
-    private T1                     gameEngine;
-    private GameRenderer<T1>       gameRenderer;
-    private List<GameListener<T2>> listeners;
-    
+
+    private final T1                     gameEngine;
+    private final GameRenderer<T1>       gameRenderer;
+    private final List<GameListener<T2>> listeners;
+
     private Thread                 thread;
     private long                   prevTime;
     private volatile boolean       done;
     private volatile float         targetUPS;
-    
-    
-    public GameView(Context context)
+
+
+    public GameView(Context context, T1 gameEngine, GameRenderer<T1> gameRenderer)
     {
         super(context);
+        this.gameEngine = gameEngine;
+        this.gameRenderer = gameRenderer;
         init();
+        listeners = new ArrayList<GameListener<T2>>();
     }
-    
-    
-    public GameView(Context context, AttributeSet attrs)
+
+
+    public GameView(Context context, AttributeSet attrs, T1 gameEngine, GameRenderer<T1> gameRenderer)
     {
-        super(context, attrs);
-        init();
+        this(context, attrs, 0, gameEngine, gameRenderer);
     }
-    
-    
-    public GameView(Context context, AttributeSet attrs, int defStyleAttr)
+
+
+    public GameView(Context context, AttributeSet attrs, int defStyleAttr, T1 gameEngine, GameRenderer<T1> gameRenderer)
     {
         super(context, attrs, defStyleAttr);
+        this.gameEngine = gameEngine;
+        this.gameRenderer = gameRenderer;
         init();
-    }
-    
-    
-    private void init()
-    {
         listeners = new ArrayList<GameListener<T2>>();
-        done = true;
-        targetUPS = DEFAULT_UPS;
     }
-    
-    
-    public void initializeComponents(T1 engine, GameRenderer<T1> renderer)
+
+
+    private void init()
     {
         if (gameEngine == null)
         {
-            throw new NullPointerException("The gameEngine must be non-null");
+            throw new NullPointerException("The GameEngine must be non-null");
         }
         else if (gameRenderer == null)
         {
-            throw new NullPointerException("The gameRenderer must be non-null");
+            throw new NullPointerException("The GameRenderer must be non-null");
         }
-        this.gameEngine = engine;
-        this.gameRenderer = renderer;
+        done = true;
+        targetUPS = DEFAULT_UPS;
     }
-    
-    
+
+
     public final void setTargetUPS(float targetUPS)
     {
         this.targetUPS = targetUPS;
     }
-    
-    
+
+
     @Override
     protected final void onDraw(Canvas c)
     {
@@ -97,7 +94,7 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             {
                 gameEngine.update((now - prevTime) / NANOS_PER_SEC, this);
             }
-            
+
             if (!done)
             {
                 gameRenderer.render(gameEngine, c, getWidth(), getHeight());
@@ -105,14 +102,14 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             }
         }
     }
-    
-    
+
+
     public final boolean startRendering()
     {
         if (gameEngine == null || gameRenderer == null)
         {
             throw new IllegalStateException(
-                "The gameEngine and gameRenderer must be initialized before the view is started");
+                "The GameEngine and GameRenderer must be initialized before rendering is started");
         }
         else if (done)
         {
@@ -127,8 +124,8 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             return false;
         }
     }
-    
-    
+
+
     public final boolean stopRendering()
     {
         if (done)
@@ -143,14 +140,14 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             return true;
         }
     }
-    
-    
+
+
     public final void initializeRenderer()
     {
         gameRenderer.initialize(getResources());
     }
-    
-    
+
+
     public final void disposeRenderer()
     {
         if (done)
@@ -159,23 +156,23 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
         }
         else
         {
-            throw new IllegalStateException("The controller cannot dispose the gameRenderer while running");
+            throw new IllegalStateException("The GameRenderer cannot be disposed while running");
         }
     }
-    
-    
+
+
     public final void addListener(GameListener<T2> listener)
     {
         listeners.add(listener);
     }
-    
-    
+
+
     public final void removeListener(GameListener<T2> listener)
     {
         listeners.remove(listener);
     }
-    
-    
+
+
     public final void updateListeners(T2 t)
     {
         for (int i = 0; i < listeners.size(); i++)
@@ -183,8 +180,8 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             listeners.get(i).onGameEvent(t, gameEngine);
         }
     }
-    
-    
+
+
     private class InnerThread
         extends Thread
     {
