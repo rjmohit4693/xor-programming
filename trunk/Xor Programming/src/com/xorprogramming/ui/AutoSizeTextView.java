@@ -162,7 +162,6 @@ public class AutoSizeTextView
         syncPaint();
 
         int availWidth = getWidth() - getPaddingLeft() - getPaddingRight();
-        System.out.println(getWidth());
         int availHeight = getHeight() - getPaddingTop() - getPaddingBottom();
         float textSize = getOptimalFontSize(text, availWidth, availHeight, MAX_FONT_SIZE, MIN_FONT_SIZE);
         TEXT_PAINT.setTextSize(textSize);
