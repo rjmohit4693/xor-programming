@@ -109,34 +109,17 @@ containing a value of this type.
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #AutoSizeTextView_android_text android:text}</code></td><td></td></tr>
-           <tr><td><code>{@link #AutoSizeTextView_android_textColor android:textColor}</code></td><td></td></tr>
            <tr><td><code>{@link #AutoSizeTextView_heightRatio com.xorprogramming:heightRatio}</code></td><td></td></tr>
            <tr><td><code>{@link #AutoSizeTextView_justification com.xorprogramming:justification}</code></td><td></td></tr>
            <tr><td><code>{@link #AutoSizeTextView_widthRatio com.xorprogramming:widthRatio}</code></td><td></td></tr>
            </table>
-           @see #AutoSizeTextView_android_text
-           @see #AutoSizeTextView_android_textColor
            @see #AutoSizeTextView_heightRatio
            @see #AutoSizeTextView_justification
            @see #AutoSizeTextView_widthRatio
          */
         public static final int[] AutoSizeTextView = {
-            0x01010098, 0x0101014f, 0x7f010000, 0x7f010001,
-            0x7f010004
+            0x7f010000, 0x7f010001, 0x7f010004
         };
-        /**
-          <p>This symbol is the offset where the {@link android.R.attr#text}
-          attribute's value can be found in the {@link #AutoSizeTextView} array.
-          @attr name android:text
-        */
-        public static final int AutoSizeTextView_android_text = 1;
-        /**
-          <p>This symbol is the offset where the {@link android.R.attr#textColor}
-          attribute's value can be found in the {@link #AutoSizeTextView} array.
-          @attr name android:textColor
-        */
-        public static final int AutoSizeTextView_android_textColor = 0;
         /**
           <p>This symbol is the offset where the {@link com.xorprogramming.R.attr#heightRatio}
           attribute's value can be found in the {@link #AutoSizeTextView} array.
@@ -150,7 +133,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.xorprogramming:heightRatio
         */
-        public static final int AutoSizeTextView_heightRatio = 3;
+        public static final int AutoSizeTextView_heightRatio = 1;
         /**
           <p>This symbol is the offset where the {@link com.xorprogramming.R.attr#justification}
           attribute's value can be found in the {@link #AutoSizeTextView} array.
@@ -168,7 +151,7 @@ containing a value of this type.
 </table>
           @attr name com.xorprogramming:justification
         */
-        public static final int AutoSizeTextView_justification = 4;
+        public static final int AutoSizeTextView_justification = 2;
         /**
           <p>This symbol is the offset where the {@link com.xorprogramming.R.attr#widthRatio}
           attribute's value can be found in the {@link #AutoSizeTextView} array.
@@ -182,7 +165,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.xorprogramming:widthRatio
         */
-        public static final int AutoSizeTextView_widthRatio = 2;
+        public static final int AutoSizeTextView_widthRatio = 0;
         /** Attributes that can be used with a CheckableImageButton.
            <p>Includes the following attributes:</p>
            <table>

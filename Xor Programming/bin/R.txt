@@ -9,12 +9,10 @@ int id right 0x7f020002
 int[] styleable AspectFrame { 0x7f010000, 0x7f010001 }
 int styleable AspectFrame_heightRatio 1
 int styleable AspectFrame_widthRatio 0
-int[] styleable AutoSizeTextView { 0x01010098, 0x0101014f, 0x7f010000, 0x7f010001, 0x7f010004 }
-int styleable AutoSizeTextView_android_text 1
-int styleable AutoSizeTextView_android_textColor 0
-int styleable AutoSizeTextView_heightRatio 3
-int styleable AutoSizeTextView_justification 4
-int styleable AutoSizeTextView_widthRatio 2
+int[] styleable AutoSizeTextView { 0x7f010000, 0x7f010001, 0x7f010004 }
+int styleable AutoSizeTextView_heightRatio 1
+int styleable AutoSizeTextView_justification 2
+int styleable AutoSizeTextView_widthRatio 0
 int[] styleable CheckableImageButton { 0x7f010003 }
 int styleable CheckableImageButton_checked 0
 int[] styleable GameView { 0x7f010002 }
