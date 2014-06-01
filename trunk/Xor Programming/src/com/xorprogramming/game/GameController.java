@@ -17,6 +17,6 @@ public interface GameController<T>
     void removeListener(GameListener<T> listener);
     
     
-    void updateListeners(T t);
+    void notifyListeners(T t);
     
 }

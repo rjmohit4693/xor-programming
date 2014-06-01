@@ -173,7 +173,7 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
     }
 
 
-    public final void updateListeners(T2 t)
+    public final void notifyListeners(T2 t)
     {
         for (int i = 0; i < listeners.size(); i++)
         {

@@ -17,8 +17,6 @@
     <declare-styleable name="AutoSizeTextView">
         <attr name="widthRatio" />
         <attr name="heightRatio" />
-        <attr name="android:text" />
-        <attr name="android:textColor" />
         <attr name="justification">
             <enum name="left" value="0" />
             <enum name="center" value="1" />
