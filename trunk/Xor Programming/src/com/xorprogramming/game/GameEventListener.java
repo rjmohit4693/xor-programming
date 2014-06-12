@@ -9,8 +9,11 @@
 
 package com.xorprogramming.game;
 
-public interface GameListener<T>
+public interface GameEventListener<T>
 {
     void onGameEvent(T t, GameEngine<T> engine);
-    
+
+
+    void onGameException(Exception ex);
+
 }

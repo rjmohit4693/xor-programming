@@ -12,13 +12,13 @@ package com.xorprogramming.game;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 
-public interface GameRenderer<T1 extends GameEngine<?>>
+public interface GameRenderer<T extends GameEngine<?>>
 {
-    void render(T1 engine, Canvas c, int width, int height);
-    
-    
-    void initialize(Resources res);
-    
-    
-    void dispose();
+    void render(T engine, Canvas c, int width, int height, GameExceptionController controller);
+
+
+    void initialize(Resources res, GameExceptionController controller);
+
+
+    void dispose(GameExceptionController controller);
 }

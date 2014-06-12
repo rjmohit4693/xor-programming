@@ -9,14 +9,8 @@
 
 package com.xorprogramming.game;
 
-public interface GameController<T>
+public interface GameEventController<T>
+    extends GameExceptionController
 {
-    void addListener(GameListener<T> listener);
-    
-    
-    void removeListener(GameListener<T> listener);
-    
-    
     void notifyListeners(T t);
-    
 }
