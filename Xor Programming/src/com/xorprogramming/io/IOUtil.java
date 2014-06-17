@@ -9,6 +9,7 @@
 
 package com.xorprogramming.io;
 
+import java.io.Closeable;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Environment;
@@ -21,22 +22,40 @@ import java.util.Scanner;
 // -------------------------------------------------------------------------
 /**
  * A utility class containing methods to read the content of files.
- * 
+ *
  * @author Steven Roberts
  * @version 1.0.0
  */
-public class IOUtil
+public final class IOUtil
 {
     private IOUtil()
     {
         // No constructor needed for utility class
     }
-    
-    
+
+
+    public static boolean closeStream(Closeable closeable)
+    {
+        if (closeable == null)
+        {
+            return false;
+        }
+        try
+        {
+            closeable.close();
+            return true;
+        }
+        catch (IOException e)
+        {
+            return false;
+        }
+    }
+
+
     // ----------------------------------------------------------
     /**
      * Reads the content of a file in the assets directory.
-     * 
+     *
      * @param assets
      *            To provide access to the assets directory
      * @param file
@@ -50,12 +69,12 @@ public class IOUtil
     {
         return read(assets.open(file));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Reads the content of a file in internal storage
-     * 
+     *
      * @param c
      *            To provide access to internal storage
      * @param file
@@ -69,12 +88,12 @@ public class IOUtil
     {
         return read(c.openFileInput(file));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Reads the content of a file in the cache directory
-     * 
+     *
      * @param c
      *            To provide access to the cache directory
      * @param file
@@ -88,13 +107,13 @@ public class IOUtil
     {
         return read(new FileInputStream(new File(c.getCacheDir(), file)));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Reads the content of a file in external storage. Note that {@code READ_EXTERNAL_STORAGE} permission must be
      * acquired in order to read from external storage.
-     * 
+     *
      * @param file
      *            The name of the file to open. This name can be hierarchical
      * @return The content of the file
@@ -106,8 +125,8 @@ public class IOUtil
     {
         return read(new FileInputStream(new File(Environment.getExternalStorageDirectory(), file)));
     }
-    
-    
+
+
     private static String read(InputStream is)
     {
         Scanner scan = null;
@@ -124,10 +143,7 @@ public class IOUtil
         }
         finally
         {
-            if (scan != null)
-            {
-                scan.close();
-            }
+            closeStream(scan);
         }
     }
 }
