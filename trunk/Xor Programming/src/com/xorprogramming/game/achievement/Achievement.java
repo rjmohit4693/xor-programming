@@ -15,7 +15,7 @@ import java.util.Set;
 // -------------------------------------------------------------------------
 /**
  * An abstract class representing a game achievement
- * 
+ *
  * @param <E>
  *            An enum that contains the various game actions that could trigger an achievement get check
  * @param <T>
@@ -29,14 +29,14 @@ public abstract class Achievement<E extends Enum<E>, T>
     private final String description;
     private boolean      hasAchievement;
     private long         achievementGetTime;
-    
-    
+
+
     public Achievement(String name, String description, E firstCheckAction, E... otherCheckActions)
     {
         this(name, description, false, firstCheckAction, otherCheckActions);
     }
-    
-    
+
+
     public Achievement(
         String name,
         String description,
@@ -49,21 +49,21 @@ public abstract class Achievement<E extends Enum<E>, T>
         this.hasAchievement = hasAchievement;
         this.checkActions = EnumSet.of(firstCheckAction, otherCheckActions);
     }
-    
-    
+
+
     final void restore(boolean restoreHasAchievement, long restoreAchievementGetTime)
     {
         this.hasAchievement = restoreHasAchievement;
         this.achievementGetTime = restoreAchievementGetTime;
     }
-    
-    
+
+
     final Set<E> getCheckActions()
     {
         return checkActions;
     }
-    
-    
+
+
     final boolean check(E action, T t)
     {
         if (!hasAchievement && checkAchievement(action, t))
@@ -76,32 +76,32 @@ public abstract class Achievement<E extends Enum<E>, T>
             return false;
         }
     }
-    
-    
+
+
     protected abstract boolean checkAchievement(E action, T t);
-    
-    
+
+
     protected abstract int getID();
-    
-    
+
+
     public final boolean hasAchievement()
     {
         return hasAchievement;
     }
-    
-    
+
+
     public final long getAcievementGetTime()
     {
         return achievementGetTime;
     }
-    
-    
+
+
     public final String getDescription()
     {
         return description;
     }
-    
-    
+
+
     @Override
     public final String toString()
     {
