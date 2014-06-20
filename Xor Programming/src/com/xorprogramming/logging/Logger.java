@@ -32,7 +32,7 @@ public final class Logger
     /**
      * Tag for all logging within the API
      */
-    private static final String               LOG_TAG      = "XOR";
+    public static final String               LOG_TAG      = "XOR";
 
     private static final List<LoggerListener> logListeners = new CopyOnWriteArrayList<LoggerListener>();
 
@@ -76,9 +76,15 @@ public final class Logger
      *
      * @param listener
      *            The {@code LoggerListener} to add
+     * @throws NullPointerException
+     *             if the listener is null
      */
     public void addLoggerListener(LoggerListener listener)
     {
+        if (listener == null)
+        {
+            throw new NullPointerException("The LoggerListener must be non-null");
+        }
         logListeners.add(listener);
     }
 
@@ -94,22 +100,6 @@ public final class Logger
     public void removeLoggerListener(LoggerListener listener)
     {
         logListeners.remove(listener);
-    }
-
-
-    // ----------------------------------------------------------
-    /**
-     * Logs a message to output with {@link Logger#LOG_TAG} as the tag.
-     *
-     * @param type
-     *            The type of message being logged
-     * @param message
-     *            The message to log
-     * @return The message
-     */
-    public static String log(LoggingType type, String message)
-    {
-        return log(type, LOG_TAG, message);
     }
 
 
@@ -142,25 +132,6 @@ public final class Logger
 
     // ----------------------------------------------------------
     /**
-     * Logs a formatted message to output with {@link Logger#LOG_TAG} as the tag.
-     *
-     * @param type
-     *            The type of message being logged
-     * @param messageFormat
-     *            The format string (see {@link java.util.Formatter#format})
-     * @param args
-     *            The list of arguments passed to the formatter. If there are more arguments than required, additional
-     *            arguments are ignored.
-     * @return The message
-     */
-    public static String logf(LoggingType type, String messageFormat, Object... args)
-    {
-        return logf(type, LOG_TAG, String.format(messageFormat, args));
-    }
-
-
-    // ----------------------------------------------------------
-    /**
      * Logs a formatted message to output with the given tag.
      *
      * @param type
@@ -178,22 +149,6 @@ public final class Logger
     public static String logf(LoggingType type, String tag, String messageFormat, Object... args)
     {
         return log(type, tag, String.format(messageFormat, args));
-    }
-
-
-    // ----------------------------------------------------------
-    /**
-     * Logs a {@code Throwable} to output with {@link Logger#LOG_TAG} as the tag.
-     *
-     * @param type
-     *            The type of message being logged
-     * @param throwable
-     *            The exception or error being logged
-     * @return The throwable
-     */
-    public static <T extends Throwable> T log(LoggingType type, T throwable)
-    {
-        return log(type, LOG_TAG, throwable);
     }
 
 
