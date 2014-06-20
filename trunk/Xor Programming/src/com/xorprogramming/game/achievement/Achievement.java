@@ -27,34 +27,36 @@ public abstract class Achievement<E extends Enum<E>, T>
     private final Set<E> checkActions;
     private final String name;
     private final String description;
-    private boolean      hasAchievement;
-    private long         achievementGetTime;
+    private final int    saveId;
+    private Long         achievementUnlockedTime;
 
 
-    public Achievement(String name, String description, E firstCheckAction, E... otherCheckActions)
+    public Achievement(int saveId, String name, String description, E firstCheckAction, E... otherCheckActions)
     {
-        this(name, description, false, firstCheckAction, otherCheckActions);
-    }
-
-
-    public Achievement(
-        String name,
-        String description,
-        boolean hasAchievement,
-        E firstCheckAction,
-        E... otherCheckActions)
-    {
+        if (name == null)
+        {
+            throw new NullPointerException("The name must be non-null");
+        }
+        else if (description == null)
+        {
+            throw new NullPointerException("The description must be non-null");
+        }
+        this.checkActions = EnumSet.of(firstCheckAction, otherCheckActions);
+        this.saveId = saveId;
         this.name = name;
         this.description = description;
-        this.hasAchievement = hasAchievement;
-        this.checkActions = EnumSet.of(firstCheckAction, otherCheckActions);
     }
 
 
-    final void restore(boolean restoreHasAchievement, long restoreAchievementGetTime)
+    final void restore(Long restoreAchievementUnlockedTime)
     {
-        this.hasAchievement = restoreHasAchievement;
-        this.achievementGetTime = restoreAchievementGetTime;
+        this.achievementUnlockedTime = restoreAchievementUnlockedTime;
+    }
+
+
+    final int getSaveId()
+    {
+        return saveId;
     }
 
 
@@ -66,10 +68,10 @@ public abstract class Achievement<E extends Enum<E>, T>
 
     final boolean check(E action, T t)
     {
-        if (!hasAchievement && checkAchievement(action, t))
+        if (!hasAchievement() && checkAchievement(action, t))
         {
-            achievementGetTime = System.currentTimeMillis();
-            return hasAchievement = true;
+            achievementUnlockedTime = System.currentTimeMillis();
+            return true;
         }
         else
         {
@@ -81,18 +83,15 @@ public abstract class Achievement<E extends Enum<E>, T>
     protected abstract boolean checkAchievement(E action, T t);
 
 
-    protected abstract int getID();
-
-
     public final boolean hasAchievement()
     {
-        return hasAchievement;
+        return achievementUnlockedTime != null;
     }
 
 
-    public final long getAcievementGetTime()
+    public final Long getAcievementGetTime()
     {
-        return achievementGetTime;
+        return achievementUnlockedTime;
     }
 
 

@@ -7,29 +7,40 @@
  * License.
  */
 
-package com.xorprogramming.string;
+package com.xorprogramming.io.utils;
+
+import java.io.Closeable;
+import java.io.IOException;
 
 // -------------------------------------------------------------------------
 /**
- * This Exception is thrown when an error occurs while parsing data
+ * A utility class containing methods to read and write the content of files.
  *
  * @author Steven Roberts
  * @version 1.0.0
  */
-public class ParseException
-    extends Exception
+final class IOUtils
 {
-    private static final long serialVersionUID = 5933538226865089632L;
-
-    // ----------------------------------------------------------
-    /**
-     * Create a new ParseException object.
-     *
-     * @param message
-     *            A informative String describing the nature and cause of the exception
-     */
-    public ParseException(String message)
+    private IOUtils()
     {
-        super(message);
+        // No constructor needed
+    }
+
+
+    public static boolean closeStream(Closeable closeable)
+    {
+        if (closeable == null)
+        {
+            return false;
+        }
+        try
+        {
+            closeable.close();
+            return true;
+        }
+        catch (IOException e)
+        {
+            return false;
+        }
     }
 }
