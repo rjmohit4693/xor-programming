@@ -14,11 +14,12 @@ import android.graphics.Canvas;
 
 public interface GameRenderer<T extends GameEngine<?>>
 {
-    void render(T engine, Canvas c, int width, int height, GameExceptionController controller);
-
-
+    
     void initialize(Resources res, GameExceptionController controller);
-
-
+    
+    
+    void render(T engine, Canvas c, int width, int height, GameExceptionController controller);
+    
+    
     void dispose(GameExceptionController controller);
 }

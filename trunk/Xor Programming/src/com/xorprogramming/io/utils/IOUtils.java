@@ -15,18 +15,18 @@ import java.io.IOException;
 // -------------------------------------------------------------------------
 /**
  * A utility class containing methods to read and write the content of files.
- *
+ * 
  * @author Steven Roberts
  * @version 1.0.0
  */
-final class IOUtils
+public final class IOUtils
 {
     private IOUtils()
     {
         // No constructor needed
     }
-
-
+    
+    
     public static boolean closeStream(Closeable closeable)
     {
         if (closeable == null)

@@ -16,8 +16,8 @@ public class GameActivity<T extends GameView<?, ?>>
     extends Activity
 {
     private T gameView;
-
-
+    
+    
     public void setGameView(T gameView)
     {
         if (gameView == null)
@@ -26,8 +26,8 @@ public class GameActivity<T extends GameView<?, ?>>
         }
         this.gameView = gameView;
     }
-
-
+    
+    
     @SuppressWarnings("unchecked")
     public void setGameView(int gameViewRes)
     {
@@ -45,8 +45,8 @@ public class GameActivity<T extends GameView<?, ?>>
             throw new IllegalArgumentException("Invalid gave view: cannot cast from " + v.getClass().getSimpleName());
         }
     }
-
-
+    
+    
     public T getGameView()
     {
         if (gameView == null)

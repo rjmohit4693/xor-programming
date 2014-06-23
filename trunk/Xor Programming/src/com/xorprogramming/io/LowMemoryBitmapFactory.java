@@ -17,6 +17,7 @@ import android.graphics.BitmapFactory;
 /**
  * A factory used to efficiently load bitmaps.
  *
+ * @see BitmapFactory
  * @author Steven Roberts
  * @version 1.0.0
  */

@@ -28,22 +28,22 @@ public final class AchievementManager<E extends Enum<E>, T>
     private final Map<E, List<Achievement<E, T>>> achievementActionMap;
     private final List<Achievement<?, ?>>         achievementList;
     private final List<AchievementListener>       listeners;
-
-
+    
+    
     public AchievementManager(Class<E> enumClass)
     {
         achievementActionMap = new EnumMap<E, List<Achievement<E, T>>>(enumClass);
         achievementList = new ArrayList<Achievement<?, ?>>();
         listeners = new ArrayList<AchievementListener>();
     }
-
-
+    
+    
     public void addAchievementListener(AchievementListener listener)
     {
         listeners.add(listener);
     }
-
-
+    
+    
     public void addAchievement(Achievement<E, T> achievement)
     {
         if (getAchievementById(achievement.getSaveId()) != null) // duplicate save id!
@@ -52,7 +52,7 @@ public final class AchievementManager<E extends Enum<E>, T>
                 "An achievement with the id %d has already been added",
                 achievement.getSaveId()));
         }
-
+        
         achievementList.add(achievement);
         for (E key : achievement.getCheckActions())
         {
@@ -65,8 +65,8 @@ public final class AchievementManager<E extends Enum<E>, T>
             value.add(achievement);
         }
     }
-
-
+    
+    
     private Achievement<?, ?> getAchievementById(int id)
     {
         for (Achievement<?, ?> a : achievementList)
@@ -78,8 +78,8 @@ public final class AchievementManager<E extends Enum<E>, T>
         }
         return null;
     }
-
-
+    
+    
     public void checkAchievements(E action, T t)
     {
         List<Achievement<E, T>> value = achievementActionMap.get(action);
@@ -92,8 +92,8 @@ public final class AchievementManager<E extends Enum<E>, T>
             }
         }
     }
-
-
+    
+    
     private void updateListeners(Achievement<?, ?> achievement)
     {
         for (int i = 0; i < listeners.size(); i++)
@@ -101,20 +101,20 @@ public final class AchievementManager<E extends Enum<E>, T>
             listeners.get(i).onAchievementGet(achievement);
         }
     }
-
-
+    
+    
     public Achievement<?, ?> getAchievement(int index)
     {
         return achievementList.get(index);
     }
-
-
+    
+    
     public int getAchievementCount()
     {
         return achievementList.size();
     }
-
-
+    
+    
     public int getUnlockedAchievementsCount()
     {
         int achievementGets = 0;
@@ -127,15 +127,15 @@ public final class AchievementManager<E extends Enum<E>, T>
         }
         return achievementGets;
     }
-
-
+    
+    
     @Override
     public Iterator<Achievement<?, ?>> iterator()
     {
         return new IteratorDecorator<Achievement<?, ?>>(achievementList.iterator());
     }
-
-
+    
+    
     @Override
     public void restore(ObjectInputStream ois)
         throws IOException,
@@ -152,8 +152,8 @@ public final class AchievementManager<E extends Enum<E>, T>
             }
         }
     }
-
-
+    
+    
     @Override
     public void save(ObjectOutputStream oos)
         throws IOException
@@ -164,34 +164,34 @@ public final class AchievementManager<E extends Enum<E>, T>
             oos.writeObject(a.getAcievementGetTime());
         }
     }
-
-
+    
+    
     private static class IteratorDecorator<T>
         implements Iterator<T>
     {
         private Iterator<T> i;
-
-
+        
+        
         public IteratorDecorator(Iterator<T> i)
         {
             this.i = i;
         }
-
-
+        
+        
         @Override
         public boolean hasNext()
         {
             return i.hasNext();
         }
-
-
+        
+        
         @Override
         public T next()
         {
             return i.next();
         }
-
-
+        
+        
         @Override
         public void remove()
         {
