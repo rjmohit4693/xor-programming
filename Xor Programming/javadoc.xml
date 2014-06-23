@@ -1,0 +1,35 @@
+<project default="javadoc" >
+
+    <property
+        name="title"
+        value="Xor Programming API" />
+
+    <property
+        name="sdk"
+        value="19" />
+
+    <target name="javadoc" >
+
+        <javadoc
+            access="protected"
+            author="true"
+            classpath="C:\Users\Steven\AppData\Local\Android\android-sdk\platforms\android-${sdk}\android.jar"
+            destdir="../Javadoc"
+            doctitle="${title}"
+            linkoffline="http://d.android.com/reference ${sdk}/docs/reference"
+            nodeprecated="false"
+            nodeprecatedlist="true"
+            nohelp="true"
+            noindex="false"
+            nonavbar="false"
+            notree="false"
+            packagenames="com.xorprogramming.*"
+            source="1.7"
+            sourcepath="gen:src"
+            splitindex="true"
+            use="false"
+            version="true"
+            windowtitle="${title}" />
+    </target>
+
+</project>

@@ -17,39 +17,39 @@ public final class SavableIOUtils
     {
         // No constructor needed
     }
-
-
+    
+    
     public static void saveToInternalStorage(Context c, Savable savable, String file, int mode)
         throws IOException,
         ClassNotFoundException
     {
         save(savable, c.openFileOutput(file, mode));
     }
-
-
+    
+    
     public static void saveToCahce(Context c, Savable savable, String file)
         throws IOException,
         ClassNotFoundException
     {
         save(savable, new File(c.getCacheDir(), file));
     }
-
-
+    
+    
     public static void saveToExternalStorage(Savable savable, String file)
         throws IOException,
         ClassNotFoundException
     {
         save(savable, new File(Environment.getExternalStorageDirectory(), file));
     }
-
-
+    
+    
     public static void save(Savable savable, File file)
         throws IOException
     {
         save(savable, new FileOutputStream(file));
     }
-
-
+    
+    
     public static void save(Savable savable, OutputStream os)
         throws IOException
     {
@@ -65,40 +65,40 @@ public final class SavableIOUtils
             IOUtils.closeStream(oos);
         }
     }
-
-
+    
+    
     public static void restoreFromInternalStorage(Context c, Savable savable, String file)
         throws IOException,
         ClassNotFoundException
     {
         restore(savable, c.openFileInput(file));
     }
-
-
+    
+    
     public static void restoreFromCahce(Context c, Savable savable, String file)
         throws IOException,
         ClassNotFoundException
     {
         restore(savable, new File(c.getCacheDir(), file));
     }
-
-
+    
+    
     public static void restoreFromExternalStorage(Savable savable, String file)
         throws IOException,
         ClassNotFoundException
     {
         restore(savable, new File(Environment.getExternalStorageDirectory(), file));
     }
-
-
+    
+    
     public static void restore(Savable savable, File file)
         throws IOException,
         ClassNotFoundException
     {
         restore(savable, new FileInputStream(file));
     }
-
-
+    
+    
     public static void restore(Savable savable, InputStream is)
         throws IOException,
         ClassNotFoundException

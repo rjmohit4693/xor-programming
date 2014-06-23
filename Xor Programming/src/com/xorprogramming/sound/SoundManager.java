@@ -19,21 +19,21 @@ public class SoundManager
 {
     private static final int     MAX_SIMULTANEOUS_STREAMS = 5;
     private static final int     STREAM_TYPE              = AudioManager.STREAM_MUSIC;
-
+    
     private final SparseIntArray soundPoolIDs;
     private final SparseIntArray loadingSoundPoolIDs;
-
+    
     private SoundPool            soundPool;
     private AudioManager         manager;
-
-
+    
+    
     public SoundManager()
     {
         soundPoolIDs = new SparseIntArray();
         loadingSoundPoolIDs = new SparseIntArray();
     }
-
-
+    
+    
     public void loadSound(Context context, int resourceID)
     {
         if (soundPool == null)
@@ -58,14 +58,14 @@ public class SoundManager
         }
         loadingSoundPoolIDs.put(soundPool.load(context, resourceID, 1), resourceID);
     }
-
-
+    
+    
     public boolean playSound(int resourceID)
     {
         return playSound(resourceID, 0);
     }
-
-
+    
+    
     public boolean playSound(int resourceID, int loop)
     {
         if (soundPool == null)
@@ -83,16 +83,16 @@ public class SoundManager
             return false;
         }
     }
-
-
+    
+    
     private float getVolume()
     {
         float streamVolumeCurrent = manager.getStreamVolume(AudioManager.STREAM_MUSIC);
         float streamVolumeMax = manager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         return streamVolumeCurrent / streamVolumeMax;
     }
-
-
+    
+    
     public boolean pauseAll()
     {
         if (soundPool != null)
@@ -105,8 +105,8 @@ public class SoundManager
             return false;
         }
     }
-
-
+    
+    
     public boolean resumeAll()
     {
         if (soundPool != null)
@@ -119,8 +119,8 @@ public class SoundManager
             return false;
         }
     }
-
-
+    
+    
     public boolean unloadSound(int resourceID)
     {
         if (soundPool == null)
@@ -139,8 +139,8 @@ public class SoundManager
             return false;
         }
     }
-
-
+    
+    
     public void dispose()
     {
         if (soundPool != null)

@@ -15,7 +15,7 @@ import java.util.Set;
 // -------------------------------------------------------------------------
 /**
  * An abstract class representing a game achievement
- *
+ * 
  * @param <E>
  *            An enum that contains the various game actions that could trigger an achievement get check
  * @param <T>
@@ -29,8 +29,8 @@ public abstract class Achievement<E extends Enum<E>, T>
     private final String description;
     private final int    saveId;
     private Long         achievementUnlockedTime;
-
-
+    
+    
     public Achievement(int saveId, String name, String description, E firstCheckAction, E... otherCheckActions)
     {
         if (name == null)
@@ -46,26 +46,26 @@ public abstract class Achievement<E extends Enum<E>, T>
         this.name = name;
         this.description = description;
     }
-
-
+    
+    
     final void restore(Long restoreAchievementUnlockedTime)
     {
         this.achievementUnlockedTime = restoreAchievementUnlockedTime;
     }
-
-
+    
+    
     final int getSaveId()
     {
         return saveId;
     }
-
-
+    
+    
     final Set<E> getCheckActions()
     {
         return checkActions;
     }
-
-
+    
+    
     final boolean check(E action, T t)
     {
         if (!hasAchievement() && checkAchievement(action, t))
@@ -78,29 +78,29 @@ public abstract class Achievement<E extends Enum<E>, T>
             return false;
         }
     }
-
-
+    
+    
     protected abstract boolean checkAchievement(E action, T t);
-
-
+    
+    
     public final boolean hasAchievement()
     {
         return achievementUnlockedTime != null;
     }
-
-
+    
+    
     public final Long getAcievementGetTime()
     {
         return achievementUnlockedTime;
     }
-
-
+    
+    
     public final String getDescription()
     {
         return description;
     }
-
-
+    
+    
     @Override
     public final String toString()
     {

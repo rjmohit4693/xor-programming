@@ -20,7 +20,7 @@ import com.xorprogramming.R;
 // -------------------------------------------------------------------------
 /**
  * A view containing text that automatically sizes to maximize the given space.
- *
+ * 
  * @author Steven Roberts
  * @version 1.1.0
  */
@@ -30,33 +30,33 @@ public class AutoSizeTextView
     private static final int   MAX_FONT_SIZE  = 256;
     private static final int   MIN_FONT_SIZE  = 2;
     private static final float THRESHOLD      = .5f;
-
+    
     private static final int   JUSTIFY_LEFT   = 0;
     private static final int   JUSTIFY_CENTER = 1;
     private static final int   JUSTIFY_RIGHT  = 2;
-
+    
     private final Paint        TEXT_PAINT     = new Paint(Paint.ANTI_ALIAS_FLAG);
     private int                justification;
     private float              widthRatio;
     private float              heightRatio;
-
-
+    
+    
     // ----------------------------------------------------------
     /**
      * Create a new AutoSizeTextView object.
-     *
+     * 
      * @param context
      */
     public AutoSizeTextView(Context context)
     {
         super(context);
     }
-
-
+    
+    
     // ----------------------------------------------------------
     /**
      * Create a new AutoSizeTextView object.
-     *
+     * 
      * @param context
      * @param attrs
      */
@@ -65,12 +65,12 @@ public class AutoSizeTextView
         super(context, attrs);
         getAttributes(context, attrs);
     }
-
-
+    
+    
     // ----------------------------------------------------------
     /**
      * Create a new AutoSizeTextView object.
-     *
+     * 
      * @param context
      * @param attrs
      * @param defStyle
@@ -80,8 +80,8 @@ public class AutoSizeTextView
         super(context, attrs, defStyle);
         getAttributes(context, attrs);
     }
-
-
+    
+    
     private void getAttributes(Context context, AttributeSet attrs)
     {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AutoSizeTextView);
@@ -90,8 +90,8 @@ public class AutoSizeTextView
         justification = a.getInt(R.styleable.AutoSizeTextView_justification, JUSTIFY_CENTER);
         a.recycle();
     }
-
-
+    
+    
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
@@ -100,34 +100,34 @@ public class AutoSizeTextView
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
             return;
         }
-
+        
         int finalWidth;
         int finalHeight;
-
+        
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int widthSize =
             widthMode == MeasureSpec.UNSPECIFIED ? Integer.MAX_VALUE : MeasureSpec.getSize(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int heightSize =
             heightMode == MeasureSpec.UNSPECIFIED ? Integer.MAX_VALUE : MeasureSpec.getSize(heightMeasureSpec);
-
+        
         if (heightMode == MeasureSpec.EXACTLY && widthMode == MeasureSpec.EXACTLY)
         {
             finalWidth = widthSize;
             finalHeight = heightSize;
-
+            
         }
         else if (heightMode == MeasureSpec.EXACTLY)
         {
             finalWidth = (int)Math.min(widthSize, heightSize * widthRatio / heightRatio);
             finalHeight = (int)(finalWidth * heightRatio / widthRatio);
-
+            
         }
         else if (widthMode == MeasureSpec.EXACTLY)
         {
             finalHeight = (int)Math.min(heightSize, widthSize * heightRatio / widthRatio);
             finalWidth = (int)(finalHeight * widthRatio / heightRatio);
-
+            
         }
         else
         {
@@ -141,15 +141,15 @@ public class AutoSizeTextView
                 finalWidth = widthSize;
                 finalHeight = (int)(finalWidth * widthRatio / heightRatio);
             }
-
+            
         }
-
+        
         super.onMeasure(
             MeasureSpec.makeMeasureSpec(finalWidth, MeasureSpec.EXACTLY),
             MeasureSpec.makeMeasureSpec(finalHeight, MeasureSpec.EXACTLY));
     }
-
-
+    
+    
     @Override
     protected void onDraw(Canvas canvas)
     {
@@ -158,9 +158,9 @@ public class AutoSizeTextView
         {
             return;
         }
-
+        
         syncPaint();
-
+        
         int availWidth = getWidth() - getPaddingLeft() - getPaddingRight();
         int availHeight = getHeight() - getPaddingTop() - getPaddingBottom();
         float textSize = getOptimalFontSize(text, availWidth, availHeight, MAX_FONT_SIZE, MIN_FONT_SIZE);
@@ -182,17 +182,17 @@ public class AutoSizeTextView
                     - TEXT_PAINT.descent() + getPaddingTop(), TEXT_PAINT);
                 break;
         }
-
+        
     }
-
-
+    
+    
     private void syncPaint()
     {
         TEXT_PAINT.setTypeface(getTypeface());
         TEXT_PAINT.setColor(getCurrentTextColor());
     }
-
-
+    
+    
     private float getOptimalFontSize(String text, int availWidth, int availHeight, float max, float min)
     {
         float middle = (max + min) / 2;
@@ -215,5 +215,5 @@ public class AutoSizeTextView
             return getOptimalFontSize(text, availWidth, availHeight, max, middle);
         }
     }
-
+    
 }

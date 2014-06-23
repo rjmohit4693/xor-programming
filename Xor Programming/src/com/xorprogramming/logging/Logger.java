@@ -21,7 +21,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Note that this class can be accessed concurrently. Also, when a thread logs a message, the
  * {@code LoggerListener.onLog} method is called by that thread. Thus, in a multithreaded environment utilizing the
  * {@code Logger}, a {@code LoggerListener.onLog} may require synchronization.
- *
+ * 
  * @see LoggingPolicy
  * @see LoggerListener
  * @author Steven Roberts
@@ -32,28 +32,28 @@ public final class Logger
     /**
      * Tag for all logging within the API
      */
-    public static final String               LOG_TAG      = "XOR";
-
+    public static final String                LOG_TAG      = "XOR";
+    
     private static final List<LoggerListener> logListeners = new CopyOnWriteArrayList<LoggerListener>();
-
+    
     private static volatile LoggingPolicy     policy;
-
+    
     static
     {
         policy = LoggingPolicy.FULL_LOGGING;
     }
-
-
+    
+    
     private Logger()
     {
         // No constructor needed
     }
-
-
+    
+    
     // ----------------------------------------------------------
     /**
      * Sets a new logging policy.
-     *
+     * 
      * @param newPolicy
      *            The new policy. If null, the policy is set to {@link LoggingPolicy#NO_LOGGING}
      */
@@ -68,12 +68,12 @@ public final class Logger
             policy = newPolicy;
         }
     }
-
-
+    
+    
     // ----------------------------------------------------------
     /**
      * Adds a {@code LoggerListener} to be notified of logging events.
-     *
+     * 
      * @param listener
      *            The {@code LoggerListener} to add
      * @throws NullPointerException
@@ -87,13 +87,13 @@ public final class Logger
         }
         logListeners.add(listener);
     }
-
-
+    
+    
     // ----------------------------------------------------------
     /**
      * Removes the {@code LoggerListener} from the list of listeners. The listener will no longer be notified of logging
      * events
-     *
+     * 
      * @param listener
      *            The {@code LoggerListener} to remove
      */
@@ -101,12 +101,12 @@ public final class Logger
     {
         logListeners.remove(listener);
     }
-
-
+    
+    
     // ----------------------------------------------------------
     /**
      * Logs a message to output with the given tag.
-     *
+     * 
      * @param type
      *            The type of message being logged
      * @param tag
@@ -128,12 +128,12 @@ public final class Logger
         updateListeners(type, tag, message);
         return message;
     }
-
-
+    
+    
     // ----------------------------------------------------------
     /**
      * Logs a formatted message to output with the given tag.
-     *
+     * 
      * @param type
      *            The type of message being logged
      * @param tag
@@ -150,12 +150,12 @@ public final class Logger
     {
         return log(type, tag, String.format(messageFormat, args));
     }
-
-
+    
+    
     // ----------------------------------------------------------
     /**
      * Logs a {@code Throwable} to output with {@link Logger#LOG_TAG} as the tag.
-     *
+     * 
      * @param type
      *            The type of message being logged
      * @param tag
@@ -177,8 +177,8 @@ public final class Logger
         updateListeners(type, tag, throwable.getMessage());
         return throwable;
     }
-
-
+    
+    
     private static void updateListeners(LoggingType type, String tag, String message)
     {
         for (LoggerListener l : logListeners)

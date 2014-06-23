@@ -7,9 +7,10 @@ import java.io.ObjectOutputStream;
 public interface Savable
 {
     void restore(ObjectInputStream ois)
-        throws IOException, ClassNotFoundException;
-
-
+        throws IOException,
+        ClassNotFoundException;
+    
+    
     void save(ObjectOutputStream oos)
         throws IOException;
 }
