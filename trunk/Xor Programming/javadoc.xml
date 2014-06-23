@@ -5,18 +5,22 @@
         value="Xor Programming API" />
 
     <property
-        name="sdk"
+        name="sdk.version"
         value="19" />
+
+    <property
+        name="sdk.path"
+        value="C:\Users\Steven\AppData\Local\Android\android-sdk" />
 
     <target name="javadoc" >
 
         <javadoc
             access="protected"
             author="true"
-            classpath="C:\Users\Steven\AppData\Local\Android\android-sdk\platforms\android-${sdk}\android.jar"
+            classpath="${sdk.path}\platforms\android-${sdk.version}\android.jar"
             destdir="../Javadoc"
             doctitle="${title}"
-            linkoffline="http://d.android.com/reference ${sdk}/docs/reference"
+            linkoffline="http://d.android.com/reference ${sdk.path}\docs\reference"
             nodeprecated="false"
             nodeprecatedlist="true"
             nohelp="true"
