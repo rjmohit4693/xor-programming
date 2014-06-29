@@ -13,7 +13,7 @@ package com.xorprogramming.game;
 /**
  * Write a one-sentence summary of your class here. Follow it with additional details about its purpose, what
  * abstraction it represents, and how to use it.
- * 
+ *
  * @param <T>
  *            The type of result from a game event. This could be an {@code Integer}
  * @author Steven Roberts
@@ -22,8 +22,8 @@ package com.xorprogramming.game;
 public interface GameEventListener<T>
 {
     void onGameEvent(T t, GameEngine<T> engine);
-    
-    
-    void onGameException(Exception ex);
-    
+
+
+    void onRenderException(RenderException ex);
+
 }
