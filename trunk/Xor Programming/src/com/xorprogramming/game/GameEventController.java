@@ -10,7 +10,6 @@
 package com.xorprogramming.game;
 
 public interface GameEventController<T>
-    extends GameExceptionController
 {
     void notifyListeners(T t);
 }
