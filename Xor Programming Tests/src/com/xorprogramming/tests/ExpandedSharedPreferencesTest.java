@@ -1,6 +1,7 @@
 package com.xorprogramming.tests;
 
 import android.content.Context;
+import android.graphics.RectF;
 import android.test.AndroidTestCase;
 import com.xorprogramming.io.ExpandedSharedPreferences;
 import com.xorprogramming.io.ExpandedSharedPreferences.ExandedEditor;
@@ -19,6 +20,7 @@ public class ExpandedSharedPreferencesTest
         throws Exception
     {
         prefs = new ExpandedSharedPreferences(getContext().getSharedPreferences(NAME, Context.MODE_PRIVATE));
+        prefs.edit().clear().commit();
     }
 
 
@@ -84,12 +86,58 @@ public class ExpandedSharedPreferencesTest
     }
 
 
+    public void testExceptions()
+    {
+        ExandedEditor edit = prefs.expandedEdit();
+
+        Exception ex = null;
+        try
+        {
+            edit.putSerializable("serial", new CantSerializeMe()).commit();
+        }
+        catch (IllegalArgumentException iae)
+        {
+            ex = iae;
+        }
+
+        assertTrue(ex instanceof IllegalArgumentException);
+
+        edit.putBytes("corrupt", new byte[] { 3, 1, 4 }).commit();
+
+        ex = null;
+        try
+        {
+            prefs.getSerializable("corrupt", null);
+        }
+        catch (ClassCastException cce)
+        {
+            ex = cce;
+        }
+
+        assertTrue(ex instanceof ClassCastException);
+
+        edit.putInt("int", Integer.MAX_VALUE).commit();
+
+        ex = null;
+        try
+        {
+            prefs.getShort("int", (short)0);
+        }
+        catch (ClassCastException cce)
+        {
+            ex = cce;
+        }
+
+        assertTrue(ex instanceof ClassCastException);
+    }
+
+
     private static class Test
         implements Serializable
     {
         private static final long serialVersionUID = 2060500187168896783L;
-        private String a;
-        private int    b;
+        private String            a;
+        private int               b;
 
 
         public Test(String a, int b)
@@ -109,5 +157,13 @@ public class ExpandedSharedPreferencesTest
             Test t = (Test)o;
             return a.equals(t.a) && b == t.b;
         }
+    }
+
+
+    private static class CantSerializeMe
+        implements Serializable
+    {
+        private final String a    = "hi";
+        private final RectF  rect = new RectF();
     }
 }

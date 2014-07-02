@@ -23,14 +23,14 @@ public abstract class GLWallpaperService
     {
         private final T                renderer;
         private WallpaperGLSurfaceView surfaceView;
-        
-        
+
+
         public GLEngine(T renderer, float targetFPS)
         {
             this.renderer = renderer;
         }
-        
-        
+
+
         @Override
         public void onCreate(SurfaceHolder surfaceHolder)
         {
@@ -39,8 +39,8 @@ public abstract class GLWallpaperService
             surfaceView.setEGLContextClientVersion(2);
             surfaceView.setRenderer(renderer);
         }
-        
-        
+
+
         @Override
         public void onVisibilityChanged(boolean visible)
         {
@@ -53,28 +53,28 @@ public abstract class GLWallpaperService
                 surfaceView.onPause();
             }
         }
-        
-        
+
+
         @Override
         public void onDestroy()
         {
             super.onDestroy();
             surfaceView.onWallpaperDestroy();
         }
-        
-        
+
+
         public void queueEvent(Runnable runnable)
         {
             surfaceView.queueEvent(runnable);
         }
-        
-        
+
+
         protected T getWallpaperRenderer()
         {
             return renderer;
         }
-        
-        
+
+
         private class WallpaperGLSurfaceView
             extends GLSurfaceView
         {
@@ -82,15 +82,15 @@ public abstract class GLWallpaperService
             {
                 super(context);
             }
-            
-            
+
+
             @Override
             public SurfaceHolder getHolder()
             {
                 return getSurfaceHolder();
             }
-            
-            
+
+
             public void onWallpaperDestroy()
             {
                 super.onDetachedFromWindow();
