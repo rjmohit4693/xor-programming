@@ -118,7 +118,7 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             long now = System.nanoTime();
             if (prevTime == -1)
             {
-                engine.update(1 / targetUPS, controller);
+                engine.update(0, controller);
             }
             else
             {

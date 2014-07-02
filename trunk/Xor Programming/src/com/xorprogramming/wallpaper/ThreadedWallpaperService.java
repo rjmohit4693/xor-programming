@@ -20,7 +20,7 @@ import com.xorprogramming.thread.UpdaterThread;
  * An abstraction of the {@code WallpaperService} that uses a {@code WallpaperScene} for updating and rendering. The
  * {@code ThreadedWallpaperService} is intend to be extended and have an inner class that extends {@code ThreadedEngine}
  * .
- * 
+ *
  * @see ThreadedEngine
  * @see WallpaperScene
  * @author Steven Roberts
@@ -34,8 +34,9 @@ public abstract class ThreadedWallpaperService
      * Handles the rendering of a {@code WallpaperScene} and threading required to update it. The scene is only updated
      * when the live wallpaper can be seen by a user. Note that the {@code ThreadedEngine} runs on a non-UI thread.
      * Thus, any interaction in a {@code WallpaperScene} by the UI thread with fields used in the {@code render} and
-     * {@code update} methods must be synchronized.
-     * 
+     * {@code update} methods must be synchronized. Declaring all the methods of a scene as {@code synchronized} is a
+     * simple and sufficient way to do this.
+     *
      * @param <T>
      *            The type of {@code WallpaperScene}
      * @see WallpaperScene
@@ -47,18 +48,18 @@ public abstract class ThreadedWallpaperService
         extends Engine
     {
         private final Object        lock = new Object();
-        
+
         private final Updatable     u;
         private final UpdaterThread thread;
         private final T             scene;
         private int                 width;
         private int                 height;
-        
-        
+
+
         // ----------------------------------------------------------
         /**
          * Create a new ThreadedEngine object.
-         * 
+         *
          * @param scene
          *            The {@code WallpaperScene} for the live wallpaper
          * @param targetFPS
@@ -75,8 +76,8 @@ public abstract class ThreadedWallpaperService
             u = new WallpaperUpdatable();
             thread = new UpdaterThread(u, targetFPS);
         }
-        
-        
+
+
         @Override
         public void onVisibilityChanged(boolean visible)
         {
@@ -89,8 +90,8 @@ public abstract class ThreadedWallpaperService
                 thread.stop(true);
             }
         }
-        
-        
+
+
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int newWidth, int newHeight)
         {
@@ -102,56 +103,56 @@ public abstract class ThreadedWallpaperService
             }
             u.update(0);
         }
-        
-        
+
+
         // ----------------------------------------------------------
         /**
          * Gets the width of the live wallpaper
-         * 
+         *
          * @return The width
          */
         protected int getWidth()
         {
             return width;
         }
-        
-        
+
+
         // ----------------------------------------------------------
         /**
          * Gets the height of the live wallpaper
-         * 
+         *
          * @return The height
          */
         protected int getHeight()
         {
             return height;
         }
-        
-        
+
+
         @Override
         public void onSurfaceDestroyed(SurfaceHolder holder)
         {
             super.onSurfaceDestroyed(holder);
             thread.stop(true);
         }
-        
-        
+
+
         // ----------------------------------------------------------
         /**
          * Get the {@code WallpaperScene} for the live wallpaper
-         * 
+         *
          * @return The scene
          */
         protected T getWallpaperScene()
         {
             return scene;
         }
-        
-        
+
+
         private class WallpaperUpdatable
             implements Updatable
         {
-            
+
             public void update(float deltaT)
             {
                 SurfaceHolder holder = getSurfaceHolder();
@@ -176,7 +177,7 @@ public abstract class ThreadedWallpaperService
                     }
                 }
             }
-            
+
         }
     }
 }
