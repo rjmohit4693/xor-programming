@@ -15,11 +15,18 @@ import android.graphics.Canvas;
 public interface GameRenderer<T extends GameEngine<?>>
 {
 
-    void initialize(Resources res) throws RenderException;
+    void initialize(Resources res)
+        throws RenderException;
 
 
-    void render(T engine, Canvas c, int width, int height) throws RenderException;
+    void onSizeChange(Resources res, int newWidth, int newHeight)
+        throws RenderException;
 
 
-    void dispose() throws RenderException;
+    void render(T engine, Canvas c, int width, int height)
+        throws RenderException;
+
+
+    void dispose()
+        throws RenderException;
 }

@@ -11,5 +11,9 @@ package com.xorprogramming.game;
 
 public interface GameEventController<T>
 {
-    void notifyListeners(T t);
+    void notifyGameEvent(T t);
+
+    void notifyGameOver(boolean won);
+
+    void stopGame();
 }

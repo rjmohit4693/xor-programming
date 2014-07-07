@@ -19,9 +19,9 @@ package com.xorprogramming.thread;
  * method. However, if data is not confined to the {@code update} method, addition synchronization measures must be
  * taken.
  * </p>
- * 
+ *
  * @author Steven Roberts
- * @version 3.1.2
+ * @version 3.1.3
  */
 public final class UpdaterThread
 {
@@ -30,28 +30,28 @@ public final class UpdaterThread
      * achieving maximum UPS.
      */
     public static final float           MAX_UPS         = Float.POSITIVE_INFINITY;
-    
+
     /*
      * Ensures starting and stopping are mutually exclusive
      */
     private final Object                startStopLock   = new Object();
-    
+
     /*
      * Ensures the inner thread cannot start before the previous instance finished
      */
     private final Object                innerThreadLock = new Object();
-    
+
     private final Updatable             u;
-    
+
     private volatile UpdaterThreadState state;
     private volatile float              targetUPS;
     private Thread                      innerThread;
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Create a new {@code UpdaterThread} object with max ups.
-     * 
+     *
      * @param u
      *            The object to update
      * @throws NullPointerException
@@ -62,12 +62,12 @@ public final class UpdaterThread
     {
         this(u, MAX_UPS);
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Create a new {@code UpdaterThread} object.
-     * 
+     *
      * @param u
      *            The object to update
      * @param targetUPS
@@ -89,12 +89,12 @@ public final class UpdaterThread
         this.u = u;
         state = UpdaterThreadState.NOT_YET_STARTED;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Sets the number of UPS that the thread will try to attain.
-     * 
+     *
      * @param targetUPS
      *            The target UPS or {@link UpdaterThread#MAX_UPS}
      * @throws IllegalArgumentException
@@ -111,26 +111,26 @@ public final class UpdaterThread
             this.targetUPS = targetUPS;
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Gets the number of UPS that the thread will try to attain.
-     * 
+     *
      * @return the number of UPS that the thread will try to attain
      */
     public float getTargetUPS()
     {
         return targetUPS;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Starts the thread provided it is not running. Note that if the {@code UpdaterThread} is stopping when
      * {@code start} is called, the thread starts, but will not run until the thread finishes stopping. This method does
      * not block.
-     * 
+     *
      * @return true if started successfully, false otherwise
      */
     public boolean start()
@@ -150,12 +150,12 @@ public final class UpdaterThread
             }
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Gets the current state of the {@code UpdaterThread}
-     * 
+     *
      * @return The current state of the {@code UpdaterThread}
      * @see UpdaterThreadState
      */
@@ -166,12 +166,12 @@ public final class UpdaterThread
             return state;
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Requests the thread to stop and changes the state to stopping.
-     * 
+     *
      * @param join
      *            If true, the method will block until the thread is stopped. Otherwise, the method will request
      *            termination and immediately return
@@ -189,7 +189,7 @@ public final class UpdaterThread
             {
                 return false;
             }
-            
+
             state = UpdaterThreadState.STOPPING;
             innerThread.interrupt();
             if (join)
@@ -198,13 +198,12 @@ public final class UpdaterThread
                 {
                     throw new IllegalStateException("The Updatable cannot wait for itself to terminate");
                 }
-                boolean retry = true;
-                while (retry)
+                while (true)
                 {
                     try
                     {
                         innerThread.join();
-                        retry = false;
+                        break;
                     }
                     catch (InterruptedException e)
                     {
@@ -216,8 +215,8 @@ public final class UpdaterThread
             return true;
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Handles the updating of the {@code Updatable}. While multiple instances of this class can exist within an
@@ -228,8 +227,8 @@ public final class UpdaterThread
     {
         private static final float NANOS_PER_SEC  = 1e9f;
         private static final float MILLIS_PER_SEC = 1e3f;
-        
-        
+
+
         @Override
         public void run()
         {
@@ -239,7 +238,7 @@ public final class UpdaterThread
                 while (state == UpdaterThreadState.RUNNING)
                 {
                     float curTargetUPS = targetUPS; // Take a snapshot of the current targetUPS
-                    
+
                     long curTime = System.nanoTime();
                     if (prevTime == -1)
                     {
@@ -250,11 +249,11 @@ public final class UpdaterThread
                         u.update((curTime - prevTime) / NANOS_PER_SEC);
                     }
                     prevTime = curTime;
-                    
+
                     if (curTargetUPS != MAX_UPS)
                     {
                         long updateTime = System.nanoTime() - curTime; // In nanoseconds
-                        
+
                         // Sleep time in milliseconds
                         long sleep =
                             (long)(MILLIS_PER_SEC / curTargetUPS - MILLIS_PER_SEC * updateTime / NANOS_PER_SEC);

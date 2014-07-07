@@ -11,35 +11,32 @@ package com.xorprogramming.game;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.os.Looper;
 import android.util.AttributeSet;
-import android.view.View;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import com.xorprogramming.thread.Updatable;
+import com.xorprogramming.thread.UpdaterThread;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class GameView<T1 extends GameEngine<T2>, T2>
-    extends View
+    extends SurfaceView
 {
-    private static final float                DEFAULT_UPS    = 60;
-    private static final float                NANOS_PER_SEC  = 1e9f;
-    private static final float                MILLIS_PER_SEC = 1e3f;
-
-    private final Controller                  controller;
-    private final List<GameEventListener<T2>> listeners;
+    private final Object                      lock       = this;
+    private final UpdaterThread               thread     = new UpdaterThread(new Updater());
+    private final Controller                  controller = new Controller();
+    private final List<GameEventListener<T2>> listeners  = new ArrayList<GameEventListener<T2>>();
     private T1                                engine;
     private GameRenderer<T1>                  renderer;
     private boolean                           initialized;
-
-    private Thread                            thread;
-    private long                              prevTime;
-    private volatile boolean                  done;
-    private volatile float                    targetUPS;
+    private int                               width;
+    private int                               height;
 
 
     public GameView(Context context)
     {
         super(context);
-        controller = new Controller();
-        listeners = new ArrayList<GameEventListener<T2>>();
         init();
     }
 
@@ -47,8 +44,6 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
     public GameView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
-        controller = new Controller();
-        listeners = new ArrayList<GameEventListener<T2>>();
         init();
     }
 
@@ -56,20 +51,17 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
     public GameView(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
-        controller = new Controller();
-        listeners = new ArrayList<GameEventListener<T2>>();
         init();
     }
 
 
     private void init()
     {
-        done = true;
-        targetUPS = DEFAULT_UPS;
+        getHolder().addCallback(new Callback());
     }
 
 
-    public final void initialize(T1 gameEngine, GameRenderer<T1> gameRenderer)
+    protected final void initialize(T1 gameEngine, GameRenderer<T1> gameRenderer)
     {
         if (gameEngine == null)
         {
@@ -81,9 +73,11 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             initialized = false;
             throw new NullPointerException("The GameRenderer must be non-null");
         }
-
-        engine = gameEngine;
-        renderer = gameRenderer;
+        synchronized (lock)
+        {
+            engine = gameEngine;
+            renderer = gameRenderer;
+        }
         initialized = true;
     }
 
@@ -99,45 +93,7 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
 
     public final void setTargetUPS(float targetUPS)
     {
-        if (Float.isInfinite(targetUPS) || Float.isNaN(targetUPS) || targetUPS <= 0)
-        {
-            throw new IllegalArgumentException("The target UPS must be a number greater than 0");
-        }
-        else
-        {
-            this.targetUPS = targetUPS;
-        }
-    }
-
-
-    @Override
-    protected final void onDraw(Canvas c)
-    {
-        if (!done && initialized && !isInEditMode())
-        {
-            long now = System.nanoTime();
-            if (prevTime == -1)
-            {
-                engine.update(0, controller);
-            }
-            else
-            {
-                engine.update((now - prevTime) / NANOS_PER_SEC, controller);
-            }
-
-            if (!done)
-            {
-                try
-                {
-                    renderer.render(engine, c, getWidth(), getHeight());
-                }
-                catch (RenderException ex)
-                {
-                    controller.notifyListeners(ex);
-                }
-                prevTime = now;
-            }
-        }
+        thread.setTargetUPS(targetUPS);
     }
 
 
@@ -153,73 +109,17 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
     }
 
 
-    public final boolean startRendering()
+    public final boolean start()
     {
         checkInitialization();
-        if (done)
-        {
-            prevTime = -1;
-            done = false;
-            thread = new InnerThread();
-            thread.start();
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return thread.start();
     }
 
 
-    public final boolean stopRendering()
+    public final boolean stop()
     {
         checkInitialization();
-        if (done)
-        {
-            return false;
-        }
-        else
-        {
-            done = true;
-            thread.interrupt();
-            thread = null;
-            return true;
-        }
-    }
-
-
-    public final void initializeRenderer()
-    {
-        checkInitialization();
-        try
-        {
-            renderer.initialize(getResources());
-        }
-        catch (RenderException ex)
-        {
-            controller.notifyListeners(ex);
-        }
-    }
-
-
-    public final void disposeRenderer()
-    {
-        checkInitialization();
-        if (done)
-        {
-            try
-            {
-                renderer.dispose();
-            }
-            catch (RenderException ex)
-            {
-                controller.notifyListeners(ex);
-            }
-        }
-        else
-        {
-            throw new IllegalStateException("The GameRenderer cannot be disposed while running");
-        }
+        return thread.stop(isOnUiThread());
     }
 
 
@@ -235,11 +135,100 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
     }
 
 
+    @Override
+    protected final void onDraw(Canvas canvas)
+    {
+        render(canvas);
+    }
+
+
+    private void render(Canvas c)
+    {
+        synchronized (lock)
+        {
+            try
+            {
+                renderer.render(engine, c, width, height);
+
+            }
+            catch (RenderException ex)
+            {
+                controller.notifyRenderException(ex);
+            }
+        }
+    }
+
+
+    private boolean isOnUiThread()
+    {
+        return Looper.getMainLooper() == Looper.myLooper();
+    }
+
+
+    private class Callback
+        implements SurfaceHolder.Callback
+    {
+
+        @Override
+        public void surfaceCreated(SurfaceHolder holder)
+        {
+            synchronized (lock)
+            {
+                try
+                {
+                    renderer.initialize(getResources());
+                }
+                catch (RenderException ex)
+                {
+                    controller.notifyRenderException(ex);
+                }
+            }
+        }
+
+
+        @Override
+        public void surfaceChanged(SurfaceHolder holder, int format, int newWidth, int newHeight)
+        {
+            synchronized (lock)
+            {
+                width = newWidth;
+                height = newHeight;
+                try
+                {
+                    renderer.onSizeChange(getResources(), newWidth, newHeight);
+                }
+                catch (RenderException ex)
+                {
+                    controller.notifyRenderException(ex);
+                }
+            }
+        }
+
+
+        @Override
+        public void surfaceDestroyed(SurfaceHolder holder)
+        {
+            synchronized (lock)
+            {
+                try
+                {
+                    renderer.dispose();
+                }
+                catch (RenderException ex)
+                {
+                    controller.notifyRenderException(ex);
+                }
+            }
+        }
+
+    }
+
+
     private class Controller
         implements GameEventController<T2>
     {
         @Override
-        public final void notifyListeners(T2 t)
+        public final void notifyGameEvent(T2 t)
         {
             for (int i = 0; i < listeners.size(); i++)
             {
@@ -248,34 +237,104 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
         }
 
 
-        public void notifyListeners(RenderException ex)
+        @Override
+        public void notifyGameOver(boolean won)
+        {
+            // TODO Auto-generated method stub
+
+        }
+
+
+        @Override
+        public void stopGame()
+        {
+
+        }
+
+
+        public void notifyRenderException(RenderException ex)
         {
             for (int i = 0; i < listeners.size(); i++)
             {
                 listeners.get(i).onRenderException(ex);
             }
         }
+
+
+        private void blockAndRunOnUI(Runnable r)
+        {
+            if (isOnUiThread())
+            {
+                r.run();
+            }
+            else
+            {
+                // TODO wait
+            }
+        }
+
+
+        private abstract class SyncRunner implements Runnable
+        {
+            private boolean done;
+
+            @Override
+            public void run()
+            {
+                for (int i = 0; i < listeners.size(); i++)
+                {
+                    runListener(listeners.get(i));
+                }
+                synchronized (this)
+                {
+                    done = true;
+                    notifyAll();
+                }
+            }
+
+
+            public void waitToComplete()
+            {
+                getHandler().post(r)
+            }
+
+
+            protected abstract void runListener(GameEventListener<T2> listener);
+        }
     }
 
 
-    private class InnerThread
-        extends Thread
+    private class Updater
+        implements Updatable
     {
+
         @Override
-        public void run()
+        public void update(float deltaT)
         {
-            while (!done)
+            SurfaceHolder holder = getHolder();
+            Canvas c = null;
+            try
             {
-                postInvalidate();
-                try
+                c = holder.lockCanvas();
+                if (c != null)
                 {
-                    Thread.sleep((long)(MILLIS_PER_SEC / targetUPS));
+                    synchronized (lock)
+                    {
+                        if (engine.update(deltaT, controller))
+                        {
+                            render(c);
+                        }
+                    }
                 }
-                catch (InterruptedException e)
+            }
+            finally
+            {
+                if (c != null)
                 {
-                    return;
+                    holder.unlockCanvasAndPost(c);
                 }
             }
         }
+
     }
 }
