@@ -24,6 +24,9 @@ public interface GameEventListener<T>
     void onGameEvent(T t, GameEngine<T> engine);
 
 
+    void onGameOver(boolean won, GameEngine<T> engine);
+
+
     void onRenderException(RenderException ex);
 
 }

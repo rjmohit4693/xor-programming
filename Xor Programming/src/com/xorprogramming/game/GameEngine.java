@@ -11,5 +11,5 @@ package com.xorprogramming.game;
 
 public interface GameEngine<T>
 {
-    void update(float deltaT, GameEventController<T> controller);
+    boolean update(float deltaT, GameEventController<T> controller);
 }
