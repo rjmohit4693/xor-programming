@@ -9,151 +9,184 @@
 
 package com.xorprogramming.sound;
 
+import com.xorprogramming.logging.LoggingType;
+import com.xorprogramming.logging.Logger;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
-import android.util.SparseIntArray;
+import android.util.SparseArray;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class SoundManager
 {
-    private static final int     MAX_SIMULTANEOUS_STREAMS = 5;
-    private static final int     STREAM_TYPE              = AudioManager.STREAM_MUSIC;
-    
-    private final SparseIntArray soundPoolIDs;
-    private final SparseIntArray loadingSoundPoolIDs;
-    
-    private SoundPool            soundPool;
-    private AudioManager         manager;
-    
-    
-    public SoundManager()
+    private final SparseArray<Sound> resIdToSoundMap;
+    private final SoundPool          pool;
+
+
+    public SoundManager(int maxStreams)
     {
-        soundPoolIDs = new SparseIntArray();
-        loadingSoundPoolIDs = new SparseIntArray();
-    }
-    
-    
-    public void loadSound(Context context, int resourceID)
-    {
-        if (soundPool == null)
+        resIdToSoundMap = new SparseArray<Sound>();
+        pool = new SoundPool(maxStreams, AudioManager.STREAM_MUSIC, 0);
+        pool.setOnLoadCompleteListener(new OnLoadCompleteListener()
         {
-            soundPool = new SoundPool(MAX_SIMULTANEOUS_STREAMS, STREAM_TYPE, 0);
-            manager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-            soundPool.setOnLoadCompleteListener(new OnLoadCompleteListener()
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int sampleId, int status)
             {
-                public void onLoadComplete(SoundPool pool, int sampleId, int status)
+                if (status == 0)
                 {
-                    if (status == 0 && soundPool != null)
+                    Logger.logf(LoggingType.INFO, Logger.XOR_LOG_TAG, "Sound %d successfully loaded", sampleId);
+                }
+                else
+                {
+                    Logger.logf(
+                        LoggingType.ERROR,
+                        Logger.XOR_LOG_TAG,
+                        "Unable to load sound %d, status %d",
+                        sampleId,
+                        status);
+                    return;
+                }
+
+                for (int i = 0; i < resIdToSoundMap.size(); i++)
+                {
+                    Sound cur = resIdToSoundMap.valueAt(i);
+                    if (cur.soundId == sampleId)
                     {
-                        int index = loadingSoundPoolIDs.indexOfKey(sampleId);
-                        if (index >= 0)
-                        {
-                            soundPoolIDs.put(loadingSoundPoolIDs.valueAt(index), sampleId);
-                            soundPoolIDs.removeAt(index);
-                        }
+                        cur.runQueuedRequests();
+                        break;
                     }
                 }
-            });
+            }
+        });
+    }
+
+
+    public boolean load(Context c, int resId)
+    {
+        Sound s = resIdToSoundMap.get(resId);
+        if (s != null)
+        {
+            // sound already exists. It cannot be loaded again!
+            return false;
         }
-        loadingSoundPoolIDs.put(soundPool.load(context, resourceID, 1), resourceID);
+
+        int soundId = pool.load(c, resId, 1);
+        resIdToSoundMap.put(resId, new Sound(soundId));
+        return true;
     }
-    
-    
-    public boolean playSound(int resourceID)
+
+
+    public boolean play(int resId, final float vol, final int loop, final float rate)
     {
-        return playSound(resourceID, 0);
-    }
-    
-    
-    public boolean playSound(int resourceID, int loop)
-    {
-        if (soundPool == null)
+        final Sound s = resIdToSoundMap.get(resId);
+        if (s == null)
         {
             return false;
         }
-        int index = soundPoolIDs.indexOfKey(resourceID);
-        if (index >= 0)
+        s.post(new Runnable()
         {
-            float volume = getVolume();
-            return soundPool.play(soundPoolIDs.get(resourceID), volume, volume, 1, loop, 1) != 0;
-        }
-        else
-        {
-            return false;
-        }
+            @Override
+            public void run()
+            {
+                pool.play(s.soundId, vol, vol, 1, loop, rate);
+            }
+        });
+        return true;
     }
-    
-    
-    private float getVolume()
+
+
+    public boolean play(int resId, float vol, int loop)
     {
-        float streamVolumeCurrent = manager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        float streamVolumeMax = manager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        return streamVolumeCurrent / streamVolumeMax;
+        return play(resId, vol, loop, 1);
     }
-    
-    
-    public boolean pauseAll()
+
+
+    public boolean play(int resId, float vol)
     {
-        if (soundPool != null)
-        {
-            soundPool.autoPause();
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return play(resId, vol, 0);
     }
-    
-    
-    public boolean resumeAll()
+
+
+    public boolean play(int resId)
     {
-        if (soundPool != null)
-        {
-            soundPool.autoResume();
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return play(resId, 1);
     }
-    
-    
-    public boolean unloadSound(int resourceID)
+
+
+    public void resumeAll()
     {
-        if (soundPool == null)
-        {
-            return false;
-        }
-        int index = soundPoolIDs.indexOfKey(resourceID);
-        if (index >= 0)
-        {
-            int soundID = soundPoolIDs.valueAt(index);
-            soundPoolIDs.removeAt(index);
-            return soundPool.unload(soundID);
-        }
-        else
-        {
-            return false;
-        }
+        pool.autoResume();
     }
-    
-    
+
+
+    public void pauseAll()
+    {
+        pool.autoPause();
+    }
+
+
+    public boolean unload(int resId)
+    {
+        Sound s = resIdToSoundMap.get(resId);
+        if (s == null)
+        {
+            return false;
+        }
+        boolean success = pool.unload(s.soundId);
+        resIdToSoundMap.delete(resId);
+        return success;
+    }
+
+
     public void dispose()
     {
-        if (soundPool != null)
+        resIdToSoundMap.clear();
+        pool.release();
+    }
+
+
+    private class Sound
+    {
+        private final int       soundId;
+        private boolean         isLoaded;
+        private Queue<Runnable> requests;
+
+
+        public Sound(int soundId)
         {
-            for (int i = 0; i < soundPoolIDs.size(); i++)
-            {
-                soundPool.unload(soundPoolIDs.valueAt(i));
-            }
-            soundPool.release();
+            this.soundId = soundId;
         }
-        soundPoolIDs.clear();
-        loadingSoundPoolIDs.clear();
-        soundPool = null;
-        manager = null;
+
+
+        public void post(Runnable r)
+        {
+            if (isLoaded)
+            {
+                r.run();
+            }
+            else
+            {
+                if (requests == null)
+                {
+                    requests = new LinkedList<Runnable>();
+                }
+                requests.add(r);
+            }
+        }
+
+
+        public void runQueuedRequests()
+        {
+            isLoaded = true;
+            if (requests != null)
+            {
+                while (!requests.isEmpty())
+                {
+                    requests.remove().run();
+                }
+            }
+        }
     }
 }
