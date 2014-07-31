@@ -15,14 +15,14 @@ import android.media.MediaPlayer;
 public class MusicManager
 {
     private MediaPlayer player;
-    
-    
+
+
     public boolean play(Context context, int resourceID)
     {
         return play(context, resourceID, false);
     }
-    
-    
+
+
     public boolean play(Context context, int resourceID, boolean loop)
     {
         if (player == null)
@@ -41,8 +41,8 @@ public class MusicManager
             return false;
         }
     }
-    
-    
+
+
     public boolean pause()
     {
         if (player == null)
@@ -55,8 +55,8 @@ public class MusicManager
             return true;
         }
     }
-    
-    
+
+
     public boolean resume()
     {
         if (player == null)
@@ -69,8 +69,8 @@ public class MusicManager
             return true;
         }
     }
-    
-    
+
+
     public void dispose()
     {
         if (player != null)
