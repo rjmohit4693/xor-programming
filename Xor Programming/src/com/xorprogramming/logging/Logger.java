@@ -1,10 +1,17 @@
-/*
- * Copyright (C) 2014 Xor Programming Licensed under the Apache License, Version 2.0 (the "License"); you may not use
- * this file except in compliance with the License. You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and limitations under the
- * License.
+/*-
+Copyright 2014 Xor Programming
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
  */
 
 package com.xorprogramming.logging;
@@ -21,7 +28,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Note that this class can be accessed concurrently. Also, when a thread logs a message, the
  * {@code LoggerListener.onLog} method is called by that thread. Thus, in a multithreaded environment utilizing the
  * {@code Logger}, a {@code LoggerListener.onLog} may require synchronization.
- * 
+ *
  * @see LoggingPolicy
  * @see LoggerListener
  * @author Steven Roberts
@@ -32,7 +39,7 @@ public final class Logger
     /**
      * Tag for all logging within the API
      */
-    public static final String                LOG_TAG      = "XOR";
+    public static final String                XOR_LOG_TAG  = "XOR";
     
     private static final List<LoggerListener> logListeners = new CopyOnWriteArrayList<LoggerListener>();
     
@@ -53,7 +60,7 @@ public final class Logger
     // ----------------------------------------------------------
     /**
      * Sets a new logging policy.
-     * 
+     *
      * @param newPolicy
      *            The new policy. If null, the policy is set to {@link LoggingPolicy#NO_LOGGING}
      */
@@ -73,13 +80,13 @@ public final class Logger
     // ----------------------------------------------------------
     /**
      * Adds a {@code LoggerListener} to be notified of logging events.
-     * 
+     *
      * @param listener
      *            The {@code LoggerListener} to add
      * @throws NullPointerException
      *             if the listener is null
      */
-    public void addLoggerListener(LoggerListener listener)
+    public static void addLoggerListener(LoggerListener listener)
     {
         if (listener == null)
         {
@@ -93,11 +100,11 @@ public final class Logger
     /**
      * Removes the {@code LoggerListener} from the list of listeners. The listener will no longer be notified of logging
      * events
-     * 
+     *
      * @param listener
      *            The {@code LoggerListener} to remove
      */
-    public void removeLoggerListener(LoggerListener listener)
+    public static void removeLoggerListener(LoggerListener listener)
     {
         logListeners.remove(listener);
     }
@@ -106,7 +113,7 @@ public final class Logger
     // ----------------------------------------------------------
     /**
      * Logs a message to output with the given tag.
-     * 
+     *
      * @param type
      *            The type of message being logged
      * @param tag
@@ -133,7 +140,7 @@ public final class Logger
     // ----------------------------------------------------------
     /**
      * Logs a formatted message to output with the given tag.
-     * 
+     *
      * @param type
      *            The type of message being logged
      * @param tag
@@ -154,8 +161,8 @@ public final class Logger
     
     // ----------------------------------------------------------
     /**
-     * Logs a {@code Throwable} to output with {@link Logger#LOG_TAG} as the tag.
-     * 
+     * Logs a {@code Throwable} to output with {@link Logger#XOR_LOG_TAG} as the tag.
+     *
      * @param type
      *            The type of message being logged
      * @param tag

@@ -1,10 +1,17 @@
-/*
- * Copyright (C) 2014 Xor Programming Licensed under the Apache License, Version 2.0 (the "License"); you may not use
- * this file except in compliance with the License. You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and limitations under the
- * License.
+/*-
+Copyright 2014 Xor Programming
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
  */
 
 package com.xorprogramming.wallpaper;
@@ -17,8 +24,8 @@ import com.xorprogramming.thread.UpdaterThread;
 
 // -------------------------------------------------------------------------
 /**
- * An abstraction of the {@code WallpaperService} that uses a {@code WallpaperScene} for updating and rendering. The
- * {@code ThreadedWallpaperService} is intend to be extended and have an inner class that extends {@code ThreadedEngine}
+ * An abstraction of the {@link WallpaperService} that uses a {@link WallpaperScene} for updating and rendering. The
+ * {@link ThreadedWallpaperService} is intend to be extended and have an inner class that extends {@link ThreadedEngine}
  * .
  *
  * @see ThreadedEngine
@@ -31,14 +38,14 @@ public abstract class ThreadedWallpaperService
 {
     // -------------------------------------------------------------------------
     /**
-     * Handles the rendering of a {@code WallpaperScene} and threading required to update it. The scene is only updated
-     * when the live wallpaper can be seen by a user. Note that the {@code ThreadedEngine} runs on a non-UI thread.
-     * Thus, any interaction in a {@code WallpaperScene} by the UI thread with fields used in the {@code render} and
-     * {@code update} methods must be synchronized. Declaring all the methods of a scene as {@code synchronized} is a
-     * simple and sufficient way to do this.
+     * Handles the rendering of a {@link WallpaperScene} and threading required to update it. The scene is only updated
+     * when the live wallpaper can be seen by a user. Note that the {@link ThreadedEngine} runs on a non-UI thread.
+     * Thus, any interaction in a {@link WallpaperScene} by the UI thread with fields used in the
+     * {@link WallpaperScene#render} and {@link WallpaperScene#update} methods must be synchronized. Declaring all the
+     * methods of a scene as {@code synchronized} is a simple and sufficient way to do this.
      *
      * @param <T>
-     *            The type of {@code WallpaperScene}
+     *            The type of {@link WallpaperScene}
      * @see WallpaperScene
      * @see ThreadedWallpaperService
      * @author Steven Roberts
@@ -48,25 +55,25 @@ public abstract class ThreadedWallpaperService
         extends Engine
     {
         private final Object        lock = new Object();
-
+        
         private final Updatable     u;
         private final UpdaterThread thread;
         private final T             scene;
         private int                 width;
         private int                 height;
-
-
+        
+        
         // ----------------------------------------------------------
         /**
          * Create a new ThreadedEngine object.
          *
          * @param scene
-         *            The {@code WallpaperScene} for the live wallpaper
+         *            The {@link WallpaperScene} for the live wallpaper
          * @param targetFPS
          *            The number of thread updates every second. It must be a positive number or
-         *            {@code UpdaterThread.MAX_UPS}, which prevents the thread from sleeping or yielding.
+         *            {@link UpdaterThread#MAX_UPS}, which prevents the thread from sleeping or yielding.
          * @throws NullPointerException
-         *             If the {@code WallpaperScene} is null
+         *             If the {@link WallpaperScene} is null
          * @throws IllegalArgumentException
          *             If {@code targetUPS} is not a positive number or {@code UpdaterThread.MAX_UPS}
          */
@@ -76,8 +83,8 @@ public abstract class ThreadedWallpaperService
             u = new WallpaperUpdatable();
             thread = new UpdaterThread(u, targetFPS);
         }
-
-
+        
+        
         @Override
         public void onVisibilityChanged(boolean visible)
         {
@@ -90,8 +97,19 @@ public abstract class ThreadedWallpaperService
                 thread.stop(true);
             }
         }
-
-
+        
+        
+        @Override
+        public void onSurfaceCreated(SurfaceHolder holder)
+        {
+            synchronized (lock)
+            {
+                super.onSurfaceCreated(holder);
+            }
+            scene.initialize(getApplicationContext());
+        }
+        
+        
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int newWidth, int newHeight)
         {
@@ -101,10 +119,10 @@ public abstract class ThreadedWallpaperService
                 width = newWidth;
                 height = newHeight;
             }
-            u.update(0);
+            scene.onSizeChange(getApplicationContext(), newWidth, newHeight);
         }
-
-
+        
+        
         // ----------------------------------------------------------
         /**
          * Gets the width of the live wallpaper
@@ -115,8 +133,8 @@ public abstract class ThreadedWallpaperService
         {
             return width;
         }
-
-
+        
+        
         // ----------------------------------------------------------
         /**
          * Gets the height of the live wallpaper
@@ -127,19 +145,23 @@ public abstract class ThreadedWallpaperService
         {
             return height;
         }
-
-
+        
+        
         @Override
         public void onSurfaceDestroyed(SurfaceHolder holder)
         {
-            super.onSurfaceDestroyed(holder);
+            synchronized (lock)
+            {
+                super.onSurfaceDestroyed(holder);
+            }
             thread.stop(true);
+            scene.dispose();
         }
-
-
+        
+        
         // ----------------------------------------------------------
         /**
-         * Get the {@code WallpaperScene} for the live wallpaper
+         * Get the {@link WallpaperScene} for the live wallpaper
          *
          * @return The scene
          */
@@ -147,12 +169,12 @@ public abstract class ThreadedWallpaperService
         {
             return scene;
         }
-
-
+        
+        
         private class WallpaperUpdatable
             implements Updatable
         {
-
+            
             public void update(float deltaT)
             {
                 SurfaceHolder holder = getSurfaceHolder();
@@ -177,7 +199,7 @@ public abstract class ThreadedWallpaperService
                     }
                 }
             }
-
+            
         }
     }
 }
