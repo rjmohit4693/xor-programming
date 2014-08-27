@@ -1,10 +1,17 @@
-/*
- * Copyright (C) 2014 Xor Programming Licensed under the Apache License, Version 2.0 (the "License"); you may not use
- * this file except in compliance with the License. You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and limitations under the
- * License.
+/*-
+Copyright 2014 Xor Programming
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
  */
 
 package com.xorprogramming.wallpaper;
@@ -16,9 +23,9 @@ import android.view.SurfaceHolder;
 
 // -------------------------------------------------------------------------
 /**
- * An abstraction of the {@code WallpaperService} that uses a {@code WallpaperScene} for updating and rendering. The
- * {@code SimpleWallpaperService} is intend to be extended and have an inner class that extends {@code SimpleEngine}.
- * 
+ * An abstraction of the {@link WallpaperService} that uses a {@link WallpaperScene} for updating and rendering. The
+ * {@link SimpleWallpaperService} is intend to be extended and have an inner class that extends {@link SimpleEngine}.
+ *
  * @see SimpleEngine
  * @see WallpaperScene
  * @author Steven Roberts
@@ -30,10 +37,10 @@ public abstract class SimpleWallpaperService
     
     // -------------------------------------------------------------------------
     /**
-     * Handles the rendering of a {@code WallpaperScene} and threading required to update it. The scene is only updated
-     * when the live wallpaper can be seen by a user. Note that the {@code SimpleEngine} runs entirely on the UI thread
-     * and may not be suitable for a {@code WallpaperScene} that require intensive updating or rendering.
-     * 
+     * Handles the rendering of a {@link WallpaperScene} and threading required to update it. The scene is only updated
+     * when the live wallpaper can be seen by a user. Note that the {@link SimpleEngine} runs entirely on the UI thread
+     * and may not be suitable for a {@link WallpaperScene} that require intensive updating or rendering.
+     *
      * @param <T>
      *            The type of {@code WallpaperScene}
      * @see WallpaperScene
@@ -65,11 +72,11 @@ public abstract class SimpleWallpaperService
         // ----------------------------------------------------------
         /**
          * Create a new SimpleEngine object.
-         * 
+         *
          * @param scene
-         *            The {@code WallpaperScene} for the live wallpaper
+         *            The {@link WallpaperScene} for the live wallpaper
          * @throws NullPointerException
-         *             If the {@code WallpaperScene} is null
+         *             If the {@link WallpaperScene} is null
          */
         public SimpleEngine(T scene)
         {
@@ -85,13 +92,13 @@ public abstract class SimpleWallpaperService
         // ----------------------------------------------------------
         /**
          * Create a new SimpleEngine object.
-         * 
+         *
          * @param scene
-         *            The {@code WallpaperScene} for the live wallpaper
+         *            The {@link WallpaperScene} for the live wallpaper
          * @param targetFPS
-         *            The frames per second at which the {@code WallpaperScene} will update and render
+         *            The frames per second at which the {@link WallpaperScene} will update and render
          * @throws NullPointerException
-         *             If the {@code WallpaperScene} is null
+         *             If the {@link WallpaperScene} is null
          * @throws IllegalArgumentException
          *             If {@code targetUPS} is not a positive number
          */
@@ -120,7 +127,7 @@ public abstract class SimpleWallpaperService
         // ----------------------------------------------------------
         /**
          * Gets the width of the live wallpaper
-         * 
+         *
          * @return The width
          */
         protected int getWidth()
@@ -132,7 +139,7 @@ public abstract class SimpleWallpaperService
         // ----------------------------------------------------------
         /**
          * Gets the height of the live wallpaper
-         * 
+         *
          * @return The height
          */
         protected int getHeight()
@@ -194,8 +201,8 @@ public abstract class SimpleWallpaperService
         
         // ----------------------------------------------------------
         /**
-         * Get the {@code WallpaperScene} for the live wallpaper
-         * 
+         * Get the {@link WallpaperScene} for the live wallpaper
+         *
          * @return The scene
          */
         protected T getWallpaperScene()
