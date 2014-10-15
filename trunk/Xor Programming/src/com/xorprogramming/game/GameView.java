@@ -62,6 +62,7 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
     private GameRenderer<T1>                      renderer;
 
     private long                                  prevTime;
+    private boolean                               postDone;
     private boolean                               done;
     private float                                 targetUPS;
 
@@ -110,6 +111,7 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
 
     private void init()
     {
+        postDone = false;
         done = true;
         targetUPS = DEFAULT_UPS;
     }
@@ -187,6 +189,12 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             {
                 controller.notifyRenderException(ex);
             }
+
+            if (postDone)
+            {
+                done = true;
+                postDone = false;
+            }
         }
     }
 
@@ -230,6 +238,7 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
         {
             prevTime = -1;
             done = false;
+            postDone = false;
             post(updater);
             return true;
         }
@@ -242,11 +251,13 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
 
     // ----------------------------------------------------------
     /**
-     * Stops the game.
+     * Stops the game immediately after updating or rendering have completed. If this method is called while updating,
+     * rendering will <b>not</b> occur.
      *
      * @return true if stopped, false if already stopped
      * @throws IllegalStateException
      *             if {@link #initialize(GameEngine, GameRenderer)} has not been called
+     * @see #postStopGame()
      */
     public final boolean stopGame()
     {
@@ -257,7 +268,34 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
         }
         else
         {
+            postDone = false;
             done = true;
+            removeCallbacks(updater);
+            return true;
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Stops the game immediately after both updating and rendering have completed. If this method is called while
+     * updating, rendering will occur.
+     *
+     * @return true if stopped or stop request was already posted, false if already stopped
+     * @throws IllegalStateException
+     *             if {@link #initialize(GameEngine, GameRenderer)} has not been called
+     * @see #stopGame()
+     */
+    public final boolean postStopGame()
+    {
+        checkInitialization();
+        if (done || postDone)
+        {
+            return false;
+        }
+        else
+        {
+            postDone = true;
             removeCallbacks(updater);
             return true;
         }
@@ -392,7 +430,7 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             long now = System.nanoTime();
             float deltaT = prevTime == -1 ? 0 : (now - prevTime) / NANOS_PER_SEC;
 
-            if (engine.update(deltaT, controller))
+            if (engine.update(deltaT, controller) && !done)
             {
                 invalidate();
                 prevTime = now;
