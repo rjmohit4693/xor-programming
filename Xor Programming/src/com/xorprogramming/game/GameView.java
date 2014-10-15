@@ -34,8 +34,8 @@ import java.util.List;
  * <ol>
  * <li>{@link #initialize(GameEngine, GameRenderer)}</li>
  * <li>{@link #initializeRenderer()}</li>
- * <li>{@link #startRendering()}</li>
- * <li>{@link #stopRendering()}</li>
+ * <li>{@link #startGame()}</li>
+ * <li>{@link #stopGame()}</li>
  * <li>{@link #disposeRenderer()}</li>
  * </ol>
  * </p>
@@ -54,18 +54,18 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
     extends View
 {
     private static final float                    DEFAULT_UPS = 60;
-    
+
     private final Runnable                        updater     = new Updater();
     private final Controller                      controller  = new Controller();
     private final List<GameEventListener<T1, T2>> listeners   = new ArrayList<GameEventListener<T1, T2>>();
     private T1                                    engine;
     private GameRenderer<T1>                      renderer;
-    
+
     private long                                  prevTime;
     private boolean                               done;
     private float                                 targetUPS;
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Create a new GameView object.
@@ -77,8 +77,8 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
         super(context);
         init();
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Create a new GameView object.
@@ -91,8 +91,8 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
         super(context, attrs);
         init();
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Create a new GameView object.
@@ -106,15 +106,15 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
         super(context, attrs, defStyleAttr);
         init();
     }
-    
-    
+
+
     private void init()
     {
         done = true;
         targetUPS = DEFAULT_UPS;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Sets the {@link GameEngine} and {@link GameRenderer}. Classes that extend {@link GameView} should call this
@@ -140,8 +140,8 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
         engine = gameEngine;
         renderer = gameRenderer;
     }
-    
-    
+
+
     private void checkInitialization()
     {
         if (engine == null || renderer == null)
@@ -149,8 +149,8 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             throw new IllegalStateException("The GameEngine and GameRenderer have not been initialized");
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Place a description of your method here.
@@ -172,8 +172,8 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             this.targetUPS = targetUPS;
         }
     }
-    
-    
+
+
     @Override
     protected final void onDraw(Canvas c)
     {
@@ -189,8 +189,8 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             }
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Gets the {@link GameEventController} responsible for notifying {@link GameEventListener}s of game events
@@ -201,8 +201,8 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
     {
         return controller;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Gets the {@link GameEngine}
@@ -213,17 +213,17 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
     {
         return engine;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
-     * Starts the game and begins rendering.
+     * Starts the game.
      *
      * @return true if started, false if already started
      * @throws IllegalStateException
      *             if {@link #initialize(GameEngine, GameRenderer)} has not been called
      */
-    public final boolean startRendering()
+    public final boolean startGame()
     {
         checkInitialization();
         if (done)
@@ -238,17 +238,17 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             return false;
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
-     * Stops the game and rendering.
+     * Stops the game.
      *
      * @return true if stopped, false if already stopped
      * @throws IllegalStateException
      *             if {@link #initialize(GameEngine, GameRenderer)} has not been called
      */
-    public final boolean stopRendering()
+    public final boolean stopGame()
     {
         checkInitialization();
         if (done)
@@ -262,8 +262,8 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             return true;
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Initializes the {@link GameRenderer}.
@@ -283,8 +283,8 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             controller.notifyRenderException(ex);
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Disposes the {@link GameRenderer}.
@@ -311,8 +311,8 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             throw new IllegalStateException("The GameRenderer cannot be disposed while running");
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Adds a {@link GameEventListener} to listen to events triggered by the {@link GameEngine}
@@ -324,8 +324,8 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
     {
         listeners.add(listener);
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Removes a {@link GameEventListener} if it has already been added
@@ -337,8 +337,8 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
     {
         listeners.remove(listener);
     }
-    
-    
+
+
     private class Controller
         implements GameEventController<T2>
     {
@@ -350,8 +350,8 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
                 listeners.get(i).onGameEvent(t, engine);
             }
         }
-        
-        
+
+
         public void notifyRenderException(RenderException ex)
         {
             for (int i = 0; i < listeners.size(); i++)
@@ -359,8 +359,8 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
                 listeners.get(i).onRenderException(ex);
             }
         }
-        
-        
+
+
         @Override
         public void notiftyGameOver(boolean win)
         {
@@ -370,15 +370,15 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             }
         }
     }
-    
-    
+
+
     private class Updater
         implements Runnable
     {
         private static final float NANOS_PER_SEC  = 1e9f;
         private static final float MILLIS_PER_SEC = 1e3f;
-        
-        
+
+
         @Override
         public void run()
         {
@@ -386,14 +386,13 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             {
                 return;
             }
-            
+
             postDelayed(this, (long)(MILLIS_PER_SEC / targetUPS));
-            
+
             long now = System.nanoTime();
             float deltaT = prevTime == -1 ? 0 : (now - prevTime) / NANOS_PER_SEC;
-            boolean dirty = engine.update(deltaT, controller);
-            
-            if (dirty)
+
+            if (engine.update(deltaT, controller))
             {
                 invalidate();
                 prevTime = now;
