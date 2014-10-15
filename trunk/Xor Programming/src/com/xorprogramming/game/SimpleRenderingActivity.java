@@ -33,16 +33,16 @@ public class SimpleRenderingActivity<T extends GameView<?, ?>>
 {
     private boolean toBeResumed;
     private boolean lostFocus;
-    
-    
+
+
     @Override
     protected void onStart()
     {
         super.onStart();
         getGameView().initializeRenderer();
     }
-    
-    
+
+
     @Override
     protected void onResume()
     {
@@ -53,25 +53,25 @@ public class SimpleRenderingActivity<T extends GameView<?, ?>>
             onActualResume();
         }
     }
-    
-    
+
+
     @Override
     protected void onPause()
     {
         super.onPause();
         lostFocus = true;
-        getGameView().stopRendering();
+        getGameView().stopGame();
     }
-    
-    
+
+
     @Override
     protected void onStop()
     {
         super.onStop();
         getGameView().disposeRenderer();
     }
-    
-    
+
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus)
     {
@@ -83,14 +83,14 @@ public class SimpleRenderingActivity<T extends GameView<?, ?>>
             onActualResume();
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Called when the {@link Activity} is resumed and actually visible
      */
     protected void onActualResume()
     {
-        getGameView().startRendering();
+        getGameView().startGame();
     }
 }

@@ -34,7 +34,7 @@ import android.graphics.Paint;
  */
 public interface GameRenderer<T extends GameEngine<?>>
 {
-    
+
     // ----------------------------------------------------------
     /**
      * Initializes the graphic objects need for rendering such as a {@link Bitmap} or {@link Paint}.
@@ -46,8 +46,8 @@ public interface GameRenderer<T extends GameEngine<?>>
      */
     void initialize(Resources res)
         throws RenderException;
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Performs the rendering of the {@link GameEngine} to the give {@link Canvas}
@@ -65,8 +65,8 @@ public interface GameRenderer<T extends GameEngine<?>>
      */
     void render(T engine, Canvas c, int width, int height)
         throws RenderException;
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Disposes graphics objects. Note that a {@link GameRenderer} can be initialized after it has been disposed.
