@@ -433,8 +433,8 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             if (engine.update(deltaT, controller) && !done)
             {
                 invalidate();
-                prevTime = now;
             }
+            prevTime = now;
         }
     }
 }
