@@ -281,7 +281,7 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
      * Stops the game immediately after both updating and rendering have completed. If this method is called while
      * updating, rendering will occur.
      *
-     * @return true if stopped or stop request was already posted, false if already stopped
+     * @return true if post was successful, false if already stopped or another post is pending
      * @throws IllegalStateException
      *             if {@link #initialize(GameEngine, GameRenderer)} has not been called
      * @see #stopGame()
@@ -299,6 +299,19 @@ public abstract class GameView<T1 extends GameEngine<T2>, T2>
             removeCallbacks(updater);
             return true;
         }
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Checks if the game is currently running. Note the game is still considered running after {@code #postStopGame()}
+     * has been called but before the game is actually stopped.
+     *
+     * @return true if the game if currently running, false otherwise
+     */
+    public final boolean isRunning()
+    {
+        return !done;
     }
 
 
