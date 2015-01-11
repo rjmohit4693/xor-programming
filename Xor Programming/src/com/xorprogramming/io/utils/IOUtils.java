@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.xorprogramming.io.utils;
 
+import android.annotation.TargetApi;
+import android.os.Build;
+import com.xorprogramming.XorUtils;
 import java.io.Closeable;
 import java.io.IOException;
 
@@ -24,19 +27,19 @@ import java.io.IOException;
  * A utility class containing commonly used methods for handling IO operations
  *
  * @author Steven Roberts
- * @version 1.0.0
+ * @version 1.0.1
  */
 public final class IOUtils
 {
     private IOUtils()
     {
-        // No constructor needed
+        XorUtils.assertConstructNoninstantiability();
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
-     * Closes a {@link Closeable}, and if an {@link IOException} is throw, it is swallowed.
+     * Closes a {@link Closeable}, and if an {@link IOException} is thrown, it is silently caught.
      *
      * @param closeable
      *            The {@link Closeable}, which may be null
@@ -54,6 +57,33 @@ public final class IOUtils
             return true;
         }
         catch (IOException e)
+        {
+            return false;
+        }
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Closes a {@link AutoCloseable}, and if an {@link Exception} is thrown, it is silently caught.
+     *
+     * @param autoCloseable
+     *            The {@link AutoCloseable}, which may be null
+     * @return true if sucessfully closed, false otherwise
+     */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public static boolean closeStream(AutoCloseable autoCloseable)
+    {
+        if (autoCloseable == null)
+        {
+            return false;
+        }
+        try
+        {
+            autoCloseable.close();
+            return true;
+        }
+        catch (Exception e)
         {
             return false;
         }

@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.xorprogramming.io.utils;
 
+import com.xorprogramming.XorUtils;
 import android.content.Context;
 import android.os.Environment;
 import java.io.File;
@@ -32,16 +33,16 @@ import java.io.OutputStream;
  * A utility class containing convenient methods for saving and restoring a {@link Savable}.
  *
  * @author Steven Roberts
- * @version 1.0.0
+ * @version 1.0.1
  */
 public final class SavableIOUtils
 {
     private SavableIOUtils()
     {
-        // No constructor needed
+        XorUtils.assertConstructNoninstantiability();
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Restores a {@link Savable} from the internal storage associated with the context.
@@ -64,8 +65,8 @@ public final class SavableIOUtils
     {
         restore(savable, c.openFileInput(file));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Restores a {@link Savable} from the cache directory of the filesystem.
@@ -88,8 +89,8 @@ public final class SavableIOUtils
     {
         restore(savable, new File(c.getCacheDir(), file));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Restores a {@link Savable} from the primary external storage directory.
@@ -110,8 +111,8 @@ public final class SavableIOUtils
     {
         restore(savable, new File(Environment.getExternalStorageDirectory(), file));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Restores a {@link Savable} from a file.
@@ -131,8 +132,8 @@ public final class SavableIOUtils
     {
         restore(savable, new FileInputStream(file));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Restores a {@link Savable} from an {@link InputStream}.
@@ -162,8 +163,8 @@ public final class SavableIOUtils
             IOUtils.closeStream(ois);
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Saves a {@link Savable} to the internal storage associated with the context.
@@ -187,8 +188,8 @@ public final class SavableIOUtils
     {
         save(savable, c.openFileOutput(file, mode));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Saves a {@link Savable} to the cache directory of the filesystem.
@@ -208,8 +209,8 @@ public final class SavableIOUtils
     {
         save(savable, new File(c.getCacheDir(), file));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Saves a {@link Savable} to the primary external storage directory.
@@ -227,8 +228,8 @@ public final class SavableIOUtils
     {
         save(savable, new File(Environment.getExternalStorageDirectory(), file));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Saves a {@link Savable} to the given file.
@@ -245,8 +246,8 @@ public final class SavableIOUtils
     {
         save(savable, new FileOutputStream(file));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Writes a {@link Savable} to the given {@link OutputStream}.

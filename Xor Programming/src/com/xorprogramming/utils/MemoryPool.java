@@ -16,25 +16,38 @@ limitations under the License.
 
 package com.xorprogramming.utils;
 
+import com.xorprogramming.XorUtils;
+import java.util.Arrays;
+
 // -------------------------------------------------------------------------
 /**
- * A generic container that minimizes the creation and garbage collection of objects through object reuse. It allows
- * objects the be preallocated to reduce the cost of creating objects later. These objects can be retrieved from the
- * pool, initialized, and then used. If more items are taken from the pool than available, new items will be constructed
- * by {@link #createItem()}. After an item has been used, it can be returned to the pool for reuse. Note that items that
+ * A generic collection that minimizes the creation and garbage collection of objects through object reuse. When
+ * constructed, a given number of objects can be preallocated. These objects can be retrieved from the pool,
+ * initialized, and then used. If more items are taken from the pool than available, new items will be constructed by
+ * {@link #createItem()}. After an item has been used, it can be returned to the pool for reuse. Note that items that
  * were not constructed by the pool can still be added to the pool.
  *
  * @param <T>
- *            The type of object to keep in the pool
+ *            The type of objects to keep in the pool
  * @author Steven Roberts
- * @version 1.0.0
+ * @version 1.1.0
  */
 public abstract class MemoryPool<T>
 {
     private Object[] items;
-    private int      cur;
-    
-    
+    private int      numAllocations;
+
+
+    // ----------------------------------------------------------
+    /**
+     * Create a new MemoryPool with zero objects initially allocated.
+     */
+    public MemoryPool()
+    {
+        this(0);
+    }
+
+
     // ----------------------------------------------------------
     /**
      * Create a new MemoryPool object.
@@ -50,16 +63,16 @@ public abstract class MemoryPool<T>
         {
             throw new IllegalArgumentException("The number of initial allocations must be non-negative");
         }
-        
+
         items = new Object[initAllocations];
         for (int i = 0; i < initAllocations; i++)
         {
             items[i] = createItem();
         }
-        cur = initAllocations;
+        numAllocations = initAllocations;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Constructs a new item of the generic type.
@@ -67,8 +80,8 @@ public abstract class MemoryPool<T>
      * @return The new item, which must be non-null
      */
     protected abstract T createItem();
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Gets an item from the pool. If there are no items available, a new one will be created.
@@ -77,24 +90,22 @@ public abstract class MemoryPool<T>
      */
     public final T getItem()
     {
-        if (cur == 0)
+        if (numAllocations == 0)
         {
             return createItem();
         }
         else
         {
-            cur--;
-            
+            numAllocations--;
+
             @SuppressWarnings("unchecked")
-            T retItem = (T)items[cur];
-            
-            items[cur] = null;
-            
+            T retItem = (T)items[numAllocations];
+            items[numAllocations] = null;
             return retItem;
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Adds an item to the pool for later reuse
@@ -106,21 +117,18 @@ public abstract class MemoryPool<T>
      */
     public final void addItem(T t)
     {
-        if (t == null)
+        XorUtils.assertNotNull(t, "The item must be non-null");
+
+        if (numAllocations >= items.length)
         {
-            throw new NullPointerException("The item must be non-null");
+            expandPool();
         }
-        
-        if (cur >= items.length)
-        {
-            doubleSize();
-        }
-        
-        items[cur] = t;
-        cur++;
+
+        items[numAllocations] = t;
+        numAllocations++;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Empties the pool and allows all items to be garbage collected. A {@link MemoryPool} can still be used after it
@@ -128,15 +136,24 @@ public abstract class MemoryPool<T>
      */
     public void empty()
     {
-        for (int i = 0; i < cur; i++)
-        {
-            items[i] = null;
-        }
-        cur = 0;
+        Arrays.fill(items, null);
+        numAllocations = 0;
     }
-    
-    
-    private void doubleSize()
+
+
+    // ----------------------------------------------------------
+    /**
+     * Gets the number of allocated objects currently in the pool
+     *
+     * @return number of allocated objects
+     */
+    public int getSize()
+    {
+        return numAllocations;
+    }
+
+
+    private void expandPool()
     {
         int origLength = items.length;
         Object[] newItems = new Object[2 * origLength + 1];

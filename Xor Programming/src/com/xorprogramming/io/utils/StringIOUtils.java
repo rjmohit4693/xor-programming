@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.xorprogramming.io.utils;
 
+import com.xorprogramming.XorUtils;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Environment;
@@ -32,16 +33,16 @@ import java.util.Scanner;
  * A utility class containing convenient methods for reading and writing a {@link String}.
  *
  * @author Steven Roberts
- * @version 1.0.0
+ * @version 1.0.1
  */
 public final class StringIOUtils
 {
     private StringIOUtils()
     {
-        // No constructor needed
+        XorUtils.assertConstructNoninstantiability();
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Reads the content of a file in the assets directory.
@@ -60,8 +61,8 @@ public final class StringIOUtils
     {
         return read(assets.open(file));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Reads the content of a file in internal storage
@@ -80,8 +81,8 @@ public final class StringIOUtils
     {
         return read(c.openFileInput(file));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Reads the content of a file in the cache directory
@@ -100,8 +101,8 @@ public final class StringIOUtils
     {
         return read(new File(c.getCacheDir(), file));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Reads the content of a file in external storage.
@@ -118,8 +119,8 @@ public final class StringIOUtils
     {
         return read(new File(Environment.getExternalStorageDirectory(), file));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Reads the content of a file
@@ -135,8 +136,8 @@ public final class StringIOUtils
     {
         return read(new FileInputStream(file));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Reads the content of an {@link InputStream}
@@ -165,8 +166,8 @@ public final class StringIOUtils
             IOUtils.closeStream(scan);
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Writes a {@link String} to the internal storage associated with the context.
@@ -190,8 +191,8 @@ public final class StringIOUtils
     {
         write(c.openFileOutput(file, mode), out);
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Writes a {@link String} to the cache directory of the filesystem.
@@ -206,14 +207,14 @@ public final class StringIOUtils
      *             If an error occurs while writing to the stream
      * @see Context#getCacheDir()
      */
-    
+
     public static void writeToCache(Context c, String file, String out)
         throws IOException
     {
         write(new File(c.getCacheDir(), file), out);
     }
-    
-    
+
+
     // ----------------------------------------------------------``
     /**
      * Writes a {@link String} to the primary external storage directory.
@@ -231,8 +232,8 @@ public final class StringIOUtils
     {
         write(new File(Environment.getExternalStorageDirectory(), file), out);
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Writes a {@link String} to the given file.
@@ -249,8 +250,8 @@ public final class StringIOUtils
     {
         write(new FileOutputStream(file), out);
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Writes a {@link String} to the given {@link OutputStream}.

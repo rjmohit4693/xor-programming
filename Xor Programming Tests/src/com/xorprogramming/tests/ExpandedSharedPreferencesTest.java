@@ -17,7 +17,6 @@ public class ExpandedSharedPreferencesTest
 
     @Override
     protected void setUp()
-        throws Exception
     {
         prefs = new ExpandedSharedPreferences(getContext().getSharedPreferences(NAME, Context.MODE_PRIVATE));
         prefs.edit().clear().commit();
@@ -135,7 +134,7 @@ public class ExpandedSharedPreferencesTest
     private static class Test
         implements Serializable
     {
-        private static final long serialVersionUID = 2060500187168896783L;
+        private static final long serialVersionUID = 1L;
         private String            a;
         private int               b;
 
@@ -150,12 +149,12 @@ public class ExpandedSharedPreferencesTest
         @Override
         public boolean equals(Object o)
         {
-            if (!(o instanceof Test))
+            if (o instanceof Test)
             {
-                return false;
+                Test t = (Test)o;
+                return a.equals(t.a) && b == t.b;
             }
-            Test t = (Test)o;
-            return a.equals(t.a) && b == t.b;
+            return false;
         }
     }
 
@@ -163,7 +162,8 @@ public class ExpandedSharedPreferencesTest
     private static class CantSerializeMe
         implements Serializable
     {
-        private final String a    = "hi";
-        private final RectF  rect = new RectF();
+        private static final long serialVersionUID = 1L;
+        @SuppressWarnings("unused")
+        private final RectF       rect             = new RectF();
     }
 }

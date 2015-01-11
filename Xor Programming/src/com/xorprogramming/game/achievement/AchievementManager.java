@@ -16,10 +16,12 @@ limitations under the License.
 
 package com.xorprogramming.game.achievement;
 
+import com.xorprogramming.XorUtils;
 import com.xorprogramming.io.utils.IOUtils;
 import com.xorprogramming.io.utils.Savable;
 import com.xorprogramming.logging.Logger;
 import com.xorprogramming.logging.LoggingType;
+import com.xorprogramming.utils.UnmodifiableIteratorDecorator;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -40,7 +42,7 @@ import java.util.Map;
  * @param <T>
  *            The type of object to check to see if the achievement is unlocked
  * @author Steven Roberts
- * @version 1.0.0
+ * @version 1.2.0
  */
 public final class AchievementManager<E extends Enum<E>, T>
     implements Iterable<Achievement<?, ?>>, Savable
@@ -48,14 +50,16 @@ public final class AchievementManager<E extends Enum<E>, T>
     private final Map<E, List<Achievement<E, T>>> achievementActionMap;
     private final List<Achievement<?, ?>>         achievementList;
     private final List<AchievementListener>       listeners;
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Create a new AchievementManager object.
      *
      * @param enumClass
      *            The class object of the generic enum type
+     * @throws NullPointerException
+     *             if the class is null
      */
     public AchievementManager(Class<E> enumClass)
     {
@@ -63,37 +67,43 @@ public final class AchievementManager<E extends Enum<E>, T>
         achievementList = new ArrayList<Achievement<?, ?>>();
         listeners = new ArrayList<AchievementListener>();
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Adds an {@link AchievementListener} to be notified of an unlocked {@link Achievement}.
      *
      * @param listener
      *            The listener to add
+     * @throws NullPointerException
+     *             if the listener is null
      */
     public void addAchievementListener(AchievementListener listener)
     {
-        listeners.add(listener);
+        listeners.add(XorUtils.assertNotNull(listener, "The listener must be non-null"));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Adds an {@link Achievement}
      *
      * @param achievement
      *            The {@link Achievement} to add
+     * @throws NullPointerException
+     *             if the achievement is null
      */
     public void addAchievement(Achievement<E, T> achievement)
     {
+        XorUtils.assertNotNull(achievement, "The achievement must be non-null");
+
         if (getAchievementById(achievement.getSaveId()) != null) // duplicate save id!
         {
             throw new IllegalArgumentException(String.format(
                 "An achievement with the id %d has already been added",
                 achievement.getSaveId()));
         }
-        
+
         achievementList.add(achievement);
         for (E key : achievement.getCheckActions())
         {
@@ -106,8 +116,8 @@ public final class AchievementManager<E extends Enum<E>, T>
             value.add(achievement);
         }
     }
-    
-    
+
+
     private Achievement<?, ?> getAchievementById(int id)
     {
         for (Achievement<?, ?> a : achievementList)
@@ -119,8 +129,8 @@ public final class AchievementManager<E extends Enum<E>, T>
         }
         return null;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Checks all achievements that correspond to the given action.
@@ -133,6 +143,11 @@ public final class AchievementManager<E extends Enum<E>, T>
     public void checkAchievements(E action, T checkObject)
     {
         List<Achievement<E, T>> value = achievementActionMap.get(action);
+        if (value == null)
+        {
+            return;
+        }
+
         for (int i = 0; i < value.size(); i++)
         {
             Achievement<E, T> achievement = value.get(i);
@@ -142,8 +157,8 @@ public final class AchievementManager<E extends Enum<E>, T>
             }
         }
     }
-    
-    
+
+
     private void updateListeners(Achievement<?, ?> achievement)
     {
         for (int i = 0; i < listeners.size(); i++)
@@ -151,8 +166,8 @@ public final class AchievementManager<E extends Enum<E>, T>
             listeners.get(i).onAchievementUnlock(achievement);
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Gets the {@link Achievement} at the given index
@@ -167,8 +182,8 @@ public final class AchievementManager<E extends Enum<E>, T>
     {
         return achievementList.get(index);
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Gets the total number of achievements
@@ -179,8 +194,8 @@ public final class AchievementManager<E extends Enum<E>, T>
     {
         return achievementList.size();
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Gets the number of achievements that have been unlocked
@@ -199,15 +214,15 @@ public final class AchievementManager<E extends Enum<E>, T>
         }
         return achievementGets;
     }
-    
-    
+
+
     @Override
     public Iterator<Achievement<?, ?>> iterator()
     {
-        return new IteratorDecorator<Achievement<?, ?>>(achievementList.iterator());
+        return new UnmodifiableIteratorDecorator<Achievement<?, ?>>(achievementList.iterator());
     }
-    
-    
+
+
     @Override
     public void restore(ObjectInputStream ois)
         throws IOException,
@@ -228,8 +243,8 @@ public final class AchievementManager<E extends Enum<E>, T>
             }
         }
     }
-    
-    
+
+
     @Override
     public void save(ObjectOutputStream oos)
         throws IOException
@@ -238,40 +253,6 @@ public final class AchievementManager<E extends Enum<E>, T>
         {
             oos.writeInt(a.getSaveId());
             oos.writeObject(a.getAcievementUnlockTime());
-        }
-    }
-    
-    
-    private static class IteratorDecorator<T>
-        implements Iterator<T>
-    {
-        private final Iterator<T> i;
-        
-        
-        public IteratorDecorator(Iterator<T> i)
-        {
-            this.i = i;
-        }
-        
-        
-        @Override
-        public boolean hasNext()
-        {
-            return i.hasNext();
-        }
-        
-        
-        @Override
-        public T next()
-        {
-            return i.next();
-        }
-        
-        
-        @Override
-        public void remove()
-        {
-            throw new UnsupportedOperationException("Cannot remove an element from this Iterator");
         }
     }
 }
