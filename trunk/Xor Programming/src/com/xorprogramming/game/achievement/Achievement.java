@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.xorprogramming.game.achievement;
 
+import com.xorprogramming.XorUtils;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -31,7 +32,7 @@ import java.util.Set;
  *            The type of object to check to see if the achievement is unlocked
  * @see AchievementManager
  * @author Steven Roberts
- * @version 1.0.0
+ * @version 1.0.2
  */
 public abstract class Achievement<E extends Enum<E>, T>
 {
@@ -40,8 +41,8 @@ public abstract class Achievement<E extends Enum<E>, T>
     private final String description;
     private final int    saveId;
     private Long         achievementUnlockedTime;
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Create a new Achievement object.
@@ -56,24 +57,18 @@ public abstract class Achievement<E extends Enum<E>, T>
      *            The first enum item representing an action that triggers an achievement check
      * @param otherCheckActions
      *            The remaining enum items
+     * @throws NullPointerException
+     *             if any parameter is null
      */
     public Achievement(int saveId, String name, String description, E firstCheckAction, E... otherCheckActions)
     {
-        if (name == null)
-        {
-            throw new NullPointerException("The name must be non-null");
-        }
-        else if (description == null)
-        {
-            throw new NullPointerException("The description must be non-null");
-        }
+        this.name = XorUtils.assertNotNull(name, "The name must be noo-null");
+        this.description = XorUtils.assertNotNull(description, "The description must be noo-null");
         this.checkActions = EnumSet.of(firstCheckAction, otherCheckActions);
         this.saveId = saveId;
-        this.name = name;
-        this.description = description;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Restores the achievement unlock time
@@ -85,8 +80,8 @@ public abstract class Achievement<E extends Enum<E>, T>
     {
         this.achievementUnlockedTime = restoreAchievementUnlockedTime;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Gets the unique identifier for saving
@@ -97,8 +92,8 @@ public abstract class Achievement<E extends Enum<E>, T>
     {
         return saveId;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Gets the set of actions that trigger an achievement check
@@ -109,8 +104,8 @@ public abstract class Achievement<E extends Enum<E>, T>
     {
         return checkActions;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Checks prerequisites then calls {@link #checkAchievement(Enum, Object)} to see if the achievement is unlocked. If
@@ -134,8 +129,8 @@ public abstract class Achievement<E extends Enum<E>, T>
             return false;
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Checks if the achievement is unlocked by examining the generic {@code checkObject}
@@ -147,8 +142,8 @@ public abstract class Achievement<E extends Enum<E>, T>
      * @return true if unlocked, false otherwise
      */
     protected abstract boolean checkAchievement(E action, T checkObject);
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Checks if the achievement is unlocked.
@@ -159,8 +154,8 @@ public abstract class Achievement<E extends Enum<E>, T>
     {
         return achievementUnlockedTime != null;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Gets the time at which the achievement was unlocked.
@@ -171,8 +166,8 @@ public abstract class Achievement<E extends Enum<E>, T>
     {
         return achievementUnlockedTime;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Gets the achievement description
@@ -183,8 +178,8 @@ public abstract class Achievement<E extends Enum<E>, T>
     {
         return description;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Returns the name of the achievement.

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp" >
+
+    <Spinner
+        android:id="@+id/sound_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TableRow>
+
+        <Button
+            android:id="@+id/load"
+            style="@style/button_style"
+            android:onClick="load"
+            android:text="@string/load" />
+
+        <Button
+            android:id="@+id/play"
+            style="@style/button_style"
+            android:onClick="play"
+            android:text="@string/play" />
+
+        <Button
+            android:id="@+id/resume"
+            style="@style/button_style"
+            android:onClick="resume"
+            android:text="@string/resume" />
+    </TableRow>
+
+    <TableRow>
+
+        <Button
+            android:id="@+id/unload"
+            style="@style/button_style"
+            android:onClick="unload"
+            android:text="@string/unload" />
+
+        <Button
+            android:id="@+id/stop"
+            style="@style/button_style"
+            android:onClick="stop"
+            android:text="@string/stop" />
+
+        <Button
+            android:id="@+id/pause"
+            style="@style/button_style"
+            android:onClick="pause"
+            android:text="@string/pause" />
+    </TableRow>
+
+    <TableRow android:paddingTop="8dp" >
+
+        <Button
+            android:id="@+id/resume_all"
+            style="@style/button_style"
+            android:onClick="resume_all"
+            android:text="@string/resume_all" />
+
+        <Button
+            android:id="@+id/pause_all"
+            style="@style/button_style"
+            android:onClick="pause_all"
+            android:text="@string/pause_all" />
+    </TableRow>
+
+    <CheckBox
+        android:id="@+id/enables"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/enable" />
+
+</TableLayout>

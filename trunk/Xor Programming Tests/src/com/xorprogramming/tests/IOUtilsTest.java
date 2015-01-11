@@ -1,5 +1,6 @@
 package com.xorprogramming.tests;
 
+import java.io.Closeable;
 import android.test.AndroidTestCase;
 import com.xorprogramming.io.utils.IOUtils;
 import java.util.Scanner;
@@ -7,18 +8,24 @@ import java.util.Scanner;
 public class IOUtilsTest
     extends AndroidTestCase
 {
+    public void testCloseNull()
+    {
+        assertFalse(IOUtils.closeStream((Closeable)null));
+        assertFalse(IOUtils.closeStream((AutoCloseable)null));
+    }
+
+
     public void testCloseStream()
     {
-        assertFalse(IOUtils.closeStream(null));
-
-        Scanner s = new Scanner("Test\nXor");
-        assertEquals("Test", s.nextLine());
-        assertTrue(IOUtils.closeStream(s));
+        Scanner scan = new Scanner("Test\nXor");
+        assertEquals("Test", scan.nextLine());
+        assertTrue(IOUtils.closeStream(scan));
+        assertNull(scan.ioException());
 
         Exception ex = null;
         try
         {
-            s.nextLine();
+            scan.nextLine();
         }
         catch (IllegalStateException ise)
         {
@@ -27,6 +34,27 @@ public class IOUtilsTest
 
         assertTrue(ex instanceof IllegalStateException);
 
-        assertFalse(IOUtils.closeStream(s));
+        assertTrue(IOUtils.closeStream(scan));
+    }
+
+
+    public void testAutoCloseStream()
+    {
+        TestAutoCloser tac = new TestAutoCloser();
+        assertFalse(IOUtils.closeStream(tac));
+    }
+
+
+    private class TestAutoCloser
+        implements AutoCloseable
+    {
+
+        @Override
+        public void close()
+            throws Exception
+        {
+            throw new IllegalStateException("Test");
+        }
+
     }
 }

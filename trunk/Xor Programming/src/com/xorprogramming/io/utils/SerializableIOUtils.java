@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.xorprogramming.io.utils;
 
+import com.xorprogramming.XorUtils;
 import android.content.Context;
 import android.os.Environment;
 import java.io.File;
@@ -33,16 +34,16 @@ import java.io.Serializable;
  * A utility class containing convenient methods for reading and writing a {@link Serializable}.
  *
  * @author Steven Roberts
- * @version 1.0.0
+ * @version 1.0.1
  */
 public final class SerializableIOUtils
 {
     private SerializableIOUtils()
     {
-        // No constructor needed
+        XorUtils.assertConstructNoninstantiability();
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Reads a {@link Serializable} from the internal storage associated with the context.
@@ -66,8 +67,8 @@ public final class SerializableIOUtils
     {
         return read(c.openFileInput(file));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Reads a {@link Serializable} from the cache directory of the filesystem.
@@ -91,8 +92,8 @@ public final class SerializableIOUtils
     {
         return read(new File(c.getCacheDir(), file));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Reads a {@link Serializable} from the primary external storage directory.
@@ -114,8 +115,8 @@ public final class SerializableIOUtils
     {
         return read(new File(Environment.getExternalStorageDirectory(), file));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Reads a {@link Serializable} from a file.
@@ -136,8 +137,8 @@ public final class SerializableIOUtils
     {
         return read(new FileInputStream(file));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Reads a {@link Serializable} from an {@link InputStream}.
@@ -160,10 +161,10 @@ public final class SerializableIOUtils
         try
         {
             ois = new ObjectInputStream(is);
-            
+
             @SuppressWarnings("unchecked")
             T retValue = (T)ois.readObject();
-            
+
             return retValue;
         }
         finally
@@ -172,8 +173,8 @@ public final class SerializableIOUtils
             IOUtils.closeStream(ois);
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Saves a {@link Serializable} to the internal storage associated with the context.
@@ -197,8 +198,8 @@ public final class SerializableIOUtils
     {
         write(c.openFileOutput(file, mode), out);
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Writes a {@link Serializable} to the cache directory of the filesystem.
@@ -218,8 +219,8 @@ public final class SerializableIOUtils
     {
         write(new File(c.getCacheDir(), file), out);
     }
-    
-    
+
+
     // ----------------------------------------------------------``
     /**
      * Writes a {@link Serializable} to the primary external storage directory.
@@ -237,8 +238,8 @@ public final class SerializableIOUtils
     {
         write(new File(Environment.getExternalStorageDirectory(), file), out);
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Writes a {@link Serializable} to the given file.
@@ -255,8 +256,8 @@ public final class SerializableIOUtils
     {
         write(new FileOutputStream(file), out);
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Writes a {@link Serializable} to the given {@link OutputStream}.

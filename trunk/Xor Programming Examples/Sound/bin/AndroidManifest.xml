@@ -1,0 +1,21 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.xorprogramming.example.sound"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="21" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@android:drawable/ic_media_play"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Black.NoTitleBar" >
+        <activity
+            android:name="com.xorprogramming.example.sound.SoundActivity"
+            android:screenOrientation="landscape" >
+        </activity>
+    </application>
+
+</manifest>

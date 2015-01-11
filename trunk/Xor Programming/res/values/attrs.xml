@@ -8,9 +8,6 @@
         <attr name="widthRatio" />
         <attr name="heightRatio" />
     </declare-styleable>
-    <declare-styleable name="GameView">
-        <attr name="transparentBackground" format="boolean" />
-    </declare-styleable>
     <declare-styleable name="CheckableImageButton">
         <attr name="checked" format="boolean" />
     </declare-styleable>

@@ -20,6 +20,7 @@ import android.annotation.TargetApi;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Base64;
+import com.xorprogramming.XorUtils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -54,7 +55,7 @@ import java.util.Set;
  * @see SharedPreferences
  * @see ExpandedSharedPreferences.ExandedEditor
  * @author Steven Roberts
- * @version 1.0.1
+ * @version 1.0.3
  */
 public class ExpandedSharedPreferences
     implements SharedPreferences
@@ -62,8 +63,8 @@ public class ExpandedSharedPreferences
     private static final String     STRING_MARKER = "";
     private static final byte[]     BYTES_MARKER  = {};
     private final SharedPreferences preferences;
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Create a new ExpandedSharedPreferences object that wraps the given preferences.
@@ -73,64 +74,60 @@ public class ExpandedSharedPreferences
      */
     public ExpandedSharedPreferences(SharedPreferences preferences)
     {
-        if (preferences == null)
-        {
-            throw new NullPointerException("The SharedPreferences must be non-null");
-        }
-        this.preferences = preferences;
+        this.preferences = XorUtils.assertNotNull(preferences, "The SharedPreferences must be non-null");
     }
-    
-    
+
+
     @Override
     public Map<String, ?> getAll()
     {
         return preferences.getAll();
     }
-    
-    
+
+
     @Override
     public String getString(String key, String defValue)
     {
         return preferences.getString(key, defValue);
     }
-    
-    
+
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public Set<String> getStringSet(String key, Set<String> defValues)
     {
         return preferences.getStringSet(key, defValues);
     }
-    
-    
+
+
     @Override
     public int getInt(String key, int defValue)
     {
         return preferences.getInt(key, defValue);
     }
-    
-    
+
+
     @Override
     public long getLong(String key, long defValue)
     {
         return preferences.getLong(key, defValue);
     }
-    
-    
+
+
     @Override
     public float getFloat(String key, float defValue)
     {
         return preferences.getFloat(key, defValue);
     }
-    
-    
+
+
     @Override
     public boolean getBoolean(String key, boolean defValue)
     {
         return preferences.getBoolean(key, defValue);
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Retrieve a byte value from the preferences.
@@ -152,8 +149,8 @@ public class ExpandedSharedPreferences
         }
         return (byte)value;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Retrieve a byte array value from the preferences.
@@ -178,11 +175,11 @@ public class ExpandedSharedPreferences
             return Base64.decode(bytesString, Base64.DEFAULT);
         }
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
-     * Retrieve a cgar value from the preferences.
+     * Retrieve a char value from the preferences.
      *
      * @param key
      *            The name of the preference to retrieve.
@@ -201,8 +198,8 @@ public class ExpandedSharedPreferences
         }
         return (char)value;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Retrieve a short value from the preferences.
@@ -224,8 +221,8 @@ public class ExpandedSharedPreferences
         }
         return (short)value;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Retrieve a double value from the preferences.
@@ -242,8 +239,8 @@ public class ExpandedSharedPreferences
     {
         return Double.longBitsToDouble(getLong(key, Double.doubleToLongBits(defaultValue)));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Retrieve a Serializable value from the preferences.
@@ -258,13 +255,14 @@ public class ExpandedSharedPreferences
      */
     public Serializable getSerializable(String key, Serializable defaultValue)
     {
+        byte[] bytes = getBytes(key, BYTES_MARKER);
+        if (bytes == BYTES_MARKER)
+        {
+            return defaultValue;
+        }
+
         try
         {
-            byte[] bytes = getBytes(key, BYTES_MARKER);
-            if (bytes == BYTES_MARKER)
-            {
-                return defaultValue;
-            }
             InputStream is = new ByteArrayInputStream(bytes);
             ObjectInputStream ois = new ObjectInputStream(is);
             return (Serializable)ois.readObject();
@@ -274,22 +272,22 @@ public class ExpandedSharedPreferences
             throw new ClassCastException(ex.getMessage());
         }
     }
-    
-    
+
+
     @Override
     public boolean contains(String key)
     {
         return preferences.contains(key);
     }
-    
-    
+
+
     @Override
     public Editor edit()
     {
         return preferences.edit();
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Create a new {@link ExandedEditor} for these preferences, through which you can make modifications to the data in
@@ -304,22 +302,22 @@ public class ExpandedSharedPreferences
     {
         return new ExandedEditor(edit());
     }
-    
-    
+
+
     @Override
     public void registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener)
     {
         preferences.registerOnSharedPreferenceChangeListener(listener);
     }
-    
-    
+
+
     @Override
     public void unregisterOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener)
     {
         preferences.unregisterOnSharedPreferenceChangeListener(listener);
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
     /**
      * Interface used for modifying values in a {@link ExpandedSharedPreferences} object. All changes you make in an
@@ -332,14 +330,14 @@ public class ExpandedSharedPreferences
     public static class ExandedEditor
     {
         private final Editor edit;
-        
-        
+
+
         private ExandedEditor(Editor edit)
         {
             this.edit = edit;
         }
-        
-        
+
+
         // ----------------------------------------------------------
         /**
          * Set a String value in the preferences editor, to be written back once {@link #commit} or {@link #apply} are
@@ -357,8 +355,8 @@ public class ExpandedSharedPreferences
             edit.putString(key, value);
             return this;
         }
-        
-        
+
+
         // ----------------------------------------------------------
         /**
          * Set a set of String values in the preferences editor, to be written back once {@link #commit} or
@@ -377,8 +375,8 @@ public class ExpandedSharedPreferences
             edit.putStringSet(key, values);
             return this;
         }
-        
-        
+
+
         // ----------------------------------------------------------
         /**
          * Set a int value in the preferences editor, to be written back once {@link #commit} or {@link #apply} are
@@ -396,8 +394,8 @@ public class ExpandedSharedPreferences
             edit.putInt(key, value);
             return this;
         }
-        
-        
+
+
         // ----------------------------------------------------------
         /**
          * Set a long value in the preferences editor, to be written back once {@link #commit} or {@link #apply} are
@@ -415,8 +413,8 @@ public class ExpandedSharedPreferences
             edit.putLong(key, value);
             return this;
         }
-        
-        
+
+
         // ----------------------------------------------------------
         /**
          * Set a float value in the preferences editor, to be written back once {@link #commit} or {@link #apply} are
@@ -434,8 +432,8 @@ public class ExpandedSharedPreferences
             edit.putFloat(key, value);
             return this;
         }
-        
-        
+
+
         // ----------------------------------------------------------
         /**
          * Set a boolean value in the preferences editor, to be written back once {@link #commit} or {@link #apply} are
@@ -453,8 +451,8 @@ public class ExpandedSharedPreferences
             edit.putBoolean(key, value);
             return this;
         }
-        
-        
+
+
         // ----------------------------------------------------------
         /**
          * Set a byte value in the preferences editor, to be written back once {@link #commit} or {@link #apply} are
@@ -471,8 +469,8 @@ public class ExpandedSharedPreferences
         {
             return putInt(key, value);
         }
-        
-        
+
+
         // ----------------------------------------------------------
         /**
          * Set a byte array value in the preferences editor, to be written back once {@link #commit} or {@link #apply}
@@ -489,8 +487,8 @@ public class ExpandedSharedPreferences
         {
             return putString(key, Base64.encodeToString(value, Base64.DEFAULT));
         }
-        
-        
+
+
         // ----------------------------------------------------------
         /**
          * Set a char value in the preferences editor, to be written back once {@link #commit} or {@link #apply} are
@@ -507,8 +505,8 @@ public class ExpandedSharedPreferences
         {
             return putInt(key, value);
         }
-        
-        
+
+
         // ----------------------------------------------------------
         /**
          * Set a short value in the preferences editor, to be written back once {@link #commit} or {@link #apply} are
@@ -525,8 +523,8 @@ public class ExpandedSharedPreferences
         {
             return putInt(key, value);
         }
-        
-        
+
+
         // ----------------------------------------------------------
         /**
          * Set a double value in the preferences editor, to be written back once {@link #commit} or {@link #apply} are
@@ -543,8 +541,8 @@ public class ExpandedSharedPreferences
         {
             return putLong(key, Double.doubleToLongBits(value));
         }
-        
-        
+
+
         // ----------------------------------------------------------
         /**
          * Set a Serializable value in the preferences editor, to be written back once {@link #commit} or {@link #apply}
@@ -579,8 +577,8 @@ public class ExpandedSharedPreferences
             }
             return this;
         }
-        
-        
+
+
         // ----------------------------------------------------------
         /**
          * <p>
@@ -601,8 +599,8 @@ public class ExpandedSharedPreferences
             edit.remove(key);
             return this;
         }
-        
-        
+
+
         // ----------------------------------------------------------
         /**
          * <p>
@@ -621,8 +619,8 @@ public class ExpandedSharedPreferences
             edit.clear();
             return this;
         }
-        
-        
+
+
         // ----------------------------------------------------------
         /**
          * <p>
@@ -644,8 +642,8 @@ public class ExpandedSharedPreferences
         {
             return edit.commit();
         }
-        
-        
+
+
         // ----------------------------------------------------------
         /**
          * <p>
@@ -677,6 +675,6 @@ public class ExpandedSharedPreferences
         {
             edit.apply();
         }
-        
+
     }
 }

@@ -16,7 +16,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int checked=0x7f010003;
+        public static final int checked=0x7f010002;
         /** <p>Must be a floating point value, such as "<code>1.2</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -36,15 +36,7 @@ containing a value of this type.
 <tr><td><code>right</code></td><td>2</td><td></td></tr>
 </table>
          */
-        public static final int justification=0x7f010004;
-        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int transparentBackground=0x7f010002;
+        public static final int justification=0x7f010003;
         /** <p>Must be a floating point value, such as "<code>1.2</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -55,12 +47,16 @@ containing a value of this type.
         public static final int widthRatio=0x7f010000;
     }
     public static final class id {
-        public static final int center=0x7f020001;
-        public static final int left=0x7f020000;
-        public static final int right=0x7f020002;
+        public static final int center=0x7f030001;
+        public static final int left=0x7f030000;
+        public static final int right=0x7f030002;
+    }
+    public static final class raw {
+        public static final int not_a_sound=0x7f020000;
+        public static final int sound1=0x7f020001;
     }
     public static final class string {
-        public static final int app_name=0x7f030000;
+        public static final int app_name=0x7f040000;
     }
     public static final class styleable {
         /** Attributes that can be used with a AspectFrame.
@@ -121,7 +117,7 @@ containing a value of this type.
            @see #AutoSizeTextView_widthRatio
          */
         public static final int[] AutoSizeTextView = {
-            0x7f010000, 0x7f010001, 0x7f010004
+            0x7f010000, 0x7f010001, 0x7f010003
         };
         /**
           <p>This symbol is the offset where the {@link com.xorprogramming.tests.R.attr#heightRatio}
@@ -180,7 +176,7 @@ containing a value of this type.
            @see #CheckableImageButton_checked
          */
         public static final int[] CheckableImageButton = {
-            0x7f010003
+            0x7f010002
         };
         /**
           <p>This symbol is the offset where the {@link com.xorprogramming.tests.R.attr#checked}
@@ -196,32 +192,5 @@ containing a value of this type.
           @attr name com.xorprogramming.tests:checked
         */
         public static final int CheckableImageButton_checked = 0;
-        /** Attributes that can be used with a GameView.
-           <p>Includes the following attributes:</p>
-           <table>
-           <colgroup align="left" />
-           <colgroup align="left" />
-           <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #GameView_transparentBackground com.xorprogramming.tests:transparentBackground}</code></td><td></td></tr>
-           </table>
-           @see #GameView_transparentBackground
-         */
-        public static final int[] GameView = {
-            0x7f010002
-        };
-        /**
-          <p>This symbol is the offset where the {@link com.xorprogramming.tests.R.attr#transparentBackground}
-          attribute's value can be found in the {@link #GameView} array.
-
-
-          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          @attr name com.xorprogramming.tests:transparentBackground
-        */
-        public static final int GameView_transparentBackground = 0;
     };
 }

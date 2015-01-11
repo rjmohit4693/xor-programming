@@ -26,7 +26,7 @@ import java.util.EnumSet;
  * @see LoggingType
  * @see Logger
  * @author Steven Roberts
- * @version 1.0.0
+ * @version 1.1.0
  */
 public final class LoggingPolicy
 {
@@ -45,16 +45,16 @@ public final class LoggingPolicy
      * A policy which contains no logging types
      */
     public static final LoggingPolicy  NO_LOGGING         = new LoggingPolicy(EnumSet.noneOf(LoggingType.class));
-    
+
     private final EnumSet<LoggingType> loggingTypes;
-    
-    
+
+
     private LoggingPolicy(EnumSet<LoggingType> loggingTypes)
     {
         this.loggingTypes = loggingTypes;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Creates a {@code LoggingPolicy} with at least one arbitrary element.
@@ -69,8 +69,8 @@ public final class LoggingPolicy
     {
         return new LoggingPolicy(EnumSet.of(firstType, otherLoggingTypes));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Checks if the give {@code LoggingType} is in the policy
@@ -83,8 +83,8 @@ public final class LoggingPolicy
     {
         return loggingTypes.contains(type);
     }
-    
-    
+
+
     @Override
     public boolean equals(Object o)
     {
@@ -99,22 +99,15 @@ public final class LoggingPolicy
         }
         return false;
     }
-    
-    
-    @Override
-    public Object clone()
-    {
-        return loggingTypes.clone();
-    }
-    
-    
+
+
     @Override
     public int hashCode()
     {
         return loggingTypes.hashCode();
     }
-    
-    
+
+
     @Override
     public String toString()
     {

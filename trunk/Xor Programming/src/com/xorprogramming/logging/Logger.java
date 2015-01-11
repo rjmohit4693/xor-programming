@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.xorprogramming.logging;
 
+import com.xorprogramming.XorUtils;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -32,31 +33,30 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @see LoggingPolicy
  * @see LoggerListener
  * @author Steven Roberts
- * @version 1.0.0
+ * @version 1.1.0
  */
 public final class Logger
 {
     /**
-     * Tag for all logging within the API
+     * The log tag used within the library
      */
     public static final String                XOR_LOG_TAG  = "XOR";
-    
+
     private static final List<LoggerListener> logListeners = new CopyOnWriteArrayList<LoggerListener>();
-    
     private static volatile LoggingPolicy     policy;
-    
+
     static
     {
         policy = LoggingPolicy.FULL_LOGGING;
     }
-    
-    
+
+
     private Logger()
     {
-        // No constructor needed
+        XorUtils.assertConstructNoninstantiability();
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Sets a new logging policy.
@@ -64,19 +64,12 @@ public final class Logger
      * @param newPolicy
      *            The new policy. If null, the policy is set to {@link LoggingPolicy#NO_LOGGING}
      */
-    public synchronized static void setLoggingPolicy(LoggingPolicy newPolicy)
+    public static void setLoggingPolicy(LoggingPolicy newPolicy)
     {
-        if (newPolicy == null)
-        {
-            policy = LoggingPolicy.NO_LOGGING;
-        }
-        else
-        {
-            policy = newPolicy;
-        }
+        policy = newPolicy == null ? LoggingPolicy.NO_LOGGING : newPolicy;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Adds a {@code LoggerListener} to be notified of logging events.
@@ -88,14 +81,10 @@ public final class Logger
      */
     public static void addLoggerListener(LoggerListener listener)
     {
-        if (listener == null)
-        {
-            throw new NullPointerException("The LoggerListener must be non-null");
-        }
-        logListeners.add(listener);
+        logListeners.add(XorUtils.assertNotNull(listener, "The LoggerListener must be non-null"));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Removes the {@code LoggerListener} from the list of listeners. The listener will no longer be notified of logging
@@ -108,8 +97,8 @@ public final class Logger
     {
         logListeners.remove(listener);
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Logs a message to output with the given tag.
@@ -125,18 +114,15 @@ public final class Logger
      */
     public static String log(LoggingType type, String tag, String message)
     {
-        synchronized (Logger.class)
+        if (policy.isLogging(type))
         {
-            if (policy.isLogging(type))
-            {
-                type.log(tag, message);
-            }
+            type.log(tag, message);
         }
         updateListeners(type, tag, message);
         return message;
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Logs a formatted message to output with the given tag.
@@ -157,11 +143,11 @@ public final class Logger
     {
         return log(type, tag, String.format(messageFormat, args));
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
-     * Logs a {@code Throwable} to output with {@link Logger#XOR_LOG_TAG} as the tag.
+     * Logs a {@code Throwable} to output with the given tag.
      *
      * @param type
      *            The type of message being logged
@@ -174,18 +160,15 @@ public final class Logger
      */
     public static <T extends Throwable> T log(LoggingType type, String tag, T throwable)
     {
-        synchronized (Logger.class)
+        if (policy.isLogging(type))
         {
-            if (policy.isLogging(type))
-            {
-                type.log(tag, throwable.getMessage());
-            }
+            type.log(tag, throwable.getMessage());
         }
         updateListeners(type, tag, throwable.getMessage());
         return throwable;
     }
-    
-    
+
+
     private static void updateListeners(LoggingType type, String tag, String message)
     {
         for (LoggerListener l : logListeners)

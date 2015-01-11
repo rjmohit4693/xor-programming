@@ -1,0 +1,14 @@
+<resources>
+
+    <string name="app_name">Sound</string>
+    <string name="load">Load</string>
+    <string name="play">Play</string>
+    <string name="resume">Resume</string>
+    <string name="resume_all">Resume All</string>
+    <string name="pause">Pause</string>
+    <string name="pause_all">Pause All</string>
+    <string name="stop">Stop</string>
+    <string name="unload">Unload</string>
+    <string name="enable">Enable Sound</string>
+
+</resources>
