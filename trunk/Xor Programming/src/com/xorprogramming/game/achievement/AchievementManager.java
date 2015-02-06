@@ -42,13 +42,13 @@ import java.util.Map;
  * @param <T>
  *            The type of object to check to see if the achievement is unlocked
  * @author Steven Roberts
- * @version 1.2.0
+ * @version 1.2.2
  */
 public final class AchievementManager<E extends Enum<E>, T>
-    implements Iterable<Achievement<?, ?>>, Savable
+    implements Iterable<Achievement<E, T>>, Savable
 {
     private final Map<E, List<Achievement<E, T>>> achievementActionMap;
-    private final List<Achievement<?, ?>>         achievementList;
+    private final List<Achievement<E, T>>         achievementList;
     private final List<AchievementListener>       listeners;
 
 
@@ -64,7 +64,7 @@ public final class AchievementManager<E extends Enum<E>, T>
     public AchievementManager(Class<E> enumClass)
     {
         achievementActionMap = new EnumMap<E, List<Achievement<E, T>>>(enumClass);
-        achievementList = new ArrayList<Achievement<?, ?>>();
+        achievementList = new ArrayList<Achievement<E, T>>();
         listeners = new ArrayList<AchievementListener>();
     }
 
@@ -217,9 +217,9 @@ public final class AchievementManager<E extends Enum<E>, T>
 
 
     @Override
-    public Iterator<Achievement<?, ?>> iterator()
+    public Iterator<Achievement<E, T>> iterator()
     {
-        return new UnmodifiableIteratorDecorator<Achievement<?, ?>>(achievementList.iterator());
+        return new UnmodifiableIteratorDecorator<Achievement<E, T>>(achievementList.iterator());
     }
 
 
@@ -249,7 +249,7 @@ public final class AchievementManager<E extends Enum<E>, T>
     public void save(ObjectOutputStream oos)
         throws IOException
     {
-        for (Achievement<?, ?> a : this)
+        for (Achievement<?, ?> a : achievementList)
         {
             oos.writeInt(a.getSaveId());
             oos.writeObject(a.getAcievementUnlockTime());

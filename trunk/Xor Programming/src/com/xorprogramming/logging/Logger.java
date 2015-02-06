@@ -33,7 +33,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @see LoggingPolicy
  * @see LoggerListener
  * @author Steven Roberts
- * @version 1.1.0
+ * @version 1.1.1
  */
 public final class Logger
 {
@@ -88,7 +88,7 @@ public final class Logger
     // ----------------------------------------------------------
     /**
      * Removes the {@code LoggerListener} from the list of listeners. The listener will no longer be notified of logging
-     * events
+     * events.
      *
      * @param listener
      *            The {@code LoggerListener} to remove
