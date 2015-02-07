@@ -1,9 +1,17 @@
+package com.javasharp.model;
 
-public class Rest implements Instructable {
-
-	public Rest() {
+public class Score implements Instructable {
+	
+	private String title;
+	private MetaData meta;
+	private ScoreContext scoreContext;
+	private List<Parts> parts;
+	
+	
+	public Score() {
 		
 	}
+
 
 	@Override
 	public void instruct() {
@@ -11,18 +19,19 @@ public class Rest implements Instructable {
 		
 	}
 
+
 	@Override
 	public Length getLength() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+
 	@Override
 	public void onTimeSignatureChanged() {
 		// TODO Auto-generated method stub
 		
 	}
-	
 	
 	
 }
