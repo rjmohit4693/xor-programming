@@ -1,33 +1,40 @@
 package com.javasharp.model;
 
-import sun.security.util.Length;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class Measure
     implements Instructable
 {
     
-    private List<Instructable> notes;
+    private Collection<Instructable> notes;
     
     
     public Measure()
     {
-        
+        notes = new ArrayList<Instructable>();
     }
     
     
     @Override
     public void instruct()
     {
-        // TODO Auto-generated method stub
-        
+        for (Instructable inst : notes)
+        {
+            inst.instruct();
+        }
     }
     
     
     @Override
-    public Length getLength()
+    public int getLength()
     {
-        // TODO Auto-generated method stub
-        return null;
+        int totalLength = 0;
+        for (Instructable inst : notes)
+        {
+            totalLength += inst.getLength();
+        }
+        return totalLength;
     }
     
     
