@@ -1,6 +1,6 @@
 package com.javasharp.model;
 
-public abstract class LengthedInstructable implements Instructable<PartContext>
+public abstract class LengthedInstructable<T> implements Instructable<T>
 {
     private final Length length;
     private final int numDots;
