@@ -1,51 +1,38 @@
 package com.javasharp.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Score
-    implements Instructable<ScoreContext>
+    extends GroupInstructable<ScoreContext, ScoreContext>
 {
-    
-    private String       title;
-    private Metadata     meta;
-    private ScoreContext scoreContext;
-    private List<Part>   parts;
-    
-    
+    private final String       title;
+    private final Metadata     meta;
+    private final ScoreContext scoreContext;
+
     public Score()
     {
         title = "Untitled";
         meta = new Metadata();
         scoreContext = new ScoreContext();
-        parts = new ArrayList<Part>();
     }
-    
-    
+
+
     @Override
     public void instruct(ScoreContext context)
     {
-        // TODO
+        super.instructChildren(context);
     }
-    
-    
+
+
     @Override
     public int getLength()
     {
-        int totalLength = 0;
-        for (Part part : parts)
-        {
-            totalLength += part.getLength();
-        }
-        return totalLength;
+        // TODO
     }
-    
-    
+
+
     @Override
-    public void onTimeSignatureChanged()
+    public void onTimeSignatureChanged(TimeSignature timeSignature)
     {
-        // TODO Auto-generated method stub
-        
+        super.notifyChildrenTimeSignatureChanged(timeSignature);
     }
-    
+
 }
