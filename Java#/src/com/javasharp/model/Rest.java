@@ -1,38 +1,21 @@
 package com.javasharp.model;
 
-import sun.security.util.Length;
-
 public class Rest
-    implements Instructable
+    extends LengthedInstructable
 {
+    private Length length;
     
-    public Rest()
+    public Rest(Length length, int numDots)
     {
-        
+        super(length, numDots);
+        this.length = length;
     }
     
     
     @Override
-    public void instruct()
+    public void instruct(PartContext context)
     {
-        // TODO Auto-generated method stub
-        
-    }
-    
-    
-    @Override
-    public Length getLength()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    
-    @Override
-    public void onTimeSignatureChanged()
-    {
-        // TODO Auto-generated method stub
-        
+        //Do nothing
     }
     
 }
