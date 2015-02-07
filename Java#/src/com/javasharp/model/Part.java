@@ -1,16 +1,17 @@
 package com.javasharp.model;
 
+import java.util.List;
 import javax.sound.midi.Instrument;
 import sun.security.util.Length;
 
 public class Part
-    implements Instructable
+    implements Instructable<PartContext>
 {
     
     private Instrument         instrument;
     private Clef               clef;
     private PartContext        partContext;
-    private List<Instructions> measures;
+    private List<Instructable> measures;
     
     
     public Part()
@@ -20,7 +21,7 @@ public class Part
     
     
     @Override
-    public void instruct()
+    public void instruct(PartContext context)
     {
         // TODO Auto-generated method stub
         
@@ -28,10 +29,13 @@ public class Part
     
     
     @Override
-    public Length getLength()
+    public int getLength()
     {
-        // TODO Auto-generated method stub
-        return null;
+        int totalLength = 0;
+        for(Instructable inst : measures) {
+            totalLength += inst.getLength();
+        }
+        return totalLength;
     }
     
     
