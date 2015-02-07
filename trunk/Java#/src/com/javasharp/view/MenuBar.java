@@ -6,11 +6,14 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import com.javasharp.controller.MenuController;
 
-public class MenuBar extends JMenuBar
+public class MenuBar
+    extends JMenuBar
 {
     private static final long serialVersionUID = 1L;
-
-    public MenuBar(MenuController controller) {
+    
+    
+    public MenuBar(MenuController controller)
+    {
         
         JMenu fileMenu = new JMenu("File");
         fileMenu.setMnemonic('f');
@@ -23,7 +26,7 @@ public class MenuBar extends JMenuBar
         fileMenu.addSeparator();
         fileMenu.add(setUpMenuItem("Exit", "", 'x', controller::exitMenuItem));
         this.add(fileMenu);
-
+        
         JMenu helpMenu = new JMenu("Help");
         helpMenu.setMnemonic('h');
         helpMenu.add(setUpMenuItem("Show Help", "F1", 'h', controller::showHelpMenuItem));
@@ -31,7 +34,9 @@ public class MenuBar extends JMenuBar
         this.add(helpMenu);
     }
     
-    private JMenuItem setUpMenuItem(String name, String keystroke, char mnemonic, final Runnable listener) {
+    
+    private JMenuItem setUpMenuItem(String name, String keystroke, char mnemonic, final Runnable listener)
+    {
         JMenuItem menuItem = new JMenuItem(name);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(keystroke));
         menuItem.setMnemonic(mnemonic);
