@@ -8,15 +8,15 @@ public class Score
 {
     
     private String       title;
-    private MetaData     meta;
+    private Metadata     meta;
     private ScoreContext scoreContext;
-    private List<Part>  parts;
+    private List<Part>   parts;
     
     
     public Score()
     {
         title = "Untitled";
-        meta = new MetaData();
+        meta = new Metadata();
         scoreContext = new ScoreContext();
         parts = new ArrayList<Part>();
     }
@@ -25,7 +25,7 @@ public class Score
     @Override
     public void instruct(ScoreContext context)
     {
-        //TODO
+        // TODO
     }
     
     
@@ -33,7 +33,8 @@ public class Score
     public int getLength()
     {
         int totalLength = 0;
-        for(Part part : parts) {
+        for (Part part : parts)
+        {
             totalLength += part.getLength();
         }
         return totalLength;

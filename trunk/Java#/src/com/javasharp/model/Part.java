@@ -1,46 +1,36 @@
 package com.javasharp.model;
 
-import java.util.List;
 import javax.sound.midi.Instrument;
-import sun.security.util.Length;
 
 public class Part
-    implements Instructable<PartContext>
+    extends GroupInstructable<ScoreContext, PartContext>
 {
-    
-    private Instrument         instrument;
-    private Clef               clef;
-    private PartContext        partContext;
-    private List<Instructable> measures;
+    private final PartContext partContext;
     
     
-    public Part()
+    public Part(Instrument instrument, int channel, ScoreContext scoreContext)
     {
-        
+        this.instrument = instrument;
+        partContext = new PartContext(scoreContext, channel);
     }
     
     
     @Override
-    public void instruct(PartContext context)
+    public void instruct(ScoreContext context)
     {
-        // TODO Auto-generated method stub
-        
+        super.instructChildren(partContext);
     }
     
     
     @Override
     public int getLength()
     {
-        int totalLength = 0;
-        for(Instructable inst : measures) {
-            totalLength += inst.getLength();
-        }
-        return totalLength;
+        return super.getChildLengthSum();
     }
     
     
     @Override
-    public void onTimeSignatureChanged()
+    public void onTimeSignatureChanged(TimeSignature timeSignature)
     {
         // TODO Auto-generated method stub
         
