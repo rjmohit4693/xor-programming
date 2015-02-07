@@ -1,37 +1,42 @@
 package com.javasharp.model;
 
+import java.util.ArrayList;
 import java.util.List;
-import sun.security.util.Length;
 
 public class Score
-    implements Instructable
+    implements Instructable<ScoreContext>
 {
     
     private String       title;
     private MetaData     meta;
     private ScoreContext scoreContext;
-    private List<Parts>  parts;
+    private List<Part>  parts;
     
     
     public Score()
     {
-        
+        title = "Untitled";
+        meta = new MetaData();
+        scoreContext = new ScoreContext();
+        parts = new ArrayList<Part>();
     }
     
     
     @Override
-    public void instruct()
+    public void instruct(ScoreContext context)
     {
-        // TODO Auto-generated method stub
-        
+        //TODO
     }
     
     
     @Override
-    public Length getLength()
+    public int getLength()
     {
-        // TODO Auto-generated method stub
-        return null;
+        int totalLength = 0;
+        for(Part part : parts) {
+            totalLength += part.getLength();
+        }
+        return totalLength;
     }
     
     

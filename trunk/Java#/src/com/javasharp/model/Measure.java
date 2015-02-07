@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class Measure
-    implements Instructable
+    implements Instructable<PartContext>
 {
     
     private Collection<Instructable> notes;
@@ -17,12 +17,10 @@ public class Measure
     
     
     @Override
-    public void instruct()
+    public void instruct(PartContext context)
     {
-        for (Instructable inst : notes)
-        {
-            inst.instruct();
-        }
+        // TODO Auto-generated method stub
+        
     }
     
     
