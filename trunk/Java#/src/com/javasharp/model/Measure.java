@@ -1,30 +1,41 @@
 package com.javasharp.model;
 
-public class Measure implements Instructable {
+import sun.security.util.Length;
 
-	private List<Instructable> notes;
-	
-	public Measure() {
-		
-	}
-
-	@Override
-	public void instruct() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Length getLength() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void onTimeSignatureChanged() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
+public class Measure
+    implements Instructable
+{
+    
+    private List<Instructable> notes;
+    
+    
+    public Measure()
+    {
+        
+    }
+    
+    
+    @Override
+    public void instruct()
+    {
+        // TODO Auto-generated method stub
+        
+    }
+    
+    
+    @Override
+    public Length getLength()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    
+    @Override
+    public void onTimeSignatureChanged()
+    {
+        // TODO Auto-generated method stub
+        
+    }
+    
 }
