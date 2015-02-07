@@ -1,46 +1,25 @@
 package com.javasharp.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 public class Measure
-    implements Instructable<PartContext>
+    extends GroupInstructable<PartContext, PartContext>
 {
-    
-    private Collection<Instructable> notes;
-    
-    
-    public Measure()
-    {
-        notes = new ArrayList<Instructable>();
-    }
-    
-    
     @Override
     public void instruct(PartContext context)
     {
-        // TODO Auto-generated method stub
-        
+        super.instructChildren(context);
     }
     
     
     @Override
     public int getLength()
     {
-        int totalLength = 0;
-        for (Instructable inst : notes)
-        {
-            totalLength += inst.getLength();
-        }
-        return totalLength;
+        return super.getChildLengthSum();
     }
     
     
     @Override
-    public void onTimeSignatureChanged()
+    public void onTimeSignatureChanged(TimeSignature timeSignature)
     {
-        // TODO Auto-generated method stub
-        
+        super.notifyChildrenTimeSignatureChanged(timeSignature);
     }
-    
 }

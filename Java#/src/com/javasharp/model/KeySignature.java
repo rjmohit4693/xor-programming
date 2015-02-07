@@ -14,9 +14,9 @@ public enum KeySignature
     E_Flat,
     B_Flat,
     F;
-
+    
     public int resolvePitch(int originalPitch)
     {
-
+        
     }
 }

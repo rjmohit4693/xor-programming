@@ -1,5 +1,6 @@
-package com.javasharp.model;
+package com.javasharp.model.util;
 
+import com.javasharp.model.MusicException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;

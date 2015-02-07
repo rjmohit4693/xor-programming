@@ -1,9 +1,10 @@
 package com.javasharp.model;
 
 public class Rest
-    extends LengthedInstructable
+    extends LengthedInstructable<PartContext>
 {
     private Length length;
+    
     
     public Rest(Length length, int numDots)
     {
@@ -15,7 +16,7 @@ public class Rest
     @Override
     public void instruct(PartContext context)
     {
-        //Do nothing
+        // Do nothing
     }
     
 }

@@ -1,13 +1,12 @@
 package com.javasharp.model;
 
-
 public class Note
-    extends LengthedInstructable
+    extends LengthedInstructable<PartContext>
 {
     
-    private StaffPosition staffPos;
-    private Articulation  articulation;
-    private Accidental    accidental;
+    private int          staffPos;
+    private Articulation articulation;
+    private Accidental   accidental;
     
     
     public Note(Length length, int numDots)
