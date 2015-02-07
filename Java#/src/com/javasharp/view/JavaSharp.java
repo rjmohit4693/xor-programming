@@ -7,13 +7,15 @@ import com.javasharp.controller.MenuController;
 
 public class JavaSharp
 {
-    private final JFrame mainFrame;
-    private MenuController menuController;
+    private final JFrame           mainFrame;
+    private MenuController         menuController;
     
-    private static final String TITLE = "Java #";
+    private static final String    TITLE         = "Java #";
     private static final Dimension MIN_DIMENSION = new Dimension(600, 400);
     
-    private JavaSharp() {
+    
+    private JavaSharp()
+    {
         mainFrame = new JFrame(TITLE);
         menuController = new MenuController();
         
@@ -25,13 +27,12 @@ public class JavaSharp
         mainFrame.add(new StatusBar(), BorderLayout.SOUTH);
         mainFrame.add(new HomeScreen(), BorderLayout.CENTER);
         
-        
-        
-        
         mainFrame.setVisible(true);
     }
     
-    public static void main(String[] args) {
+    
+    public static void main(String[] args)
+    {
         new JavaSharp();
     }
 }

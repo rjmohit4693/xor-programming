@@ -1,6 +1,5 @@
 package com.javasharp.controller;
 
-
 public final class MenuController
 {
     
@@ -9,33 +8,46 @@ public final class MenuController
         
     }
     
-    public void openMenuItem() {
+    
+    public void openMenuItem()
+    {
         
     }
     
-    public void saveMenuItem() {
+    
+    public void saveMenuItem()
+    {
         
     }
     
-    public void exportMenuItem() {
+    
+    public void exportMenuItem()
+    {
         
     }
     
-    public void printMenuItem() {
+    
+    public void printMenuItem()
+    {
         
     }
     
-    public void exitMenuItem() {
+    
+    public void exitMenuItem()
+    {
         
     }
     
-    public void showHelpMenuItem() {
+    
+    public void showHelpMenuItem()
+    {
         
     }
     
-    public void aboutMenuItem() {
+    
+    public void aboutMenuItem()
+    {
         
     }
-
     
 }

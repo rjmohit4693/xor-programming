@@ -15,8 +15,8 @@ public final class MidiUtils
     {
         throw new AssertionError("Suppress default constructor for noninstantiability");
     }
-
-
+    
+    
     private static Collection<Instrument> getInstrments()
         throws MusicException
     {
