@@ -1,16 +1,12 @@
+package com.javasharp.model;
 
-public class Score implements Instructable {
+public class Measure implements Instructable {
+
+	private List<Instructable> notes;
 	
-	private String title;
-	private MetaData meta;
-	private ScoreContext scoreContext;
-	private List<Parts> parts;
-	
-	
-	public Score() {
+	public Measure() {
 		
 	}
-
 
 	@Override
 	public void instruct() {
@@ -18,13 +14,11 @@ public class Score implements Instructable {
 		
 	}
 
-
 	@Override
 	public Length getLength() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 	@Override
 	public void onTimeSignatureChanged() {

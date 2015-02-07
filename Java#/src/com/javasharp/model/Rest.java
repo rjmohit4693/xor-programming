@@ -1,11 +1,8 @@
+package com.javasharp.model;
 
-public class Note implements Instructable {
+public class Rest implements Instructable {
 
-	private StaffPosition staffPos;
-	private Articulation articulation;
-	private Accidental accidental;
-	
-	public Note() {
+	public Rest() {
 		
 	}
 
@@ -26,6 +23,7 @@ public class Note implements Instructable {
 		// TODO Auto-generated method stub
 		
 	}
+	
 	
 	
 }

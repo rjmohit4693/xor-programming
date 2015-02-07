@@ -1,3 +1,4 @@
+package com.javasharp.model;
 
 public interface Instructable {
 

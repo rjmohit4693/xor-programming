@@ -1,9 +1,14 @@
+package com.javasharp.model;
 
-public class Measure implements Instructable {
-
-	private List<Instructable> notes;
+public class Part implements Instructable {
 	
-	public Measure() {
+	private Instrument instrument;
+	private Clef clef;
+	private PartContext partContext;
+	private List<Instructions> measures;
+	
+	
+	public Part() {
 		
 	}
 

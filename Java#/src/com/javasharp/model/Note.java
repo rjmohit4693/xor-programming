@@ -1,13 +1,12 @@
+package com.javasharp.model;
 
-public class Part implements Instructable {
+public class Note implements Instructable {
+
+	private StaffPosition staffPos;
+	private Articulation articulation;
+	private Accidental accidental;
 	
-	private Instrument instrument;
-	private Clef clef;
-	private PartContext partContext;
-	private List<Instructions> measures;
-	
-	
-	public Part() {
+	public Note() {
 		
 	}
 
