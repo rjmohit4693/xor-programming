@@ -4,7 +4,7 @@ public interface Instructable {
 
 	public void instruct(ScoreContext);
 	
-	public Length getLength();
+	public int getLength();
 	
 	public void onTimeSignatureChanged();
 	
