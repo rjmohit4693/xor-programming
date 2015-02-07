@@ -20,6 +20,7 @@ public class JavaSharp
         mainFrame.setLayout(new BorderLayout());
         mainFrame.setJMenuBar(new MenuBar());
         mainFrame.add(new StatusBar(), BorderLayout.SOUTH);
+        mainFrame.add(new HomeScreen(), BorderLayout.CENTER);
         
         
         mainFrame.setVisible(true);
