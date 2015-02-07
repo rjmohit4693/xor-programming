@@ -1,9 +1,8 @@
 package com.javasharp.model;
 
-import sun.security.util.Length;
 
 public class Note
-    implements Instructable
+    extends LengthedInstructable
 {
     
     private StaffPosition staffPos;
@@ -11,30 +10,15 @@ public class Note
     private Accidental    accidental;
     
     
-    public Note()
+    public Note(Length length, int numDots)
     {
+        super(length, numDots);
         
     }
     
     
     @Override
-    public void instruct()
-    {
-        // TODO Auto-generated method stub
-        
-    }
-    
-    
-    @Override
-    public Length getLength()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    
-    @Override
-    public void onTimeSignatureChanged()
+    public void instruct(PartContext context)
     {
         // TODO Auto-generated method stub
         
