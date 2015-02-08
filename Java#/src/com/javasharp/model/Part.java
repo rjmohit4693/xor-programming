@@ -10,8 +10,7 @@ public class Part
     
     public Part(Instrument instrument, int channel, ScoreContext scoreContext)
     {
-        this.instrument = instrument;
-        partContext = new PartContext(scoreContext, channel);
+        partContext = new PartContext(scoreContext, instrument, channel);
     }
     
     

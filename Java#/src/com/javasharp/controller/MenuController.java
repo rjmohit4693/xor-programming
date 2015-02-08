@@ -35,7 +35,8 @@ public final class MenuController
     
     public void exitMenuItem()
     {
-        
+        //TODO add unsaved work prompt
+        System.exit(0);
     }
     
     

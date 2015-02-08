@@ -5,8 +5,8 @@ public class Note
 {
     
     private int          staffPos;
-    private Articulation articulation;
-    private Accidental   accidental;
+    //TODO private Articulation articulation;
+    //TODO private Accidental   accidental;
     
     
     public Note(Length length, int numDots)
