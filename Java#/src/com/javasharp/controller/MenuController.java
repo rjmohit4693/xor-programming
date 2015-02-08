@@ -1,7 +1,16 @@
 package com.javasharp.controller;
 
+import com.javasharp.view.JavaSharp;
+
 public final class MenuController
 {
+    
+    private JavaSharp view;
+    
+    public MenuController(JavaSharp view) {
+        this.view = view;
+    }
+    
     
     public void newMenuItem()
     {
@@ -42,7 +51,7 @@ public final class MenuController
     
     public void showHelpMenuItem()
     {
-        
+        view.showHelpDialog();
     }
     
     
