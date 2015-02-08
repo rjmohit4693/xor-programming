@@ -17,7 +17,7 @@ public class JavaSharp
     private JavaSharp()
     {
         mainFrame = new JFrame(TITLE);
-        menuController = new MenuController();
+        menuController = new MenuController(this);
         
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setMinimumSize(MIN_DIMENSION);
@@ -34,5 +34,11 @@ public class JavaSharp
     public static void main(String[] args)
     {
         new JavaSharp();
+    }
+    
+    
+    public void showHelpDialog()
+    {
+        new HelpDialog(mainFrame).setVisible(true);
     }
 }
