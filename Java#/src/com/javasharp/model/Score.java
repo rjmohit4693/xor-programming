@@ -5,12 +5,11 @@ public class Score
 {
     private static final String DEFAULT_TITLE = "unnamed";
     
-    
     private String              title;
     private final Metadata      meta;
     private final ScoreContext  scoreContext;
-
-
+    
+    
     public Score()
     {
         this.title = DEFAULT_TITLE;
@@ -31,8 +30,8 @@ public class Score
             title = trimmed;
         }
     }
-
-
+    
+    
     @Override
     public void instruct(ScoreContext context)
     {

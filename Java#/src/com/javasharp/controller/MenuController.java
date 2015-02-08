@@ -7,7 +7,9 @@ public final class MenuController
     
     private JavaSharp view;
     
-    public MenuController(JavaSharp view) {
+    
+    public MenuController(JavaSharp view)
+    {
         this.view = view;
     }
     
@@ -44,7 +46,7 @@ public final class MenuController
     
     public void exitMenuItem()
     {
-        //TODO add unsaved work prompt
+        // TODO add unsaved work prompt
         System.exit(0);
     }
     
