@@ -42,7 +42,7 @@ public class SequencerTest
         //set instrument
         int channel = 0;
         int tick = 0;
-        int instrument = 1;
+        int instrument = 49;
         track.add(new MidiEvent(new ShortMessage(ShortMessage.PROGRAM_CHANGE, channel, instrument, 0), tick));
         
         track.add(new MidiEvent(new ShortMessage(ShortMessage.NOTE_ON, 0, 60, 100), 0));
