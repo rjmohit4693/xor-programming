@@ -1,10 +1,10 @@
 package com.javasharp.view;
 
+import com.javasharp.controller.MenuController;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
-import com.javasharp.controller.MenuController;
 
 public class MenuBar
     extends JMenuBar
@@ -24,7 +24,7 @@ public class MenuBar
         fileMenu.addSeparator();
         fileMenu.add(setUpMenuItem("Print", "control P", 'p', controller::printMenuItem));
         fileMenu.addSeparator();
-        fileMenu.add(setUpMenuItem("Exit", "", 'x', controller::exitMenuItem));
+        fileMenu.add(setUpMenuItem("Exit", null, 'x', controller::exitMenuItem));
         this.add(fileMenu);
         
         JMenu helpMenu = new JMenu("Help");

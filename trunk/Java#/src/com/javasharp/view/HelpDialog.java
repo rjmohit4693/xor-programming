@@ -23,18 +23,18 @@ public class HelpDialog
     private static final String DEFAULT_HELP     = "Welcome to Java# Help. Click a link to begin.";
     private static final String ERROR_MESSAGE    = "Error loading help!";
     private static final Path   HELP_PATH        = Paths.get("res/help");
-
-
+    
+    
     public HelpDialog(Frame parent)
     {
         super(parent, "Help", false);
         setSize(600, 400);
-        setMinimumSize(new Dimension(400, 300));
-
+        setMinimumSize(new Dimension(500, 400));
+        
         DefaultMutableTreeNode top = new DefaultMutableTreeNode("Java#");
         JTree tree = new JTree(top);
         final JEditorPane helpPane = new JEditorPane("text/html", DEFAULT_HELP);
-
+        
         try
         {
             addNodes(top);
@@ -43,27 +43,25 @@ public class HelpDialog
         {
             helpPane.setText(ERROR_MESSAGE);
         }
-
+        
         for (int i = 0; i < tree.getRowCount(); i++)
         {
             tree.expandRow(i);
         }
-        tree.getSelectionModel()
-            .setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         tree.addTreeSelectionListener((e) -> {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
             if (node == null)
             {
                 return;
             }
-
+            
             if (node.isLeaf())
             {
                 HelpItem item = (HelpItem)node.getUserObject();
                 try
                 {
-                    helpPane.setPage(item.path.toUri()
-                        .toURL());
+                    helpPane.setPage(item.path.toUri().toURL());
                     return;
                 }
                 catch (Exception ex)
@@ -73,50 +71,48 @@ public class HelpDialog
             }
             helpPane.setText(DEFAULT_HELP);
         });
-
+        
         DefaultCaret caret = (DefaultCaret)helpPane.getCaret();
         caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
         helpPane.setEditable(false);
-
+        
         this.add(new JScrollPane(tree), BorderLayout.WEST);
         this.add(new JScrollPane(helpPane), BorderLayout.CENTER);
         setLocationRelativeTo(parent);
     }
-
-
+    
+    
     private void addNodes(DefaultMutableTreeNode top)
         throws IOException
     {
-        Files.list(HELP_PATH)
-            .forEach((path) -> {
-                String fileName = path.getFileName()
-                    .toString();
-                if (fileName.endsWith(FileUtils.HTML_FILE_EXTENSION))
-                {
-                    String name = FileUtils.getFileNameNoExtension(fileName);
-                    top.add(new DefaultMutableTreeNode(new HelpItem(name, path)));
-                }
-            });
+        Files.list(HELP_PATH).forEach((path) -> {
+            String fileName = path.getFileName().toString();
+            if (fileName.endsWith(FileUtils.HTML_FILE_EXTENSION))
+            {
+                String name = FileUtils.getFileNameNoExtension(fileName);
+                top.add(new DefaultMutableTreeNode(new HelpItem(name, path)));
+            }
+        });
     }
-
-
+    
+    
     private static final class HelpItem
     {
         private final String name;
         private final Path   path;
-
-
+        
+        
         public HelpItem(String name, Path path)
         {
             this.name = name;
             this.path = path;
         }
-
-
+        
+        
         public String toString()
         {
             return name;
         }
     }
-
+    
 }

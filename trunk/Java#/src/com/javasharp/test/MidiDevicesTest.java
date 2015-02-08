@@ -3,12 +3,16 @@ package com.javasharp.test;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiSystem;
 
-public class MidiDevicesTest {
-
-    public static void main(String[] args) {
-        try {
+public class MidiDevicesTest
+{
+    
+    public static void main(String[] args)
+    {
+        try
+        {
             MidiDevice.Info[] midiDeviceInfoArray = MidiSystem.getMidiDeviceInfo();
-            for ( MidiDevice.Info midiDeviceInfo : midiDeviceInfoArray ) {
+            for (MidiDevice.Info midiDeviceInfo : midiDeviceInfoArray)
+            {
                 System.out.println("Next device:");
                 System.out.println("  Name: " + midiDeviceInfo.getName());
                 System.out.println("  Description: " + midiDeviceInfo.getDescription());
@@ -17,7 +21,8 @@ public class MidiDevicesTest {
                 System.out.println("");
             }
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
     }

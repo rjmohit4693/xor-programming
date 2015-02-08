@@ -4,10 +4,11 @@ public class Note
     extends LengthedInstructable<PartContext>
 {
     
-    private int          staffPos;
-    //TODO private Articulation articulation;
-    //TODO private Accidental   accidental;
+    private int staffPos;
     
+    
+    // TODO private Articulation articulation;
+    // TODO private Accidental accidental;
     
     public Note(Length length, int numDots)
     {
