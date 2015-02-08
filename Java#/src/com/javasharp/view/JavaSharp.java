@@ -3,6 +3,8 @@ package com.javasharp.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import com.javasharp.controller.MenuController;
 
 public class JavaSharp
@@ -40,5 +42,10 @@ public class JavaSharp
     public void showHelpDialog()
     {
         new HelpDialog(mainFrame).setVisible(true);
+    }
+    
+    public void showAboutDialog() {
+        JLabel label = new JLabel("<html><center>Created by:<br>Steven Roberts and Taylor Mattison<br>for VT Hacks II 2015<center></html>", JLabel.CENTER);
+        JOptionPane.showMessageDialog(mainFrame, label, "About", JOptionPane.PLAIN_MESSAGE);
     }
 }

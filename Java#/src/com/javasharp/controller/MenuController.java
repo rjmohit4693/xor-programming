@@ -57,7 +57,7 @@ public final class MenuController
     
     public void aboutMenuItem()
     {
-        
+        view.showAboutDialog();
     }
     
 }
