@@ -3,7 +3,7 @@ package com.javasharp.model;
 public class ScoreContext
 {
     private int          tempoBPM;
-    private TimeSignatue timeSignature;
+    private TimeSignature timeSignature;
     
     
     public void initialize()

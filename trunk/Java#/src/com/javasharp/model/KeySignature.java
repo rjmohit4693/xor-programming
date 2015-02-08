@@ -17,6 +17,8 @@ public enum KeySignature
     
     public int resolvePitch(int originalPitch)
     {
-        
+        //TODO
+        System.out.println("Unimplemented.");
+        return 0;
     }
 }

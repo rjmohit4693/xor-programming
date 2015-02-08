@@ -44,6 +44,7 @@ public class Score
     public int getLength()
     {
         // TODO
+        return 0;
     }
     
     
