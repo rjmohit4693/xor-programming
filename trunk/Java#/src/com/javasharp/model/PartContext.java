@@ -1,8 +1,6 @@
 package com.javasharp.model;
 
 import javax.sound.midi.Instrument;
-import javax.sound.midi.MidiEvent;
-import javax.sound.midi.ShortMessage;
 
 public class PartContext
 {
@@ -37,6 +35,6 @@ public class PartContext
     
     public void playNote()
     {
-        track.add(new MidiEvent(new ShortMessage(ShortMessage.NOTE_ON, channel, pitch, 100), offset + locationInMeasure));
+        //TODO track.add(new MidiEvent(new ShortMessage(ShortMessage.NOTE_ON, channel, pitch, 100), offset + locationInMeasure));
     }
 }
