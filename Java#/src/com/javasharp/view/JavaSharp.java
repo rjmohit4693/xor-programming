@@ -9,16 +9,16 @@ import javax.swing.JOptionPane;
 
 public class JavaSharp
 {
+    public static final String     PROGRAM_NAME  = "Java#";
+    private static final Dimension MIN_DIMENSION = new Dimension(600, 400);
+
     private final JFrame           mainFrame;
     private MenuController         menuController;
-
-    private static final String    TITLE         = "Java#";
-    private static final Dimension MIN_DIMENSION = new Dimension(600, 400);
 
 
     private JavaSharp()
     {
-        mainFrame = new JFrame(TITLE);
+        mainFrame = new JFrame(PROGRAM_NAME);
         menuController = new MenuController(this);
 
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
