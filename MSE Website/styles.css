@@ -1,0 +1,80 @@
+html {
+	background: #DDC;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+}
+
+.bounded-content {
+	max-width: 1024px;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.page-content {
+	background: white;
+}
+
+#menu-bar {
+	background: #5D0201;
+	text-align: center;
+}
+
+#menu a.menu-item {
+	display: inline-block;
+	padding: 8px;
+	margin: 8px;
+	font-weight: bold;
+	color: white;
+	text-decoration: none;
+	border-radius: 4px;
+}
+
+#menu a.menu-item:ACTIVE {
+	background: #3F0101;
+}
+
+#menu a.menu-item:HOVER {
+	text-shadow: 0 0 16px #FF8800;
+}
+
+#shadow-wrapper {
+	padding: 0 16px;
+}
+
+.shadow {
+	box-shadow: 0 0 10px black;
+	-webkit-box-shadow: 0 0 10px black;
+	-moz-box-shadow: 0 0 10px black;
+}
+
+table#home-content {
+	border-spacing: 0;
+	border-collapse: separate;
+}
+
+table#home-content td {
+	padding: 8px;
+	vertical-align: top;
+}
+
+#primary-section {
+	width: 70%;
+	height: 600px;
+}
+
+#secondary-section {
+	border-left: 2px solid #5D0201;
+	width: 30%;
+}
+
+img.maroon-border {
+	float: left;
+	border: 2px solid #5D0201;
+	margin: 0 4px;
+}
