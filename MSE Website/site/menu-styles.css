@@ -1,0 +1,30 @@
+#menu-bar {
+	width: 100%;
+	background: #5D0201;
+	text-align: center;
+	position: relative;
+}
+
+a.menu-item {
+	display: inline-block;
+	padding: 8px;
+	margin: 8px;
+	font-weight: bold;
+	color: white;
+	text-decoration: none;
+	border-radius: 4px;
+}
+
+a.menu-item:ACTIVE {
+	background: #3F0101;
+}
+
+a.menu-item:HOVER {
+	text-shadow: 0 0 16px #FF8800;
+}
+
+@media(min-width: 600px) {
+	div.menu-break {
+		display: inline-block;
+	}
+}

@@ -1,0 +1,43 @@
+html {
+	/* background: #DDC */
+	background: url("res/background.png");
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-align: center;
+}
+
+.bounded-content {
+	max-width: 1024px;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#page-content {
+	background: white;
+}
+
+#page-content > *{
+	padding: 4px;
+}
+
+#shadow-wrapper {
+	padding: 0 16px;
+}
+
+.shadow {
+	box-shadow: 0 0 12px black;
+	-webkit-box-shadow: 0 0 12px black;
+	-moz-box-shadow: 0 0 12px black;
+}
+
+.maroon-border {
+	border: 2px solid #5D0201;
+}
