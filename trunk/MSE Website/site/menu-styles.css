@@ -20,7 +20,7 @@ a.menu-item:ACTIVE {
 }
 
 a.menu-item:HOVER {
-	text-shadow: 0 0 20px #FF6600, 0 0 10px #DD6600;
+	text-shadow: 0 0 20px #D55500, 0 0 10px #D55500;
 }
 
 @media(min-width: 600px) {
