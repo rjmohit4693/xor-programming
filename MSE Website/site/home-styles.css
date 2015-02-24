@@ -5,7 +5,7 @@
 	margin-bottom: 8px;
 }
 
-#center-section > * {
+#center-section>* {
 	clear: both;
 }
 
@@ -20,11 +20,13 @@
 	#twitter-section {
 		border-left: 2px solid #5D0201;
 		display: table-cell;
+		/* Must be at lease 180px wide to fit twitter feed */
+		min-width: 200px;
 		width: 30%;
 	}
 }
 
-@media ( max-width : 600px) {
+@media ( max-width : 599px) {
 	#twitter-section {
 		border-top: 2px solid #5D0201;
 	}
