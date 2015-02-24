@@ -8,3 +8,9 @@
 #banner-logo {
 	height: 100%;
 }
+
+@media(max-width: 600px) {
+	#banner {
+		height: 96px;
+	}
+}
