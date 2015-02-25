@@ -1,5 +1,6 @@
 #menu-bar {
 	width: 100%;
+	padding: 6px 0;
 	background: #5D0201;
 	text-align: center;
 	position: relative;
@@ -8,7 +9,7 @@
 a.menu-item {
 	display: inline-block;
 	padding: 8px;
-	margin: 8px;
+	margin: 2px 8px;
 	font-weight: bold;
 	color: white;
 	text-decoration: none;
@@ -23,7 +24,7 @@ a.menu-item:HOVER {
 	text-shadow: 0 0 20px #D55500, 0 0 10px #D55500;
 }
 
-@media(min-width: 601px) {
+@media ( min-width : 601px) {
 	div.menu-group {
 		display: inline-block;
 	}

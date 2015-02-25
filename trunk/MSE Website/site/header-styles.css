@@ -1,3 +1,7 @@
+#header {
+	background: white;
+}
+
 #banner {
 	height: 128px;
 	background: url("res/banner.jpg");
