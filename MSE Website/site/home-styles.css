@@ -10,8 +10,6 @@
 }
 
 iframe[id^='twitter-widget-'] {
-	height: 100% !important;
-	min-height: 400px !important;
 	width: 100% !important;
 	position: relative !important;
 }
