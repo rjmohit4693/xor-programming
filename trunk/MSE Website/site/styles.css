@@ -1,6 +1,12 @@
+* {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
 html {
-	/* background: #DDC */
-	background: url("res/background.png");
+	background-color: #DDC;
+	background-image: url("res/background.png");
 	font-family: Arial, Helvetica, sans-serif;
 	min-width: 256px;
 }
@@ -27,11 +33,6 @@ p {
 
 #page-content {
 	background: white;
-}
-
-#page-content>* {
-	padding: 8px;
-	vertical-align: top;
 }
 
 #shadow-wrapper {

@@ -9,6 +9,11 @@
 	clear: both;
 }
 
+#page-content>* {
+	padding: 8px;
+	vertical-align: top;
+}
+
 iframe[id^='twitter-widget-'] {
 	width: 100% !important;
 	position: relative !important;
