@@ -16,7 +16,6 @@ limitations under the License.
 
 package com.xorprogramming.utils;
 
-import com.xorprogramming.XorUtils;
 import java.util.Arrays;
 
 // -------------------------------------------------------------------------
@@ -117,7 +116,10 @@ public abstract class MemoryPool<T>
      */
     public final void addItem(T t)
     {
-        XorUtils.assertNotNull(t, "The item must be non-null");
+        if (t == null)
+        {
+            throw new NullPointerException("The item must be non-null");
+        }
 
         if (numAllocations >= items.length)
         {
