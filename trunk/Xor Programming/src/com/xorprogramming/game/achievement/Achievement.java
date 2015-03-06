@@ -62,8 +62,8 @@ public abstract class Achievement<E extends Enum<E>, T>
      */
     public Achievement(int saveId, String name, String description, E firstCheckAction, E... otherCheckActions)
     {
-        this.name = XorUtils.assertNotNull(name, "The name must be noo-null");
-        this.description = XorUtils.assertNotNull(description, "The description must be noo-null");
+        this.name = XorUtils.assertNotNull(name, "The name must be non-null");
+        this.description = XorUtils.assertNotNull(description, "The description must be non-null");
         this.checkActions = EnumSet.of(firstCheckAction, otherCheckActions);
         this.saveId = saveId;
     }
