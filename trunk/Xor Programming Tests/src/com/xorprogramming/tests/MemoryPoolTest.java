@@ -1,7 +1,7 @@
 package com.xorprogramming.tests;
 
 import android.test.AndroidTestCase;
-import com.xorprogramming.utils.MemoryPool;
+import com.xorprogramming.xor2d.utils.MemoryPool;
 
 public class MemoryPoolTest
     extends AndroidTestCase

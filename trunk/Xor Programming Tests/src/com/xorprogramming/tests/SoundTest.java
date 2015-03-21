@@ -2,8 +2,8 @@ package com.xorprogramming.tests;
 
 import android.content.res.Resources.NotFoundException;
 import android.test.AndroidTestCase;
-import com.xorprogramming.sound.Sound;
-import com.xorprogramming.sound.SoundManager;
+import com.xorprogramming.xor2d.sound.Sound;
+import com.xorprogramming.xor2d.sound.SoundManager;
 
 public class SoundTest
     extends AndroidTestCase

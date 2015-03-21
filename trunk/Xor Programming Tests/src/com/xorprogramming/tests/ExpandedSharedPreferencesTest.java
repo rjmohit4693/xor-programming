@@ -3,8 +3,8 @@ package com.xorprogramming.tests;
 import android.content.Context;
 import android.graphics.RectF;
 import android.test.AndroidTestCase;
-import com.xorprogramming.io.ExpandedSharedPreferences;
-import com.xorprogramming.io.ExpandedSharedPreferences.ExandedEditor;
+import com.xorprogramming.xor2d.io.ExpandedSharedPreferences;
+import com.xorprogramming.xor2d.io.ExpandedSharedPreferences.ExandedEditor;
 import java.io.Serializable;
 import java.util.Arrays;
 

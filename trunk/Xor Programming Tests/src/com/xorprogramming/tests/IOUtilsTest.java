@@ -1,8 +1,8 @@
 package com.xorprogramming.tests;
 
-import java.io.Closeable;
 import android.test.AndroidTestCase;
-import com.xorprogramming.io.utils.IOUtils;
+import com.xorprogramming.xor2d.io.utils.IOUtils;
+import java.io.Closeable;
 import java.util.Scanner;
 
 public class IOUtilsTest
